@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MobileDataCollection.iml" filepath="$PROJECT_DIR$/MobileDataCollection.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mobiledatacollection.iml" filepath="$PROJECT_DIR$/mobiledatacollection.iml" />
     </modules>
   </component>
 </project>
