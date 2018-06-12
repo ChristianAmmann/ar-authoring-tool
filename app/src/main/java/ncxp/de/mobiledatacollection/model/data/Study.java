@@ -1,19 +1,9 @@
 package ncxp.de.mobiledatacollection.model.data;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity(tableName = Study.TABLE_NAME)
 public class Study {
 
@@ -23,4 +13,24 @@ public class Study {
 	private long   id;
 	private String name;
 
+	public Study(long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

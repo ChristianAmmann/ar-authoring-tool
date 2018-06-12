@@ -1,11 +1,13 @@
 package ncxp.de.mobiledatacollection.model.dao;
 
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
-import android.database.Cursor;
 
+import java.util.List;
+
+import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
 import ncxp.de.mobiledatacollection.model.data.Study;
 
 @Dao
@@ -18,10 +20,10 @@ public interface StudyDao {
 	long[] insertAll(Study[] studies);
 
 	@Query("SELECT * FROM " + Study.TABLE_NAME)
-	Cursor selectAll();
+	LiveData<List<Study>> selectAll();
 
 	@Query("SELECT * FROM " + Study.TABLE_NAME + " WHERE id = :id")
-	Cursor selectById(long id);
+	LiveData<Study> selectById(long id);
 
 	@Query("DELETE FROM " + Study.TABLE_NAME + " WHERE id = :id")
 	int deleteById(long id);

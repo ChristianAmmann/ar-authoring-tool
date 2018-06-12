@@ -1,17 +1,8 @@
 package ncxp.de.mobiledatacollection.model.data;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
 @Entity(tableName = DeviceSensor.TABLE_NAME)
 public class DeviceSensor {
 
@@ -20,4 +11,20 @@ public class DeviceSensor {
 	@PrimaryKey
 	private long   id;
 	private String name;
+
+	public long getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

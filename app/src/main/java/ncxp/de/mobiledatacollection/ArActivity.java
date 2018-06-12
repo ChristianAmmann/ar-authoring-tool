@@ -1,7 +1,6 @@
 package ncxp.de.mobiledatacollection;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -20,6 +19,8 @@ import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class ArActivity extends AppCompatActivity {
 	private static final String TAG = ArActivity.class.getSimpleName();

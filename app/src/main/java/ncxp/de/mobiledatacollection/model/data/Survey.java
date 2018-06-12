@@ -1,18 +1,8 @@
 package ncxp.de.mobiledatacollection.model.data;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
-
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
 @Entity(tableName = Survey.TABLE_NAME)
 public class Survey {
 
@@ -23,4 +13,27 @@ public class Survey {
 	private int    platformId;
 	private String name;
 
+	public long getId() {
+		return id;
+	}
+
+	public int getPlatformId() {
+		return platformId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setPlatformId(int platformId) {
+		this.platformId = platformId;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }
