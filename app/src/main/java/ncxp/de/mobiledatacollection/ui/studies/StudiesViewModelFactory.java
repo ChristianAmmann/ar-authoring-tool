@@ -1,7 +1,8 @@
 package ncxp.de.mobiledatacollection.ui.studies;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProvider;
+import android.support.annotation.NonNull;
+
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 
 public class StudiesViewModelFactory implements ViewModelProvider.Factory {

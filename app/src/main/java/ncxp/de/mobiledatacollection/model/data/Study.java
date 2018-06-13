@@ -1,8 +1,7 @@
 package ncxp.de.mobiledatacollection.model.data;
 
-
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = Study.TABLE_NAME)
 public class Study {

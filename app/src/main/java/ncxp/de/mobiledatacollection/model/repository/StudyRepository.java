@@ -1,9 +1,10 @@
 package ncxp.de.mobiledatacollection.model.repository;
 
 
+import android.arch.lifecycle.LiveData;
+
 import java.util.List;
 
-import androidx.lifecycle.LiveData;
 import ncxp.de.mobiledatacollection.model.dao.StudyDao;
 import ncxp.de.mobiledatacollection.model.data.Study;
 

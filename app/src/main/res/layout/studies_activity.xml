@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-													 xmlns:app="http://schemas.android.com/apk/res-auto"
-													 xmlns:tools="http://schemas.android.com/tools"
-													 android:layout_width="match_parent"
-													 android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+												 xmlns:app="http://schemas.android.com/apk/res-auto"
+												 xmlns:tools="http://schemas.android.com/tools"
+												 android:layout_width="match_parent"
+												 android:layout_height="match_parent">
 
 
 	<FrameLayout
@@ -14,21 +14,32 @@
 		android:paddingBottom="?attr/actionBarSize"
 		tools:context=".StudiesActivity"/>
 
-	<com.google.android.material.bottomappbar.BottomAppBar
+	<android.support.design.widget.AppBarLayout
 		android:id="@+id/bottom_app_bar"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_gravity="bottom"
+		app:backgroundTint="@color/colorPrimary">
 
-		app:backgroundTint="@color/colorPrimary"
-		app:fabAlignmentMode="center"
-		app:fabAttached="true"/>
+		<android.support.v7.widget.Toolbar
+			android:id="@+id/action_bar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:navigationIcon="@drawable/augmented_reality"
+			app:theme="@style/ToolbarTheme"/>
 
-	<com.google.android.material.floatingactionbutton.FloatingActionButton
+
+	</android.support.design.widget.AppBarLayout>
+
+	<android.support.design.widget.FloatingActionButton
 		android:id="@+id/fab"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		app:layout_anchor="@id/bottom_app_bar"/>
+		android:src="@drawable/plus"
+		app:fabSize="normal"
+		app:layout_anchor="@id/bottom_app_bar"
+		app:layout_anchorGravity="center|top"
+		app:layout_behavior="@string/bottom_sheet_behavior"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</android.support.design.widget.CoordinatorLayout>
 

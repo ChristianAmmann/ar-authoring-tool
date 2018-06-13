@@ -1,3 +1,16 @@
 <resources>
 	<string name="app_name">MobileDataCollection</string>
+	<string name="impressum">Impressum</string>
+	<string name="help">Hilfe</string>
+	<string name="search">Suche</string>
+	<string name="card_expand">Studie aufklappen</string>
+	<string name="start">Starten</string>
+	<string name="share">Teilen</string>
+	<string name="more">Mehr</string>
+	<string name="export">Exportieren</string>
+	<string name="edit">Editieren</string>
+	<string name="delete">Löschen</string>
+	<string name="share_study">Datenerhebung als Datei teilen</string>
+	<string name="no_study_placeholder">Keine Studien vorhanden</string>
+	<string name="no_study_hint">Mit \"+\" können Sie Studien erstellen. Ihre erstellten Studien werden hier angezeigt</string>
 </resources>

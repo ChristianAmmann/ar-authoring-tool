@@ -1,50 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView style="@style/Widget.MaterialComponents.CardView"
-												   xmlns:android="http://schemas.android.com/apk/res/android"
-												   xmlns:tools="http://schemas.android.com/tools"
-												   android:layout_width="match_parent"
-												   android:layout_height="wrap_content"
-												   android:layout_marginLeft="@dimen/mtrl_card_spacing"
-												   android:layout_marginRight="@dimen/mtrl_card_spacing"
-												   android:layout_marginTop="@dimen/mtrl_card_spacing"
-												   android:minHeight="140dp"
-												   android:orientation="vertical">
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+									xmlns:tools="http://schemas.android.com/tools"
+									android:layout_width="match_parent"
+									android:layout_height="wrap_content"
+									android:layout_marginLeft="@dimen/mtrl_card_spacing"
+									android:layout_marginRight="@dimen/mtrl_card_spacing"
+									android:layout_marginTop="@dimen/mtrl_card_spacing"
+									android:elevation="@dimen/mtrl_card_elevation"
+									android:minHeight="120dp"
+									android:orientation="vertical">
 
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:orientation="horizontal">
+		android:orientation="vertical">
 
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:orientation="vertical">
+			android:orientation="horizontal"
+			android:padding="@dimen/mtrl_cards_padding">
 
-			<TextView
-				android:id="@+id/study_name"
+			<LinearLayout
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				tools:text="Titel der Studie"/>
+				android:orientation="vertical">
 
-			<TextView
-				android:id="@+id/amount_of_testperson"
+				<TextView
+					android:id="@+id/study_name"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="sans-serif-medium"
+					android:textAppearance="@android:style/TextAppearance.Material.Title"
+					android:textSize="@dimen/material_typography_h6"
+					tools:text="Titel der Studie"/>
+
+				<TextView
+					android:id="@+id/amount_of_testperson"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="sans-serif"
+					android:textSize="@dimen/material_typography_body2"
+					tools:text="X Probanden teilgenommen"/>
+
+			</LinearLayout>
+
+			<View
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"/>
+
+
+			<ImageButton
+				android:id="@+id/expand_arrow"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				tools:text="X Probanden teilgenommen"/>
-
+				android:layout_gravity="center_vertical"
+				android:layout_weight="0.1"
+				android:background="@android:color/white"
+				android:contentDescription="@string/card_expand"
+				android:src="@drawable/chevron_up"/>
 		</LinearLayout>
 
 		<View
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_weight="1"/>
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="#1E000000"
+			android:paddingBottom="4dp"
+			android:paddingTop="4dp"/>
 
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
 
-		<ImageButton
-			android:id="@+id/arrow"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"/>
+			<Button
+				style="@style/CardButton"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:text="@string/start"
+				android:textAllCaps="true"/>
+
+			<View
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"/>
+
+			<ImageButton
+				android:id="@+id/share"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:layout_weight="0.1"
+				android:background="@android:color/white"
+				android:contentDescription="@string/share"
+				android:src="@drawable/share_variant"/>
+
+			<ImageButton
+				android:id="@+id/more"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:layout_weight="0.1"
+				android:background="@android:color/white"
+				android:contentDescription="@string/more"
+				android:src="@drawable/dots_vertical"/>
+		</LinearLayout>
+
 	</LinearLayout>
 
 
-</com.google.android.material.card.MaterialCardView>
+</android.support.v7.widget.CardView>

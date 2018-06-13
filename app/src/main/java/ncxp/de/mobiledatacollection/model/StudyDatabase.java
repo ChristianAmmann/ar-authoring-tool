@@ -1,14 +1,14 @@
 package ncxp.de.mobiledatacollection.model;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
+import android.arch.persistence.room.Database;
+import android.arch.persistence.room.Room;
+import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import java.util.concurrent.Executors;
 
-import androidx.annotation.NonNull;
-import androidx.room.Database;
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 import ncxp.de.mobiledatacollection.model.dao.ConfigurationDao;
 import ncxp.de.mobiledatacollection.model.dao.DeviceSensorDao;
 import ncxp.de.mobiledatacollection.model.dao.StudyDao;
@@ -55,6 +55,17 @@ public abstract class StudyDatabase extends RoomDatabase {
 
 	private static Study[] populateData() {
 		return new Study[]{
-				new Study(1, "title1"), new Study(2, "title2"), new Study(3, "title3"), new Study(4, "title4"), new Study(5, "title5")};
+				new Study(1, "Title der Studie 1"),
+				new Study(2, "Title der Studie 2"),
+				new Study(3, "Title der Studie 3"),
+				new Study(4, "Title der Studie 4"),
+				new Study(5, "Title der Studie 5"),
+				new Study(6, "Title der Studie 6"),
+				new Study(7, "Title der Studie 7"),
+				new Study(8, "Title der Studie 8"),
+				new Study(9, "Title der Studie 9"),
+				new Study(10, "Title der Studie 10"),
+				new Study(11, "Title der Studie 11"),
+				new Study(12, "Title der Studie 12")};
 	}
 }
