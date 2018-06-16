@@ -32,6 +32,8 @@
 	<dimen name="material_typography_h6">20sp</dimen>
 	<dimen name="material_typography_subtitle1">16sp</dimen>
 	<dimen name="material_typography_subtitle2">14sp</dimen>
-
+	<dimen name="fab_padding">10dp</dimen>
 	<dimen name="placeholder_spacing">24dp</dimen>
+
+	<dimen name="two_line_item__min_height">64dp</dimen>
 </resources>

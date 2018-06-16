@@ -38,8 +38,7 @@
 		android:src="@drawable/plus"
 		app:fabSize="normal"
 		app:layout_anchor="@id/bottom_app_bar"
-		app:layout_anchorGravity="center|top"
-		app:layout_behavior="@string/bottom_sheet_behavior"/>
+		app:layout_anchorGravity="center|top"/>
 
 </android.support.design.widget.CoordinatorLayout>
 

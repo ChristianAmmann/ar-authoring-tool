@@ -13,4 +13,24 @@
 	<string name="share_study">Datenerhebung als Datei teilen</string>
 	<string name="no_study_placeholder">Keine Studien vorhanden</string>
 	<string name="no_study_hint">Mit \"+\" können Sie Studien erstellen. Ihre erstellten Studien werden hier angezeigt</string>
+	<string name="sensors">Sensoren</string>
+	<string name="survey">Fragebögen</string>
+	<string name="others">Weitere</string>
+	<string name="name_of_study">Name der Studie</string>
+	<string name="test">Testen</string>
+	<string name="no_survey_placeholder">Keine Fragebogen vorhanden</string>
+	<string name="no_survey_hint">Mit \"+\" können Sie Fragebogen einfügen. Ihre einfgefügten Fragebogen werden hier angezeigt.</string>
+	<string name="description_study">Kurzbeschreibung der Studie</string>
+	<string name="save">Speichern</string>
+	<string name="new_study">Neue Studie</string>
+
+	<string name="dialog_delete_title">Studie löschen?</string>
+	<string name="dialog_delete_message">Durch das Löschen werden alle Einstellungen und Studiendaten gelöscht! Sie können Ihre Studiendaten durch Exportieren
+		sicherstellen.</string>
+	<string name="cancel">Abbrechen</string>
+
+	<string name="dialog_survey_delete_title">Fragebogen entfernen?</string>
+	<string name="dialog_survey_delete_message">Durch das Entfernen wird der Fragebogen nicht mehr eingebunden. Die Daten des Fragebogens finden Sie auf der
+		Fragebogen-Plattform.</string>
+	<string name="dialog_survey_remove">Entfernen</string>
 </resources>

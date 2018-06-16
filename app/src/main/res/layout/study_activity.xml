@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+												 xmlns:app="http://schemas.android.com/apk/res-auto"
+												 xmlns:tools="http://schemas.android.com/tools"
+												 android:layout_width="match_parent"
+												 android:layout_height="match_parent">
+
+	<android.support.design.widget.AppBarLayout
+		android:id="@+id/app_bar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:backgroundTint="@color/colorPrimary">
+
+		<android.support.design.widget.CollapsingToolbarLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+			<android.support.v7.widget.Toolbar
+				android:id="@+id/toolbar"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:navigationIcon="@drawable/close"
+				app:theme="@style/ToolbarTheme"/>
+		</android.support.design.widget.CollapsingToolbarLayout>
+
+
+	</android.support.design.widget.AppBarLayout>
+
+	<FrameLayout
+		android:id="@+id/container"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_marginBottom="?attr/actionBarSize"
+		android:layout_marginTop="?attr/actionBarSize"/>
+
+	<android.support.design.widget.BottomNavigationView
+		android:id="@+id/bottom_navigation"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_gravity="bottom"
+		android:clipChildren="false"
+		android:paddingTop="?attr/actionBarSize"
+		app:menu="@menu/create_menu"/>
+
+
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/fab"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_above="@+id/bottom_navigation"
+		android:layout_gravity="end|bottom"
+		android:layout_marginEnd="@dimen/fab_padding"
+		android:src="@drawable/plus"
+		android:visibility="gone"
+		app:fabSize="mini"
+		app:layout_anchor="@id/bottom_navigation"
+		app:layout_anchorGravity="end"/>
+
+
+</android.support.design.widget.CoordinatorLayout>

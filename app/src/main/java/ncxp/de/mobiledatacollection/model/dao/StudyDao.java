@@ -31,5 +31,4 @@ public interface StudyDao {
 
 	@Update
 	int update(Study study);
-
 }

@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -23,6 +25,7 @@ import ncxp.de.mobiledatacollection.model.StudyDatabase;
 import ncxp.de.mobiledatacollection.model.dao.StudyDao;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
+import ncxp.de.mobiledatacollection.ui.studies.adapter.StudiesAdapter;
 
 public class StudiesFragment extends Fragment implements MoreListener, ShareListener {
 
@@ -66,7 +69,7 @@ public class StudiesFragment extends Fragment implements MoreListener, ShareList
 	}
 
 	private void configureViewModel() {
-		StudyDao study = StudyDatabase.getInstance(getActivity().getApplicationContext()).study();
+		StudyDao study = StudyDatabase.getInstance(getContext()).study();
 		StudyRepository repository = new StudyRepository(study);
 		StudiesViewModelFactory factory = new StudiesViewModelFactory(repository);
 		viewModel = ViewModelProviders.of(this, factory).get(StudiesViewModel.class);
@@ -74,13 +77,40 @@ public class StudiesFragment extends Fragment implements MoreListener, ShareList
 	}
 
 	@Override
-	public void onPopupMenuClick(View view, int position) {
+	public void onPopupMenuClick(View view, Study study) {
 		PopupMenu popupMenu = new PopupMenu(getContext(), view);
 		MenuInflater inflater = popupMenu.getMenuInflater();
 		inflater.inflate(R.menu.card_popup_menu, popupMenu.getMenu());
-		//TODO setOnMenuItemClickListener
+		popupMenu.setOnMenuItemClickListener(menuItem -> onPopupMenuItemClicked(menuItem, study));
 		popupMenu.show();
 
+	}
+
+	private boolean onPopupMenuItemClicked(MenuItem menuItem, Study study) {
+		switch (menuItem.getItemId()) {
+			case R.id.export:
+				//TODO export
+				break;
+			case R.id.edit:
+				//TODO edit
+				break;
+			case R.id.delete:
+				showDeleteDialog(study);
+				break;
+		}
+		return true;
+	}
+
+	private void showDeleteDialog(Study study) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+		builder.setMessage(R.string.dialog_delete_message);
+		builder.setTitle(R.string.dialog_delete_title);
+		builder.setPositiveButton(R.string.delete, (dialog, which) -> {
+			studiesAdapter.deleteItem(study);
+			//TODO Remove in db with viewmodel
+		});
+		builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
+		builder.create().show();
 	}
 
 	@Override

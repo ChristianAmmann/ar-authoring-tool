@@ -1,4 +1,4 @@
-package ncxp.de.mobiledatacollection.ui.studies;
+package ncxp.de.mobiledatacollection.ui.studies.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +10,8 @@ import java.util.List;
 
 import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.model.data.Study;
+import ncxp.de.mobiledatacollection.ui.studies.MoreListener;
+import ncxp.de.mobiledatacollection.ui.studies.ShareListener;
 
 public class StudiesAdapter extends RecyclerView.Adapter<StudyViewHolder> {
 
@@ -32,10 +34,11 @@ public class StudiesAdapter extends RecyclerView.Adapter<StudyViewHolder> {
 
 	@Override
 	public void onBindViewHolder(@NonNull StudyViewHolder holder, int position) {
-		holder.getStudyNameView().setText(studies.get(position).getName());
+		Study study = studies.get(position);
+		holder.getStudyNameView().setText(study.getName());
 		//TODO Right text
 		holder.getAmountOfTestPersonView().setText("0 Probanden teilgenommen");
-		holder.getMoreButton().setOnClickListener(view -> moreListener.onPopupMenuClick(view, position));
+		holder.getMoreButton().setOnClickListener(view -> moreListener.onPopupMenuClick(view, study));
 		holder.getShareButton().setOnClickListener(view -> shareListener.shareStudy(position));
 
 	}
@@ -43,6 +46,12 @@ public class StudiesAdapter extends RecyclerView.Adapter<StudyViewHolder> {
 	@Override
 	public int getItemCount() {
 		return studies == null ? 0 : studies.size();
+	}
+
+	public void deleteItem(Study study) {
+		int position = studies.indexOf(study);
+		studies.remove(position);
+		notifyItemRemoved(position);
 	}
 
 	public void addItems(List<Study> newStudies) {

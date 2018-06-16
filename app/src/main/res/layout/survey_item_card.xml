@@ -27,18 +27,16 @@
 				android:orientation="vertical">
 
 				<TextView
-					android:id="@+id/study_name"
+					android:id="@+id/survey_name"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:ellipsize="end"
 					android:fontFamily="sans-serif-medium"
-					android:maxLines="1"
 					android:textAppearance="@android:style/TextAppearance.Material.Title"
 					android:textSize="@dimen/material_typography_h6"
-					tools:text="Titel der Studie"/>
+					tools:text="Fragebogen"/>
 
 				<TextView
-					android:id="@+id/amount_of_testperson"
+					android:id="@+id/survey_description"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:fontFamily="sans-serif"
@@ -46,22 +44,6 @@
 					tools:text="X Probanden teilgenommen"/>
 
 			</LinearLayout>
-
-			<View
-				android:layout_width="0dp"
-				android:layout_height="match_parent"
-				android:layout_weight="1"/>
-
-
-			<ImageButton
-				android:id="@+id/expand_arrow"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center_vertical"
-				android:layout_weight="0.1"
-				android:background="@android:color/white"
-				android:contentDescription="@string/card_expand"
-				android:src="@drawable/chevron_up"/>
 		</LinearLayout>
 
 		<View
@@ -81,7 +63,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_vertical"
-				android:text="@string/start"
+				android:text="@string/test"
 				android:textAllCaps="true"/>
 
 			<View
@@ -89,18 +71,9 @@
 				android:layout_height="match_parent"
 				android:layout_weight="1"/>
 
-			<ImageButton
-				android:id="@+id/share"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center_vertical"
-				android:layout_weight="0.1"
-				android:background="@android:color/white"
-				android:contentDescription="@string/share"
-				android:src="@drawable/share_variant"/>
 
 			<ImageButton
-				android:id="@+id/more"
+				android:id="@+id/more_options"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_vertical"

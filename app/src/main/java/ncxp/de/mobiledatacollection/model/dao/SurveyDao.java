@@ -1,10 +1,12 @@
 package ncxp.de.mobiledatacollection.model.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
-import android.database.Cursor;
+
+import java.util.List;
 
 import ncxp.de.mobiledatacollection.model.data.Survey;
 
@@ -18,10 +20,10 @@ public interface SurveyDao {
 	long[] insertAll(Survey[] surveys);
 
 	@Query("SELECT * FROM " + Survey.TABLE_NAME)
-	Cursor selectAll();
+	LiveData<List<Survey>> selectAll();
 
 	@Query("SELECT * FROM " + Survey.TABLE_NAME + " WHERE id = :id")
-	Cursor selectById(long id);
+	LiveData<Survey> selectById(long id);
 
 	@Query("DELETE FROM " + Survey.TABLE_NAME + " WHERE id = :id")
 	int deleteById(long id);
