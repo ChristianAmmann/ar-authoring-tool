@@ -14,7 +14,7 @@
 		<item name="android:textColor">@color/colorPrimary</item>
 	</style>
 
-	<!-- Typology
+	<!-- Typography
 
 	<style name="H1Text" parent="">
 		<item name="android:textSize">@dimen/material_typography_h1</item>

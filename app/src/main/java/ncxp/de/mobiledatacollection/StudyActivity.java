@@ -25,13 +25,13 @@ public class StudyActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.study_activity);
 		toolbar = findViewById(R.id.toolbar);
-		toolbar.setNavigationOnClickListener(view -> this.finish());
 		toolbar.setTitle(R.string.new_study);
 		fab = findViewById(R.id.fab);
 		navigationView = findViewById(R.id.bottom_navigation);
 		navigationView.setOnNavigationItemSelectedListener(this::onNavigationItemClicked);
 		setSupportActionBar(toolbar);
-		getSupportActionBar().setDisplayShowTitleEnabled(true);
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
+		toolbar.setNavigationOnClickListener(view -> this.finish());
 		showSensorFragment(savedInstanceState);
 	}
 

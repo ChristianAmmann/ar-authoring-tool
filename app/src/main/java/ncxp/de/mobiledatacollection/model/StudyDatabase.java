@@ -32,13 +32,14 @@ public abstract class StudyDatabase extends RoomDatabase {
 
 	public static StudyDatabase getInstance(final Context context) {
 		if (instance == null) {
-			instance = Room.databaseBuilder(context, StudyDatabase.class, "studies.db").addCallback(new Callback() {
+			//TODO Room.databasebuilder for productive version
+			instance = Room.inMemoryDatabaseBuilder(context, StudyDatabase.class).addCallback(new Callback() {
 				@Override
 				public void onCreate(@NonNull SupportSQLiteDatabase db) {
 					super.onCreate(db);
 					Executors.newSingleThreadScheduledExecutor().execute(() -> {
-						getInstance(context).study().insertAll(populateStudyData());
-						getInstance(context).survey().insertAll(populateSurveyData());
+						//getInstance(context).study().insertAll(populateStudyData());
+						//getInstance(context).survey().insertAll(populateSurveyData());
 
 					});
 				}
@@ -47,7 +48,7 @@ public abstract class StudyDatabase extends RoomDatabase {
 		return instance;
 	}
 
-	private static Study[] populateStudyData() {
+	/*private static Study[] populateStudyData() {
 		return new Study[]{
 				new Study(1, "Title der Studie 1"),
 				new Study(2, "Title der Studie 2"),
@@ -69,5 +70,5 @@ public abstract class StudyDatabase extends RoomDatabase {
 				new Survey(2, "Fragenbogen 2", "Kurzbeschreibung 2"),
 				new Survey(3, "Fragenbogen 3", "Kurzbeschreibung 3"),
 				new Survey(4, "Fragenbogen 4", "Kurzbeschreibung 4")};
-	}
+	}*/
 }

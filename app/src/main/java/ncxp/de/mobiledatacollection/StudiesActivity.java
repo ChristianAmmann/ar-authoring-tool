@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 
 import ncxp.de.mobiledatacollection.ui.studies.StudiesFragment;
 
@@ -19,7 +20,7 @@ public class StudiesActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.studies_activity);
-		fab = findViewById(R.id.fab);
+		fab = findViewById(R.id.fab_add_study);
 		fab.setOnClickListener(view -> {
 			Intent intent = new Intent(this, StudyActivity.class);
 			startActivity(intent);
@@ -27,7 +28,13 @@ public class StudiesActivity extends AppCompatActivity {
 		Toolbar toolbar = findViewById(R.id.action_bar);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
+		toolbar.setNavigationOnClickListener(this::showArActivity);
 		showFragment(savedInstanceState);
+	}
+
+	private void showArActivity(View view) {
+		Intent intent = new Intent(this, ArActivity.class);
+		startActivity(intent);
 	}
 
 	private void showFragment(Bundle savedInstanceState) {

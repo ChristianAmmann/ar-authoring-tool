@@ -35,5 +35,7 @@
 	<dimen name="fab_padding">10dp</dimen>
 	<dimen name="placeholder_spacing">24dp</dimen>
 
+	<dimen name="settings_padding">10dp</dimen>
+
 	<dimen name="two_line_item__min_height">64dp</dimen>
 </resources>

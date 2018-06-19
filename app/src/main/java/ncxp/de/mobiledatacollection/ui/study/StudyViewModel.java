@@ -3,10 +3,11 @@ package ncxp.de.mobiledatacollection.ui.study;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import ncxp.de.mobiledatacollection.datalogger.AvailableDeviceSensor;
 import ncxp.de.mobiledatacollection.datalogger.SensorDataManager;
-import ncxp.de.mobiledatacollection.datalogger.sensor.DeviceSensor;
 import ncxp.de.mobiledatacollection.model.data.Survey;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
@@ -34,8 +35,16 @@ public class StudyViewModel extends ViewModel {
 		return this.surveys;
 	}
 
-	public List<DeviceSensor> getAvailableDeviceSensor() {
-		return sensorDataManager.getAvailableDeviceSensors();
+	public List<AvailableDeviceSensor> getAvailableDeviceSensor() {
+		List<AvailableDeviceSensor> availableDeviceSensors = new ArrayList<>();
+		sensorDataManager.getAvailableDeviceSensors().forEach(sensor -> {
+			AvailableDeviceSensor availableDeviceSensor = new AvailableDeviceSensor(sensor);
+			if (availableDeviceSensor.getType() != null) {
+				availableDeviceSensors.add(availableDeviceSensor);
+			}
+
+		});
+		return availableDeviceSensors;
 	}
 
 }

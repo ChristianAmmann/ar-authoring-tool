@@ -1,10 +1,18 @@
 package ncxp.de.mobiledatacollection;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.ar.core.Anchor;
@@ -28,6 +36,13 @@ public class ArActivity extends AppCompatActivity {
 	private ModelRenderable andyRenderable;
 	private GestureDetector trackableGestureDetector;
 
+	private ImageButton settingsButton;
+	private String      currentSelectionTechnique;
+	private String      currentRotationTechnique;
+	private String      currentScaleTechnique;
+	private float       displayCenterY;
+	private float       displayCenterX;
+
 	@Override
 	@SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
 	// CompletableFuture requires api level 24
@@ -36,8 +51,12 @@ public class ArActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.ar_activity);
-
+		settingsButton = findViewById(R.id.ar_settings_button);
+		settingsButton.setOnClickListener(this::onSettingsClicked);
 		arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+
+		displayCenterX = this.getResources().getDisplayMetrics().widthPixels / 2 - 100;
+		displayCenterY = this.getResources().getDisplayMetrics().heightPixels / 2;
 
 		// When you build a Renderable, Sceneform loads its resources in the background while returning
 		// a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
@@ -48,7 +67,9 @@ public class ArActivity extends AppCompatActivity {
 			return null;
 		});
 
+
 		arFragment.setOnTapArPlaneListener((HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
+			motionEvent = getMotionEventCenter(motionEvent);
 			if (andyRenderable == null) {
 				return;
 			}
@@ -68,11 +89,15 @@ public class ArActivity extends AppCompatActivity {
 			andy.setRenderable(andyRenderable);
 			andy.select();
 		});
+
+
 		arFragment.getArSceneView().getScene().setOnPeekTouchListener(this::handleOnTouch);
 		trackableGestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
 			@Override
-			public boolean onSingleTapUp(MotionEvent e) {
-				onSingleTapUp(e);
+			public boolean onSingleTapUp(MotionEvent motionEvent) {
+				//TODO check selection technique
+				motionEvent = getMotionEventCenter(motionEvent);
+				onSingleTap(motionEvent);
 				return true;
 			}
 
@@ -81,11 +106,57 @@ public class ArActivity extends AppCompatActivity {
 				return true;
 			}
 		});
+		/*arFragment.getArSceneView().getScene().setOnTouchListener((HitTestResult hitTestResult, MotionEvent event) -> {
+			MotionEvent motionEventCenter = getMotionEventCenter(event);
+			return trackableGestureDetector.onTouchEvent(motionEventCenter);
+		});*/
 
+	}
+
+	private void onSettingsClicked(View view) {
+		PopupMenu popupMenu = new PopupMenu(this, view);
+		MenuInflater inflater = popupMenu.getMenuInflater();
+		inflater.inflate(R.menu.ar_menu, popupMenu.getMenu());
+		popupMenu.setOnMenuItemClickListener(this::onPopupMenuClicked);
+		popupMenu.show();
+	}
+
+	private boolean onPopupMenuClicked(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+			case R.id.manage_study:
+				finish();
+				break;
+			case R.id.manage_ar_scene:
+				break;
+			case R.id.ar_settings:
+				showArSettingDialog();
+				break;
+		}
+		return true;
+	}
+
+	private void showArSettingDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = getLayoutInflater();
+		builder.setTitle(R.string.ar_settings);
+		View dialogView = inflater.inflate(R.layout.dialog_ar_setting, null);
+		Spinner selectionSpinner = dialogView.findViewById(R.id.spinner_selection);
+		Spinner rotationSpinner = dialogView.findViewById(R.id.spinner_rotation);
+		Spinner scaleSpinner = dialogView.findViewById(R.id.spinner_scale);
+
+		builder.setView(dialogView).setPositiveButton(R.string.apply, ((dialog, which) -> {
+			currentSelectionTechnique = selectionSpinner.getSelectedItem().toString();
+			currentRotationTechnique = rotationSpinner.getSelectedItem().toString();
+			currentSelectionTechnique = scaleSpinner.getSelectedItem().toString();
+
+		})).setNegativeButton(R.string.cancel, ((dialog, which) -> dialog.dismiss()));
+		builder.create().show();
 	}
 
 	private void handleOnTouch(HitTestResult hitTestResult, MotionEvent motionEvent) {
 		// First call ArFragment's listener to handle TransformableNodes.
+		//TODO check selection technique
+		motionEvent = getMotionEventCenter(motionEvent);
 		arFragment.onPeekTouch(hitTestResult, motionEvent);
 
 		// Check for touching a Sceneform node
@@ -117,6 +188,11 @@ public class ArActivity extends AppCompatActivity {
 				}
 			}
 		}
+	}
+
+
+	private MotionEvent getMotionEventCenter(MotionEvent event) {
+		return MotionEvent.obtain(event.getDownTime(), event.getEventTime(), event.getAction(), displayCenterX, displayCenterY, event.getMetaState());
 	}
 
 }

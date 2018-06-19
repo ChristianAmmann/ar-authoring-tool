@@ -13,21 +13,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import ncxp.de.mobiledatacollection.R;
+import ncxp.de.mobiledatacollection.datalogger.AvailableDeviceSensor;
 import ncxp.de.mobiledatacollection.datalogger.SensorDataManager;
+import ncxp.de.mobiledatacollection.datalogger.SensorGroup;
 import ncxp.de.mobiledatacollection.model.StudyDatabase;
 import ncxp.de.mobiledatacollection.model.dao.StudyDao;
 import ncxp.de.mobiledatacollection.model.dao.SurveyDao;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
-import ncxp.de.mobiledatacollection.ui.study.adapter.SensorAdapter;
+import ncxp.de.mobiledatacollection.ui.study.adapter.SectionAdapter;
 
 public class SensorFragment extends Fragment {
 
 	private StudyViewModel viewModel;
-	private RecyclerView   sensorRecyclerView;
-	private SensorAdapter  sensorAdapter;
+	private RecyclerView   sectionedRecyclerView;
+	private SectionAdapter sectionAdapter;
 
 	public static SensorFragment newInstance() {
 		return new SensorFragment();
@@ -36,7 +40,6 @@ public class SensorFragment extends Fragment {
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		this.configureViewModel();
 	}
 
@@ -48,16 +51,18 @@ public class SensorFragment extends Fragment {
 
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-		sensorRecyclerView = view.findViewById(R.id.recyclerview_sensor);
+		sectionedRecyclerView = view.findViewById(R.id.recyclerview_sectioned);
 		setupSensorView();
 	}
 
 	private void setupSensorView() {
-		sensorRecyclerView.setHasFixedSize(true);
-		sensorAdapter = new SensorAdapter(new ArrayList<>());
-		sensorRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-		sensorRecyclerView.setAdapter(sensorAdapter);
-		sensorAdapter.addItems(viewModel.getAvailableDeviceSensor());
+		sectionAdapter = new SectionAdapter(new ArrayList<>());
+		sectionedRecyclerView.setHasFixedSize(true);
+		LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+		sectionedRecyclerView.setLayoutManager(layoutManager);
+		sectionedRecyclerView.setLayoutManager(layoutManager);
+		sectionedRecyclerView.setAdapter(sectionAdapter);
+		sectionAdapter.addItems(getSectionedDeviceSensors(viewModel.getAvailableDeviceSensor()));
 	}
 
 	private void configureViewModel() {
@@ -69,5 +74,17 @@ public class SensorFragment extends Fragment {
 		StudyViewModelFactory factory = new StudyViewModelFactory(studyRepo, surveyRepo, sensorDataManager);
 		viewModel = ViewModelProviders.of(this, factory).get(StudyViewModel.class);
 		viewModel.init();
+	}
+
+	private List<Object> getSectionedDeviceSensors(List<AvailableDeviceSensor> availableDeviceSensors) {
+		List<Object> sectionedDeviceSensors = new ArrayList<>();
+		for (SensorGroup group : SensorGroup.values()) {
+			List<AvailableDeviceSensor> sensorsOfGroup = availableDeviceSensors.stream()
+																			   .filter(availableDeviceSensor -> availableDeviceSensor.getType().getGroup().equals(group))
+																			   .collect(Collectors.toList());
+			sectionedDeviceSensors.add(group.getGroupId());
+			sectionedDeviceSensors.addAll(sensorsOfGroup);
+		}
+		return sectionedDeviceSensors;
 	}
 }

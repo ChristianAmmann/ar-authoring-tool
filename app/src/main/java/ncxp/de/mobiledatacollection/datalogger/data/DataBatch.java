@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import ncxp.de.mobiledatacollection.model.data.Data;
+
 public class DataBatch implements Serializable {
 
 	public static final int CAPACITY_UNLIMITED = -1;

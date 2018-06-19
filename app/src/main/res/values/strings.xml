@@ -33,4 +33,43 @@
 	<string name="dialog_survey_delete_message">Durch das Entfernen wird der Fragebogen nicht mehr eingebunden. Die Daten des Fragebogens finden Sie auf der
 		Fragebogen-Plattform.</string>
 	<string name="dialog_survey_remove">Entfernen</string>
+	<string name="settings">Einstellungen</string>
+	<string name="manage_study">Studien verwalten</string>
+	<string name="manage_ar_scene">AR-Szenen verwalten</string>
+	<string name="ar_settings">AR-Einstellungen</string>
+	<string name="selection">Selektion</string>
+	<string name="scale">Skalieren</string>
+	<string name="rotate">Rotation</string>
+	<string name="rotation">Rotation</string>
+	<string name="scale_variant">Skalieren</string>
+	<string name="apply">Anwenden</string>
+	<string name="crosshairs">Fadenkreuz</string>
+
+	<!-- Sensorenbeschreibug -->
+	<string name="group_motion_sensor">Bewegungssensoren</string>
+	<string name="group_position_sensor">Positionssensoren</string>
+	<string name="group_environment_sensor">Umgebungssensoren</string>
+	<string name="group_other_sensor">Weitere Sensoren</string>
+
+	<string name="accelerometer">Beschleunigung</string>
+	<string name="accelerometer_description">Acceleration force along the x/y/z axis (including gravity).\nUnit of measure: m/s^2</string>
+	<string name="accelerometer_uncalibrated">Beschleunigung Unkalibriert</string>
+	<string name="accelerometer_uncalibrated_description">Measured acceleration along the x/y/z axis without any bias compensation and with estimated bias compensation.\nUnit of
+		measure: m/s^2</string>
+	<string name="gravity">Gravitation</string>
+	<string name="gravity_description">Force of gravity along the x/y/z axis.\nUnit of measure: m/s^2</string>
+	<string name="gyroscope">Gyroskop</string>
+	<string name="gyroscope_description">Rate of rotation around the x/y/z axis.\nUnit of measure: rad/s</string>
+	<string name="gyroscope_uncalibrated">Gyroskop Unkalibriert</string>
+	<string name="gyroscope_uncalibrated_description">Rate of rotation (without drift compensation) around the x/y/z axis and estimated drift around the x/y/z axis..\nUnit of
+		measure: rad/s</string>
+	<string name="linear_accelerometer">Lineare Beschleunigung</string>
+	<string name="linear_accelerometer_description">Acceleration force along the x/y/z axis (excluding gravity).\nUnit of measure: m/s^2</string>
+	<string name="step_counter">Schrittzähler</string>
+	<string name="step_counter_description">Number of steps taken by the user since the last reboot while the sensor was activated.\nUnit of measure: Steps</string>
+	<string name="rotation_vector">Rotationsvektor</string>
+	<string name="rotation_vector_description">Rotation vector component along the x/y/z axis (x * sin(θ/2)).\nUnit of measure: Unitless</string>
+
+	<string name="game_rotation_vector">Gamerotationsvektor</string>
+	<string name="geomagnetic_rotation_vector">Geomagnitischer Rotationsvektor</string>
 </resources>
