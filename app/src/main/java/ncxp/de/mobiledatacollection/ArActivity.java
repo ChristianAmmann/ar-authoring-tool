@@ -69,7 +69,6 @@ public class ArActivity extends AppCompatActivity {
 
 
 		arFragment.setOnTapArPlaneListener((HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
-			motionEvent = getMotionEventCenter(motionEvent);
 			if (andyRenderable == null) {
 				return;
 			}
@@ -96,7 +95,6 @@ public class ArActivity extends AppCompatActivity {
 			@Override
 			public boolean onSingleTapUp(MotionEvent motionEvent) {
 				//TODO check selection technique
-				motionEvent = getMotionEventCenter(motionEvent);
 				onSingleTap(motionEvent);
 				return true;
 			}
@@ -106,11 +104,6 @@ public class ArActivity extends AppCompatActivity {
 				return true;
 			}
 		});
-		/*arFragment.getArSceneView().getScene().setOnTouchListener((HitTestResult hitTestResult, MotionEvent event) -> {
-			MotionEvent motionEventCenter = getMotionEventCenter(event);
-			return trackableGestureDetector.onTouchEvent(motionEventCenter);
-		});*/
-
 	}
 
 	private void onSettingsClicked(View view) {
@@ -156,7 +149,6 @@ public class ArActivity extends AppCompatActivity {
 	private void handleOnTouch(HitTestResult hitTestResult, MotionEvent motionEvent) {
 		// First call ArFragment's listener to handle TransformableNodes.
 		//TODO check selection technique
-		motionEvent = getMotionEventCenter(motionEvent);
 		arFragment.onPeekTouch(hitTestResult, motionEvent);
 
 		// Check for touching a Sceneform node

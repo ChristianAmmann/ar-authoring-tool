@@ -44,6 +44,12 @@
 	<string name="scale_variant">Skalieren</string>
 	<string name="apply">Anwenden</string>
 	<string name="crosshairs">Fadenkreuz</string>
+	<string name="name_survey">Name des Fragebogens</string>
+	<string name="soci_survey_survey_id">SoSci Survey Id des Fragebogens</string>
+	<string name="survey_description">Kurzbeschreibung des Fragenbogens</string>
+	<string name="dialog_survey_title">Fragebogen einbinden</string>
+	<string name="study_title">Titel der Studie</string>
+	<string name="dialog_study_save_title">Studie speichern</string>
 
 	<!-- Sensorenbeschreibug -->
 	<string name="group_motion_sensor">Bewegungssensoren</string>
@@ -71,5 +77,26 @@
 	<string name="rotation_vector_description">Rotation vector component along the x/y/z axis (x * sin(θ/2)).\nUnit of measure: Unitless</string>
 
 	<string name="game_rotation_vector">Gamerotationsvektor</string>
+	<string name="game_rotation_vector_description">Rotation vector component along the x/y/z axis (x * sin(θ/2)).\nUnit of measure: Unitless</string>
 	<string name="geomagnetic_rotation_vector">Geomagnitischer Rotationsvektor</string>
+	<string name="geomagnetic_rotation_vector_description">Rotation vector component along the x/y/z axis (x * sin(θ/2)).\nUnit of measure: Unitless</string>
+	<string name="magnetic_field">Magnetisches Feld</string>
+	<string name="magnetic_field_description">Geomagnetic field strength along the x/y/z axis.\nUnit of measure: μT</string>
+	<string name="magnetic_field_uncalibrated">Magnetisches Feld Unkalibriert</string>
+	<string name="magnetic_field_uncalibrated_description">Geomagnetic field strength (without hard iron calibration) along the x/y/z axis.\nUnit of measure: μT</string>
+	<string name="orientation">Orientierung</string>
+	<string name="orientation_description">angle around the x/y/z-axis\nUnit of measure: Degrees</string>
+	<string name="proximity">Entfernung</string>
+	<string name="proximity_description">Distance from object.\nUnit of measure: cm</string>
+
+	<string name="ambient_temperature">Umgebungstemperatur</string>
+	<string name="ambient_temperature_description">Ambient air temperature.\nUnit of measure: °C</string>
+	<string name="light">Licht</string>
+	<string name="light_description">Illuminance.\nUnit of measure: lx</string>
+	<string name="pressure">Druck</string>
+	<string name="pressure_description">Ambient air pressure.\nUnit of measure: hPa or mbar</string>
+	<string name="temperature">Temperatur</string>
+	<string name="temperature_description">Device temperature.\nUnit of measure: °C</string>
+
+
 </resources>

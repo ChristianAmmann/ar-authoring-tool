@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/studies"
-				xmlns:android="http://schemas.android.com/apk/res/android"
-				xmlns:app="http://schemas.android.com/apk/res-auto"
-				xmlns:tools="http://schemas.android.com/tools"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout android:id="@+id/studies"
+												 xmlns:android="http://schemas.android.com/apk/res/android"
+												 xmlns:app="http://schemas.android.com/apk/res-auto"
+												 xmlns:tools="http://schemas.android.com/tools"
+												 android:layout_width="match_parent"
+												 android:layout_height="match_parent">
 
 	<android.support.v7.widget.RecyclerView
 		android:id="@+id/recyclerview_survey"
@@ -15,7 +15,7 @@
 		android:id="@+id/empty_survey_placeholder"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_centerInParent="true"
+		android:layout_gravity="center"
 		android:layout_margin="@dimen/placeholder_spacing"
 		android:orientation="vertical">
 
@@ -36,4 +36,15 @@
 			android:textSize="@dimen/material_typography_subtitle1"/>
 
 	</LinearLayout>
-</RelativeLayout>
+
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/fab_survey"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="end"
+		android:layout_margin="@dimen/fab_padding"
+		android:src="@drawable/plus"
+		app:fabSize="normal"
+		app:layout_anchor="@id/recyclerview_survey"
+		app:layout_anchorGravity="bottom|end"/>
+</android.support.design.widget.CoordinatorLayout>

@@ -1,9 +1,12 @@
 package ncxp.de.mobiledatacollection.ui.study;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -24,19 +28,18 @@ import ncxp.de.mobiledatacollection.datalogger.SensorDataManager;
 import ncxp.de.mobiledatacollection.model.StudyDatabase;
 import ncxp.de.mobiledatacollection.model.dao.StudyDao;
 import ncxp.de.mobiledatacollection.model.dao.SurveyDao;
-import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.data.Survey;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
-import ncxp.de.mobiledatacollection.ui.studies.MoreListener;
 import ncxp.de.mobiledatacollection.ui.study.adapter.SurveyAdapter;
 
 public class SurveyFragment extends Fragment implements OptionSurveyListener {
 
-	private RecyclerView   surveyRecyclerView;
-	private SurveyAdapter  surveyAdapter;
-	private StudyViewModel viewModel;
-	private LinearLayout   placeHolder;
+	private RecyclerView         surveyRecyclerView;
+	private SurveyAdapter        surveyAdapter;
+	private StudyViewModel       viewModel;
+	private LinearLayout         placeHolder;
+	private FloatingActionButton fab;
 
 	public static SurveyFragment newInstance() {
 		return new SurveyFragment();
@@ -58,6 +61,8 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		surveyRecyclerView = view.findViewById(R.id.recyclerview_survey);
 		placeHolder = view.findViewById(R.id.empty_survey_placeholder);
+		fab = view.findViewById(R.id.fab_survey);
+		fab.setOnClickListener(this::showSurveyAddDialog);
 		setupSurveyView();
 	}
 
@@ -102,6 +107,43 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 				break;
 		}
 		return true;
+	}
+
+	private void showSurveyAddDialog(View view) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+		LayoutInflater inflater = getLayoutInflater();
+		builder.setTitle(R.string.dialog_survey_title);
+		View dialogView = inflater.inflate(R.layout.dialog_import_survey, null);
+		TextInputEditText surveyTitle = dialogView.findViewById(R.id.survey_title);
+		TextInputEditText surveyDescription = dialogView.findViewById(R.id.survey_description);
+		TextInputEditText surveyId = dialogView.findViewById(R.id.survey_id);
+
+		builder.setView(dialogView).setPositiveButton(R.string.save, null).setNegativeButton(R.string.cancel, ((dialog, which) -> dialog.dismiss()));
+		AlertDialog alertDialog = builder.create();
+		alertDialog.show();
+		Button positiveButtion = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+		positiveButtion.setOnClickListener((clickedView) -> {
+
+			boolean canDismissDialog = true;
+			if (surveyTitle.getText().toString().isEmpty()) {
+				surveyTitle.setError("Der Fragebogen benötigt einen Titel");
+				canDismissDialog = false;
+			}
+
+			if (surveyDescription.getText().toString().isEmpty()) {
+				surveyDescription.setError("Der Fragebogen benötigt eine Beschreibung");
+				canDismissDialog = false;
+			}
+
+			if (surveyId.getText().toString().isEmpty()) {
+				surveyId.setError("Der Fragebogen benötigt eine SoSci-Survey Id");
+				canDismissDialog = false;
+			}
+			if (canDismissDialog) {
+				alertDialog.dismiss();
+			}
+
+		});
 	}
 
 	private void showDeleteDialog(Survey survey) {
