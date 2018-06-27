@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,11 +18,14 @@ import android.widget.Button;
 import ncxp.de.mobiledatacollection.ui.study.OthersFragment;
 import ncxp.de.mobiledatacollection.ui.study.SensorFragment;
 import ncxp.de.mobiledatacollection.ui.study.SurveyFragment;
+import ncxp.de.mobiledatacollection.ui.study.adapter.ViewPagerAdapter;
 
 public class StudyActivity extends AppCompatActivity {
 
 	private Toolbar              toolbar;
 	private BottomNavigationView navigationView;
+	private ViewPager            viewPager;
+	private MenuItem             previousMenuItem;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,33 +33,57 @@ public class StudyActivity extends AppCompatActivity {
 		setContentView(R.layout.study_activity);
 		toolbar = findViewById(R.id.toolbar);
 		toolbar.setTitle(R.string.new_study);
+		viewPager = findViewById(R.id.container);
+		setupViewPagerAdapter();
 		navigationView = findViewById(R.id.bottom_navigation);
 		navigationView.setOnNavigationItemSelectedListener(this::onNavigationItemClicked);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 		toolbar.setNavigationOnClickListener(view -> this.finish());
-		showSensorFragment(savedInstanceState);
+	}
+
+	private void setupViewPagerAdapter() {
+		ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+		adapter.addFragment(SensorFragment.newInstance());
+		adapter.addFragment(SurveyFragment.newInstance());
+		adapter.addFragment(OthersFragment.newInstance());
+		viewPager.setAdapter(adapter);
+		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
+
+			@Override
+			public void onPageSelected(int position) {
+				if (previousMenuItem != null) {
+					previousMenuItem.setChecked(false);
+				} else {
+					navigationView.getMenu().getItem(0).setChecked(false);
+				}
+				navigationView.getMenu().getItem(position).setChecked(true);
+				previousMenuItem = navigationView.getMenu().getItem(position);
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int state) {
+
+			}
+		});
 	}
 
 
 	private boolean onNavigationItemClicked(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.sensors:
-				getSupportFragmentManager().beginTransaction().replace(R.id.container, SensorFragment.newInstance(), null).commit();
+				viewPager.setCurrentItem(0);
 				break;
 			case R.id.survey:
-				getSupportFragmentManager().beginTransaction().replace(R.id.container, SurveyFragment.newInstance(), null).commit();
+				viewPager.setCurrentItem(1);
 				break;
 			case R.id.others:
-				getSupportFragmentManager().beginTransaction().replace(R.id.container, OthersFragment.newInstance(), null).commit();
+				viewPager.setCurrentItem(2);
+				break;
 		}
-		return true;
-	}
-
-	private void showSensorFragment(Bundle savedInstanceState) {
-		if (savedInstanceState == null) {
-			getSupportFragmentManager().beginTransaction().add(R.id.container, SensorFragment.newInstance(), null).commit();
-		}
+		return false;
 	}
 
 	@Override

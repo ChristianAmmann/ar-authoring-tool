@@ -62,7 +62,7 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 		surveyRecyclerView = view.findViewById(R.id.recyclerview_survey);
 		placeHolder = view.findViewById(R.id.empty_survey_placeholder);
 		fab = view.findViewById(R.id.fab_survey);
-		fab.setOnClickListener(this::showSurveyAddDialog);
+		fab.setOnClickListener(clickedView -> showSurveyDialog());
 		setupSurveyView();
 	}
 
@@ -71,9 +71,12 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 		surveyAdapter = new SurveyAdapter(new ArrayList<>(), this);
 		surveyRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		surveyRecyclerView.setAdapter(surveyAdapter);
-		viewModel.getSurveys().observe(SurveyFragment.this, surveys -> {
+		viewModel.getSavedSurveys().observe(SurveyFragment.this, surveys -> {
+			List<Survey> currentCreatedSurveys = viewModel.getCurrentCreatedSurveys().getValue();
+			showPlaceHolder(currentCreatedSurveys);
 			showPlaceHolder(surveys);
 			surveyAdapter.addItems(surveys);
+			surveyAdapter.addItems(currentCreatedSurveys);
 		});
 	}
 
@@ -84,7 +87,7 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 		SurveyRepository surveyRepo = new SurveyRepository(survey);
 		SensorDataManager sensorDataManager = SensorDataManager.getInstance(getContext());
 		StudyViewModelFactory factory = new StudyViewModelFactory(studyRepo, surveyRepo, sensorDataManager);
-		viewModel = ViewModelProviders.of(this, factory).get(StudyViewModel.class);
+		viewModel = ViewModelProviders.of(getActivity(), factory).get(StudyViewModel.class);
 		viewModel.init();
 	}
 
@@ -100,7 +103,7 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 	private boolean onPopupMenuClicked(MenuItem menuItem, Survey survey) {
 		switch (menuItem.getItemId()) {
 			case R.id.edit:
-				//TODO edit
+				showSurveyDialog(survey);
 				break;
 			case R.id.delete:
 				showDeleteDialog(survey);
@@ -109,7 +112,11 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 		return true;
 	}
 
-	private void showSurveyAddDialog(View view) {
+	private void showSurveyDialog() {
+		showSurveyDialog(null);
+	}
+
+	private void showSurveyDialog(Survey survey) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		LayoutInflater inflater = getLayoutInflater();
 		builder.setTitle(R.string.dialog_survey_title);
@@ -117,29 +124,46 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 		TextInputEditText surveyTitle = dialogView.findViewById(R.id.survey_title);
 		TextInputEditText surveyDescription = dialogView.findViewById(R.id.survey_description);
 		TextInputEditText surveyId = dialogView.findViewById(R.id.survey_id);
-
+		if (survey != null) {
+			surveyTitle.setText(survey.getName());
+			surveyDescription.setText(survey.getDescription());
+			surveyId.setText(survey.getPlatformId());
+		}
 		builder.setView(dialogView).setPositiveButton(R.string.save, null).setNegativeButton(R.string.cancel, ((dialog, which) -> dialog.dismiss()));
 		AlertDialog alertDialog = builder.create();
 		alertDialog.show();
-		Button positiveButtion = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-		positiveButtion.setOnClickListener((clickedView) -> {
+		Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+		positiveButton.setOnClickListener((clickedView) -> {
 
 			boolean canDismissDialog = true;
-			if (surveyTitle.getText().toString().isEmpty()) {
-				surveyTitle.setError("Der Fragebogen benötigt einen Titel");
+			String name = surveyTitle.getText().toString();
+			if (name.isEmpty()) {
+				surveyTitle.setError(getString(R.string.dialog_survey_error_title));
 				canDismissDialog = false;
 			}
 
-			if (surveyDescription.getText().toString().isEmpty()) {
-				surveyDescription.setError("Der Fragebogen benötigt eine Beschreibung");
+			String description = surveyDescription.getText().toString();
+			if (description.isEmpty()) {
+				surveyDescription.setError(getString(R.string.dialog_survey_error_description));
 				canDismissDialog = false;
 			}
 
-			if (surveyId.getText().toString().isEmpty()) {
-				surveyId.setError("Der Fragebogen benötigt eine SoSci-Survey Id");
+			String platformId = surveyId.getText().toString();
+			if (platformId.isEmpty()) {
+				surveyId.setError(getString(R.string.dialog_survey_error_id));
 				canDismissDialog = false;
 			}
 			if (canDismissDialog) {
+				if (survey != null) {
+					survey.setName(name);
+					survey.setDescription(description);
+					survey.setPlatformId(platformId);
+					surveyAdapter.updateItem(survey);
+				} else {
+					Survey createdDialog = viewModel.createSurvey(name, description, platformId);
+					surveyAdapter.addItem(createdDialog);
+				}
+				showPlaceHolder(false);
 				alertDialog.dismiss();
 			}
 
@@ -152,6 +176,7 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 		builder.setTitle(R.string.dialog_survey_delete_title);
 		builder.setPositiveButton(R.string.dialog_survey_remove, (dialog, which) -> {
 			surveyAdapter.deleteItem(survey);
+			viewModel.removeSurvey(survey);
 			//TODO Remove in db with viewmodel
 		});
 		builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
@@ -161,5 +186,13 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 	private void showPlaceHolder(List<Survey> surveys) {
 		int visible = (surveys != null && surveys.size() > 0) ? View.INVISIBLE : View.VISIBLE;
 		placeHolder.setVisibility(visible);
+	}
+
+	private void showPlaceHolder(boolean visible) {
+		if (visible) {
+			placeHolder.setVisibility(View.VISIBLE);
+		} else {
+			placeHolder.setVisibility(View.GONE);
+		}
 	}
 }

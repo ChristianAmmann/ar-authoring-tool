@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:tools="http://schemas.android.com/tools"
+			  android:layout_width="match_parent"
+			  android:layout_height="wrap_content"
+			  android:minHeight="@dimen/two_line_item__min_height"
+			  android:orientation="horizontal"
+			  android:padding="16dp">
+
+	<Textview
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_vertical"
+		android:layout_weight="2"
+		android:fontFamily="sans-serif"
+		android:textColor="@android:color/black"
+		android:textSize="@dimen/material_typography_subtitle1"
+		tools:text="Genauigkeit"/>
+
+	<SeekBar
+		android:id="@+id/accuracy_seek_bar"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_vertical"
+		android:layout_weight="1"
+		android:max="2"
+		android:paddingEnd="5dp"
+		android:paddingStart="5dp"
+		android:tickMark="@drawable/tickmark"/>
+
+</LinearLayout>

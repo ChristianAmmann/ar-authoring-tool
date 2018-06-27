@@ -27,7 +27,7 @@ import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
 import ncxp.de.mobiledatacollection.ui.study.adapter.SectionAdapter;
 
-public class SensorFragment extends Fragment {
+public class SensorFragment extends Fragment implements OptionSensorListener {
 
 	private StudyViewModel viewModel;
 	private RecyclerView   sectionedRecyclerView;
@@ -62,7 +62,7 @@ public class SensorFragment extends Fragment {
 		sectionedRecyclerView.setLayoutManager(layoutManager);
 		sectionedRecyclerView.setLayoutManager(layoutManager);
 		sectionedRecyclerView.setAdapter(sectionAdapter);
-		sectionAdapter.addItems(getSectionedDeviceSensors(viewModel.getAvailableDeviceSensor()));
+		sectionAdapter.addItems(getSectionedDeviceSensors(viewModel.getAvailableDeviceSensor().getValue()));
 	}
 
 	private void configureViewModel() {
@@ -72,7 +72,7 @@ public class SensorFragment extends Fragment {
 		SurveyRepository surveyRepo = new SurveyRepository(survey);
 		SensorDataManager sensorDataManager = SensorDataManager.getInstance(getContext());
 		StudyViewModelFactory factory = new StudyViewModelFactory(studyRepo, surveyRepo, sensorDataManager);
-		viewModel = ViewModelProviders.of(this, factory).get(StudyViewModel.class);
+		viewModel = ViewModelProviders.of(getActivity(), factory).get(StudyViewModel.class);
 		viewModel.init();
 	}
 
@@ -86,5 +86,10 @@ public class SensorFragment extends Fragment {
 			sectionedDeviceSensors.addAll(sensorsOfGroup);
 		}
 		return sectionedDeviceSensors;
+	}
+
+	@Override
+	public void onActiveChanged(AvailableDeviceSensor deviceSensor, boolean active) {
+		deviceSensor.setActive(active);
 	}
 }

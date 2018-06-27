@@ -1,5 +1,6 @@
 package ncxp.de.mobiledatacollection.ui.study;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,19 +11,45 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ncxp.de.mobiledatacollection.R;
+import ncxp.de.mobiledatacollection.datalogger.SensorDataManager;
+import ncxp.de.mobiledatacollection.model.StudyDatabase;
+import ncxp.de.mobiledatacollection.model.dao.StudyDao;
+import ncxp.de.mobiledatacollection.model.dao.SurveyDao;
+import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
+import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
+import ncxp.de.mobiledatacollection.ui.study.adapter.SectionAdapter;
 
 public class OthersFragment extends Fragment {
 
-	private RecyclerView othersRecyclerView;
+	private StudyViewModel viewModel;
+	private RecyclerView   othersRecyclerView;
+	private SectionAdapter sectionAdapter;
 
 	public static OthersFragment newInstance() {
 		return new OthersFragment();
 	}
 
 
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		this.configureViewModel();
+	}
+
 	@Nullable
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.others_fragment, container, false);
+	}
+
+	private void configureViewModel() {
+		StudyDao study = StudyDatabase.getInstance(getContext()).study();
+		SurveyDao survey = StudyDatabase.getInstance(getContext()).survey();
+		StudyRepository studyRepo = new StudyRepository(study);
+		SurveyRepository surveyRepo = new SurveyRepository(survey);
+		SensorDataManager sensorDataManager = SensorDataManager.getInstance(getContext());
+		StudyViewModelFactory factory = new StudyViewModelFactory(studyRepo, surveyRepo, sensorDataManager);
+		viewModel = ViewModelProviders.of(getActivity(), factory).get(StudyViewModel.class);
+		viewModel.init();
 	}
 }

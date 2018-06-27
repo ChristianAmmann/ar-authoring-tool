@@ -47,9 +47,19 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyViewHolder> {
 		notifyDataSetChanged();
 	}
 
+	public void addItem(Survey survey) {
+		surveys.add(survey);
+		notifyItemInserted(surveys.size());
+	}
+
 	public void deleteItem(Survey survey) {
 		int position = surveys.indexOf(survey);
 		surveys.remove(position);
 		notifyItemRemoved(position);
+	}
+
+	public void updateItem(Survey survey) {
+		int position = surveys.indexOf(survey);
+		notifyItemChanged(position);
 	}
 }

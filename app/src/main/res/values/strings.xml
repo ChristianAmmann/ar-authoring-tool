@@ -50,8 +50,11 @@
 	<string name="dialog_survey_title">Fragebogen einbinden</string>
 	<string name="study_title">Titel der Studie</string>
 	<string name="dialog_study_save_title">Studie speichern</string>
+	<string name="dialog_survey_error_title">Der Fragebogen benötigt einen Titel</string>
+	<string name="dialog_survey_error_description">Der Fragebogen benötigt eine Beschreibung</string>
+	<string name="dialog_survey_error_id">Der Fragebogen benötigt eine SoSci-Survey Id</string>
 
-	<!-- Sensorenbeschreibug -->
+	<!-- Sensorenbeschreibung und Gruppen -->
 	<string name="group_motion_sensor">Bewegungssensoren</string>
 	<string name="group_position_sensor">Positionssensoren</string>
 	<string name="group_environment_sensor">Umgebungssensoren</string>
@@ -97,6 +100,11 @@
 	<string name="pressure_description">Ambient air pressure.\nUnit of measure: hPa or mbar</string>
 	<string name="temperature">Temperatur</string>
 	<string name="temperature_description">Device temperature.\nUnit of measure: °C</string>
+
+
+	<string name="group_others_sensor_settings">Einstellungen der Sensoren</string>
+	<string name="group_others_video_audio">Video &amp; Audio</string>
+	<string name="group_others_miscellaneous">Weitere Optionen</string>
 
 
 </resources>

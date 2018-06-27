@@ -12,34 +12,28 @@ public class Survey {
 	public static final String TABLE_NAME = "surveys";
 
 	@PrimaryKey
-	private final long   id;
-	private       int    platformId;
-	private       String name;
-	private       String description;
-	private final long   studyId;
+	private long   id;
+	private String platformId;
+	private String name;
+	private String description;
+	private long   studyId;
 
-	public Survey(long id, long studyId, int platformId, String name, String description) {
-		this.id = id;
-		this.studyId = studyId;
-		this.platformId = platformId;
-		this.name = name;
-		this.description = description;
+	public Survey() {
 	}
 
 	public long getId() {
 		return id;
 	}
 
-
 	public long getStudyId() {
 		return studyId;
 	}
 
-	public int getPlatformId() {
+	public String getPlatformId() {
 		return platformId;
 	}
 
-	public void setPlatformId(int platformId) {
+	public void setPlatformId(String platformId) {
 		this.platformId = platformId;
 	}
 
@@ -57,5 +51,13 @@ public class Survey {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setStudyId(long studyId) {
+		this.studyId = studyId;
 	}
 }
