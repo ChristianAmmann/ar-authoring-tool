@@ -1,16 +1,16 @@
 package ncxp.de.mobiledatacollection.model.data;
 
+import android.hardware.SensorManager;
+
 public class SensorSettings {
 
 	// Between 1 - 3
-	private int accuracy;
+	private int accuracy = SensorManager.SENSOR_STATUS_ACCURACY_HIGH;
 
 	//in s
-	private double timeInterval;
+	private double timeInterval = 1.0;
 
-	public SensorSettings(int accuracy, double timeInterval) {
-		this.accuracy = accuracy;
-		this.timeInterval = timeInterval;
+	public SensorSettings() {
 	}
 
 	public int getAccuracy() {

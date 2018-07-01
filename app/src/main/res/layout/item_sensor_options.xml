@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:tools="http://schemas.android.com/tools"
+			  android:layout_width="match_parent"
+			  android:layout_height="wrap_content"
+			  android:orientation="vertical">
+
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:minHeight="@dimen/two_line_item__min_height"
+		android:orientation="horizontal"
+		android:padding="16dp">
+
+		<LinearLayout
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_weight="0.5"
+			android:orientation="vertical">
+
+			<TextView
+				android:id="@+id/accuracy_title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:fontFamily="sans-serif"
+				android:text="@string/settings_sensor_accuracy"
+				android:textColor="@android:color/black"
+				android:textSize="@dimen/material_typography_subtitle1"/>
+
+			<TextView
+				android:id="@+id/accuracy_description"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="sans-serif"
+				android:text="@string/settings_sensor_accuracy_description"
+				android:textSize="@dimen/material_typography_caption"
+				tools:text="Kurzbeschreibung"/>
+
+		</LinearLayout>
+
+		<SeekBar
+			android:id="@+id/accuracy_seek_bar"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_weight="0.25"
+			android:max="2"
+			android:paddingEnd="5dp"
+			android:paddingStart="5dp"
+			android:tickMark="@drawable/tickmark"/>
+
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:minHeight="@dimen/two_line_item__min_height"
+		android:orientation="horizontal"
+		android:padding="16dp">
+
+		<LinearLayout
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_weight="1"
+			android:orientation="vertical">
+
+			<TextView
+				android:id="@+id/setting_name"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="sans-serif"
+				android:text="@string/settings_sensor_timeinterval_title"
+				android:textColor="@android:color/black"
+				android:textSize="@dimen/material_typography_subtitle1"
+				tools:text="Sensor"/>
+
+			<TextView
+				android:id="@+id/setting_description"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="sans-serif"
+				android:text="@string/settings_sensor_timeinterval_description"
+				android:textSize="@dimen/material_typography_caption"
+				tools:text="Kurzbeschreibung"/>
+		</LinearLayout>
+
+		<Button
+			android:id="@+id/time_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:paddingEnd="5dp"
+			android:paddingStart="5dp"/>
+
+	</LinearLayout>
+</LinearLayout>

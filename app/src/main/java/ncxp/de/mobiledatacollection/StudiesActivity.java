@@ -19,7 +19,7 @@ public class StudiesActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.studies_activity);
+		setContentView(R.layout.activity_studies);
 		fab = findViewById(R.id.fab_add_study);
 		fab.setOnClickListener(view -> {
 			Intent intent = new Intent(this, StudyActivity.class);

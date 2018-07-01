@@ -9,12 +9,14 @@ import java.util.List;
 
 import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.datalogger.AvailableDeviceSensor;
+import ncxp.de.mobiledatacollection.ui.study.viewholder.ConfigViewHolder;
+import ncxp.de.mobiledatacollection.ui.study.viewholder.SectionViewHolder;
 
-public class SectionAdapter extends RecyclerView.Adapter {
+public class SensorAdapter extends RecyclerView.Adapter {
 
 	private List<Object> sectionedDeviceSensors;
 
-	public SectionAdapter(List<Object> sectionedDeviceSensors) {
+	public SensorAdapter(List<Object> sectionedDeviceSensors) {
 		this.sectionedDeviceSensors = sectionedDeviceSensors;
 	}
 
@@ -23,11 +25,11 @@ public class SectionAdapter extends RecyclerView.Adapter {
 	public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		RecyclerView.ViewHolder viewHolder = null;
 		switch (viewType) {
-			case R.layout.section:
-				viewHolder = new SectionViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.section, parent, false));
+			case R.layout.item_section:
+				viewHolder = new SectionViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_section, parent, false));
 				break;
-			case R.layout.config_item:
-				viewHolder = new ConfigViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.config_item, parent, false));
+			case R.layout.item_config:
+				viewHolder = new ConfigViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_config, parent, false));
 				break;
 		}
 		return viewHolder;
@@ -36,12 +38,12 @@ public class SectionAdapter extends RecyclerView.Adapter {
 	@Override
 	public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 		switch (holder.getItemViewType()) {
-			case R.layout.section:
+			case R.layout.item_section:
 				SectionViewHolder sectionViewHolder = (SectionViewHolder) holder;
 				Integer id = (Integer) sectionedDeviceSensors.get(position);
 				sectionViewHolder.getSectionTitle().setText(id);
 				break;
-			case R.layout.config_item:
+			case R.layout.item_config:
 				ConfigViewHolder configViewHolder = (ConfigViewHolder) holder;
 				AvailableDeviceSensor deviceSensor = (AvailableDeviceSensor) sectionedDeviceSensors.get(position);
 				configViewHolder.getConfigName().setText(deviceSensor.getNameId());
@@ -56,10 +58,10 @@ public class SectionAdapter extends RecyclerView.Adapter {
 	public int getItemViewType(int position) {
 		Object item = sectionedDeviceSensors.get(position);
 		if (item instanceof AvailableDeviceSensor) {
-			return R.layout.config_item;
+			return R.layout.item_config;
 		}
 		if (item instanceof Integer) {
-			return R.layout.section;
+			return R.layout.item_section;
 		}
 		return position;
 	}

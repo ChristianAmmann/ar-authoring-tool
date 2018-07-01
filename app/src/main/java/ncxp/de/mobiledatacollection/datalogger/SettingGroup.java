@@ -15,6 +15,6 @@ public enum SettingGroup {
 	}
 
 	public int getGroupId() {
-		return groupId;
+		return this.groupId;
 	}
 }

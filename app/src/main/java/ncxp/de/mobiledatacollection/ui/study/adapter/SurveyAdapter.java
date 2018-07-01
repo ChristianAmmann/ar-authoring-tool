@@ -11,6 +11,7 @@ import java.util.List;
 import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.model.data.Survey;
 import ncxp.de.mobiledatacollection.ui.study.OptionSurveyListener;
+import ncxp.de.mobiledatacollection.ui.study.viewholder.SurveyViewHolder;
 
 public class SurveyAdapter extends RecyclerView.Adapter<SurveyViewHolder> {
 
@@ -25,7 +26,7 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyViewHolder> {
 	@NonNull
 	@Override
 	public SurveyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.survey_item_card, parent, false);
+		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_survey, parent, false);
 		return new SurveyViewHolder(view);
 	}
 
@@ -35,6 +36,7 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyViewHolder> {
 		holder.getSurveyName().setText(survey.getName());
 		holder.getSurveyDescription().setText(survey.getDescription());
 		holder.getMoreButton().setOnClickListener(view -> optionListener.onPopupMenuClick(view, survey));
+		holder.getTestButton().setOnClickListener(view -> optionListener.onTestButtonClick(view, survey));
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package ncxp.de.mobiledatacollection.ui.study.adapter;
+package ncxp.de.mobiledatacollection.ui.study.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

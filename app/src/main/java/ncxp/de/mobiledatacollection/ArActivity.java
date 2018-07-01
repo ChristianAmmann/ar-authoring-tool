@@ -50,7 +50,7 @@ public class ArActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.ar_activity);
+		setContentView(R.layout.activity_ar);
 		settingsButton = findViewById(R.id.ar_settings_button);
 		settingsButton.setOnClickListener(this::onSettingsClicked);
 		arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);

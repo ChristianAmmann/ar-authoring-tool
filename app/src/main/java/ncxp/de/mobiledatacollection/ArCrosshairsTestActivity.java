@@ -21,7 +21,7 @@ public class ArCrosshairsTestActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.ar_crosshair_activity);
+		setContentView(R.layout.activity_ar_crosshair);
 		arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 	}
 

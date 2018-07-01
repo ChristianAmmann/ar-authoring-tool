@@ -41,8 +41,11 @@
 		android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true"
 		android:layout_gravity="bottom"
+		android:layout_marginTop="?attr/actionBarSize"
+		android:background="@color/colorPrimary"
 		android:clipChildren="false"
-		android:paddingTop="?attr/actionBarSize"
+		app:itemIconTint="@drawable/selector"
+		app:itemTextColor="@drawable/selector"
 		app:menu="@menu/create_menu"/>
 
 </android.support.design.widget.CoordinatorLayout>

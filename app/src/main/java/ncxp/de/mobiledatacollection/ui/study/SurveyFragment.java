@@ -2,6 +2,7 @@ package ncxp.de.mobiledatacollection.ui.study;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ncxp.de.mobiledatacollection.R;
+import ncxp.de.mobiledatacollection.SurveyTestActivity;
 import ncxp.de.mobiledatacollection.datalogger.SensorDataManager;
 import ncxp.de.mobiledatacollection.model.StudyDatabase;
 import ncxp.de.mobiledatacollection.model.dao.StudyDao;
@@ -32,6 +34,8 @@ import ncxp.de.mobiledatacollection.model.data.Survey;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
 import ncxp.de.mobiledatacollection.ui.study.adapter.SurveyAdapter;
+import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModel;
+import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModelFactory;
 
 public class SurveyFragment extends Fragment implements OptionSurveyListener {
 
@@ -54,7 +58,7 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 	@Nullable
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.survey_fragment, container, false);
+		return inflater.inflate(R.layout.fragment_survey, container, false);
 	}
 
 	@Override
@@ -98,6 +102,13 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 		inflater.inflate(R.menu.survey_popup_menu, popupMenu.getMenu());
 		popupMenu.setOnMenuItemClickListener(item -> onPopupMenuClicked(item, survey));
 		popupMenu.show();
+	}
+
+	@Override
+	public void onTestButtonClick(View view, Survey survey) {
+		Intent intent = new Intent(getActivity(), SurveyTestActivity.class);
+		intent.putExtra(SurveyTestActivity.PREF_KEY, survey.getPlatformId());
+		startActivity(intent);
 	}
 
 	private boolean onPopupMenuClicked(MenuItem menuItem, Survey survey) {

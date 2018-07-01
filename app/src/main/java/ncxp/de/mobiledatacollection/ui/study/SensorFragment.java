@@ -25,13 +25,15 @@ import ncxp.de.mobiledatacollection.model.dao.StudyDao;
 import ncxp.de.mobiledatacollection.model.dao.SurveyDao;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
-import ncxp.de.mobiledatacollection.ui.study.adapter.SectionAdapter;
+import ncxp.de.mobiledatacollection.ui.study.adapter.SensorAdapter;
+import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModel;
+import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModelFactory;
 
 public class SensorFragment extends Fragment implements OptionSensorListener {
 
 	private StudyViewModel viewModel;
 	private RecyclerView   sectionedRecyclerView;
-	private SectionAdapter sectionAdapter;
+	private SensorAdapter  sectionSensorAdapter;
 
 	public static SensorFragment newInstance() {
 		return new SensorFragment();
@@ -46,7 +48,7 @@ public class SensorFragment extends Fragment implements OptionSensorListener {
 	@Nullable
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.sensor_fragment, container, false);
+		return inflater.inflate(R.layout.fragment_sensor, container, false);
 	}
 
 	@Override
@@ -56,13 +58,13 @@ public class SensorFragment extends Fragment implements OptionSensorListener {
 	}
 
 	private void setupSensorView() {
-		sectionAdapter = new SectionAdapter(new ArrayList<>());
+		sectionSensorAdapter = new SensorAdapter(new ArrayList<>());
 		sectionedRecyclerView.setHasFixedSize(true);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 		sectionedRecyclerView.setLayoutManager(layoutManager);
 		sectionedRecyclerView.setLayoutManager(layoutManager);
-		sectionedRecyclerView.setAdapter(sectionAdapter);
-		sectionAdapter.addItems(getSectionedDeviceSensors(viewModel.getAvailableDeviceSensor().getValue()));
+		sectionedRecyclerView.setAdapter(sectionSensorAdapter);
+		sectionSensorAdapter.addItems(getSectionedDeviceSensors(viewModel.getAvailableDeviceSensor().getValue()));
 	}
 
 	private void configureViewModel() {

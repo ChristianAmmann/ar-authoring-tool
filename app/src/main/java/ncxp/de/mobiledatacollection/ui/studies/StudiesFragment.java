@@ -47,7 +47,7 @@ public class StudiesFragment extends Fragment implements MoreListener, ShareList
 	@Nullable
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.studies_fragment, container, false);
+		return inflater.inflate(R.layout.fragment_studies, container, false);
 	}
 
 	@Override

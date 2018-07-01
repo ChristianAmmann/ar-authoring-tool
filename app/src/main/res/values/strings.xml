@@ -53,6 +53,10 @@
 	<string name="dialog_survey_error_title">Der Fragebogen benötigt einen Titel</string>
 	<string name="dialog_survey_error_description">Der Fragebogen benötigt eine Beschreibung</string>
 	<string name="dialog_survey_error_id">Der Fragebogen benötigt eine SoSci-Survey Id</string>
+	<string name="settings_sensor_accuracy">Genauigkeit der Sensoren</string>
+	<string name="settings_sensor_accuracy_description">Genauigkeit von Gering zu Hoch. Dabei werden nur Sensorwerte mit der gewählten Genauigkeit gespeichert.</string>
+	<string name="settings_sensor_timeinterval_title">Messabstände</string>
+	<string name="settings_sensor_timeinterval_description">Der Wert gibt an nach wievielen Sekunden Sensordaten abgefragt werden</string>
 
 	<!-- Sensorenbeschreibung und Gruppen -->
 	<string name="group_motion_sensor">Bewegungssensoren</string>
@@ -106,5 +110,6 @@
 	<string name="group_others_video_audio">Video &amp; Audio</string>
 	<string name="group_others_miscellaneous">Weitere Optionen</string>
 
+	<string name="sosci_survey_url">https://www.soscisurvey.de/%1$s/?q=qnr2&amp;r=</string>
 
 </resources>

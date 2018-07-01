@@ -30,7 +30,7 @@ public class StudyActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.study_activity);
+		setContentView(R.layout.activity_study);
 		toolbar = findViewById(R.id.toolbar);
 		toolbar.setTitle(R.string.new_study);
 		viewPager = findViewById(R.id.container);
