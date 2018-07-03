@@ -13,6 +13,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,7 +110,7 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 	@Override
 	public void onTestButtonClick(View view, Survey survey) {
 		Intent intent = new Intent(getActivity(), SurveyTestActivity.class);
-		intent.putExtra(SurveyTestActivity.PREF_KEY, survey.getPlatformId());
+		intent.putExtra(SurveyTestActivity.PREF_KEY, survey);
 		startActivity(intent);
 	}
 
@@ -128,17 +131,58 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 	}
 
 	private void showSurveyDialog(Survey survey) {
+		//TODO Custom Dialog Refactor
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		LayoutInflater inflater = getLayoutInflater();
 		builder.setTitle(R.string.dialog_survey_title);
 		View dialogView = inflater.inflate(R.layout.dialog_import_survey, null);
 		TextInputEditText surveyTitle = dialogView.findViewById(R.id.survey_title);
 		TextInputEditText surveyDescription = dialogView.findViewById(R.id.survey_description);
-		TextInputEditText surveyId = dialogView.findViewById(R.id.survey_id);
+		TextInputEditText surveyProjectDirectory = dialogView.findViewById(R.id.survey_project_directory);
+		TextInputEditText surveyIdentifier = dialogView.findViewById(R.id.survey_identifier);
+		TextView surveyProjectDirectoryURL = dialogView.findViewById(R.id.survey_project_directory_url);
+		TextView surveyIdentiferURL = dialogView.findViewById(R.id.survey_identifier_url);
+		surveyProjectDirectory.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				surveyProjectDirectoryURL.setText(s);
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
+			}
+		});
+
+		surveyIdentifier.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				surveyIdentiferURL.setText(s);
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
+			}
+		});
+
 		if (survey != null) {
 			surveyTitle.setText(survey.getName());
 			surveyDescription.setText(survey.getDescription());
-			surveyId.setText(survey.getPlatformId());
+			surveyProjectDirectory.setText(survey.getProjectDirectory());
+			surveyIdentifier.setText(survey.getIdentifier());
+			surveyProjectDirectoryURL.setText(survey.getProjectDirectory());
+			surveyIdentiferURL.setText(survey.getIdentifier());
 		}
 		builder.setView(dialogView).setPositiveButton(R.string.save, null).setNegativeButton(R.string.cancel, ((dialog, which) -> dialog.dismiss()));
 		AlertDialog alertDialog = builder.create();
@@ -146,32 +190,24 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 		Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
 		positiveButton.setOnClickListener((clickedView) -> {
 
-			boolean canDismissDialog = true;
-			String name = surveyTitle.getText().toString();
-			if (name.isEmpty()) {
-				surveyTitle.setError(getString(R.string.dialog_survey_error_title));
-				canDismissDialog = false;
-			}
 
-			String description = surveyDescription.getText().toString();
-			if (description.isEmpty()) {
-				surveyDescription.setError(getString(R.string.dialog_survey_error_description));
-				canDismissDialog = false;
-			}
+			boolean validInput = validateInput(surveyTitle, R.string.dialog_survey_error_title);
+			validInput &= validateInput(surveyDescription, R.string.dialog_survey_error_description);
+			validInput &= validateInput(surveyProjectDirectory, R.string.dialog_survey_error_project_directory);
 
-			String platformId = surveyId.getText().toString();
-			if (platformId.isEmpty()) {
-				surveyId.setError(getString(R.string.dialog_survey_error_id));
-				canDismissDialog = false;
-			}
-			if (canDismissDialog) {
+			if (validInput) {
+				String name = surveyTitle.getText().toString();
+				String description = surveyDescription.getText().toString();
+				String projectDirectory = surveyProjectDirectory.getText().toString();
+				String identifier = surveyIdentifier.getText().toString();
 				if (survey != null) {
 					survey.setName(name);
 					survey.setDescription(description);
-					survey.setPlatformId(platformId);
+					survey.setProjectDirectory(projectDirectory);
+					survey.setIdentifier(identifier);
 					surveyAdapter.updateItem(survey);
 				} else {
-					Survey createdDialog = viewModel.createSurvey(name, description, platformId);
+					Survey createdDialog = viewModel.createSurvey(name, description, projectDirectory, identifier);
 					surveyAdapter.addItem(createdDialog);
 				}
 				showPlaceHolder(false);
@@ -180,6 +216,15 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 
 		});
 	}
+
+	private boolean validateInput(TextInputEditText editText, int errorCode) {
+		if (editText.getText().toString().isEmpty()) {
+			editText.setError(getString(errorCode));
+			return false;
+		}
+		return true;
+	}
+
 
 	private void showDeleteDialog(Survey survey) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

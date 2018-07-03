@@ -61,11 +61,12 @@ public class StudyViewModel extends ViewModel {
 		return this.currentCreatedSurveys;
 	}
 
-	public Survey createSurvey(String name, String description, String platformId) {
+	public Survey createSurvey(String name, String description, String projectDirectory, String identifier) {
 		Survey survey = new Survey();
 		survey.setName(name);
 		survey.setDescription(description);
-		survey.setPlatformId(platformId);
+		survey.setProjectDirectory(projectDirectory);
+		survey.setIdentifier(identifier);
 		currentCreatedSurveys.getValue().add(survey);
 		return survey;
 	}

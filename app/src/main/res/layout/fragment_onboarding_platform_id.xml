@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  android:background="@color/colorPrimary"
+			  android:gravity="center_horizontal"
+			  android:orientation="vertical"
+			  android:padding="@dimen/surrounding">
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:fontFamily="sans-serif-medium"
+		android:paddingBottom="@dimen/spacing_medium"
+		android:text="@string/onboarding_survey_platform_id_title"
+		android:textColor="@android:color/white"
+		android:textSize="@dimen/material_typography_h6"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:fontFamily="sans-serif"
+		android:text="@string/onboarding_survey_platform_id_description"
+		android:textColor="@android:color/white"
+		android:textSize="@dimen/material_typography_subtitle1"/>
+
+	<ImageView
+		android:id="@+id/platform_id_image"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/survey_help"/>
+
+	<View
+		android:layout_width="wrap_content"
+		android:layout_height="0dp"
+		android:layout_weight="1"/>
+
+	<Button
+		android:id="@+id/show_app_usage_permission"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Öffne SosCi Survey"
+		android:textColor="@android:color/white"
+		android:theme="@style/ButtonStyleOnBoarding"/>
+
+</LinearLayout>

@@ -14,6 +14,12 @@
 		<item name="android:textColor">@color/colorPrimary</item>
 	</style>
 
+	<style name="ButtonStyleOnBoarding" parent="Widget.AppCompat.Button.Colored">
+		<item name="android:colorButtonNormal">@color/colorPrimaryDark</item>
+		<item name="colorButtonNormal">@color/colorPrimaryDark</item>
+		<item name="android:textColor">#FFFFFF</item>
+	</style>
+
 	<!-- Typography
 
 	<style name="H1Text" parent="">
