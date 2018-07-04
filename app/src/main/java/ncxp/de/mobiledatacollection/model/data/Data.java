@@ -13,7 +13,7 @@ public class Data {
 
 	public static final String TABLE_NAME = "data";
 
-	@PrimaryKey
+	@PrimaryKey(autoGenerate = true)
 	private final long    id;
 	private final long    testPersonId;
 	private final long    deviceSensorId;

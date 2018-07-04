@@ -29,4 +29,8 @@ public class StudiesViewModel extends ViewModel {
 	public LiveData<List<Study>> getStudies() {
 		return this.studies;
 	}
+
+	public void deleteStudy(Study study) {
+		studyRepo.deleteStudy(study);
+	}
 }

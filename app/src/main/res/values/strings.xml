@@ -53,6 +53,8 @@
 	<string name="dialog_survey_error_title">Der Fragebogen benötigt einen Titel</string>
 	<string name="dialog_survey_error_description">Der Fragebogen benötigt eine Beschreibung</string>
 	<string name="dialog_survey_error_project_directory">Der Fragebogen benötigt ein SoSci-Survey Projektverzeichnis</string>
+	<string name="dialog_study_error_title">Die Studie benötigt einen Titel</string>
+	<string name="dialog_study_error_description">Die Studie benötigt eine Beschreibung</string>
 	<string name="settings_sensor_accuracy">Genauigkeit der Sensoren</string>
 	<string name="settings_sensor_accuracy_description">Genauigkeit von Gering zu Hoch. Dabei werden nur Sensorwerte mit der gewählten Genauigkeit gespeichert.</string>
 	<string name="settings_sensor_timeinterval_title">Messabstände</string>

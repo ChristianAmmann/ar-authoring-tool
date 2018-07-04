@@ -1,6 +1,5 @@
 package ncxp.de.mobiledatacollection.ui.study;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,17 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ncxp.de.mobiledatacollection.R;
+import ncxp.de.mobiledatacollection.StudyActivity;
 import ncxp.de.mobiledatacollection.SurveyTestActivity;
-import ncxp.de.mobiledatacollection.datalogger.SensorDataManager;
-import ncxp.de.mobiledatacollection.model.StudyDatabase;
-import ncxp.de.mobiledatacollection.model.dao.StudyDao;
-import ncxp.de.mobiledatacollection.model.dao.SurveyDao;
 import ncxp.de.mobiledatacollection.model.data.Survey;
-import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
-import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
 import ncxp.de.mobiledatacollection.ui.study.adapter.SurveyAdapter;
 import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModel;
-import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModelFactory;
 
 public class SurveyFragment extends Fragment implements OptionSurveyListener {
 
@@ -55,7 +48,7 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.configureViewModel();
+		viewModel = StudyActivity.obtainViewModel(getActivity());
 	}
 
 	@Nullable
@@ -85,17 +78,6 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 			surveyAdapter.addItems(surveys);
 			surveyAdapter.addItems(currentCreatedSurveys);
 		});
-	}
-
-	private void configureViewModel() {
-		StudyDao study = StudyDatabase.getInstance(getContext()).study();
-		SurveyDao survey = StudyDatabase.getInstance(getContext()).survey();
-		StudyRepository studyRepo = new StudyRepository(study);
-		SurveyRepository surveyRepo = new SurveyRepository(survey);
-		SensorDataManager sensorDataManager = SensorDataManager.getInstance(getContext());
-		StudyViewModelFactory factory = new StudyViewModelFactory(studyRepo, surveyRepo, sensorDataManager);
-		viewModel = ViewModelProviders.of(getActivity(), factory).get(StudyViewModel.class);
-		viewModel.init();
 	}
 
 	@Override

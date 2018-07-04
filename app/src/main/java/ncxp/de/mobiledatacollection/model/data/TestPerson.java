@@ -9,9 +9,9 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 @Entity(tableName = TestPerson.TABLE_NAME, foreignKeys = @ForeignKey(entity = Study.class, parentColumns = "id", childColumns = "studyId", onDelete = CASCADE))
 public class TestPerson {
 
-	public static final String TABLE_NAME = "subjects";
+	public static final String TABLE_NAME = "Subject";
 
-	@PrimaryKey
+	@PrimaryKey(autoGenerate = true)
 	private final long id;
 	private final long studyId;
 

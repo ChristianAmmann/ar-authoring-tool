@@ -1,9 +1,11 @@
 package ncxp.de.mobiledatacollection;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,10 +17,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import ncxp.de.mobiledatacollection.datalogger.SensorDataManager;
+import ncxp.de.mobiledatacollection.model.StudyDatabase;
+import ncxp.de.mobiledatacollection.model.dao.DeviceSensorDao;
+import ncxp.de.mobiledatacollection.model.dao.StudyDao;
+import ncxp.de.mobiledatacollection.model.dao.StudyDeviceSensorJoinDao;
+import ncxp.de.mobiledatacollection.model.dao.SurveyDao;
+import ncxp.de.mobiledatacollection.model.repository.DeviceSensorRepository;
+import ncxp.de.mobiledatacollection.model.repository.StudyDeviceSensorJoinRepository;
+import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
+import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
 import ncxp.de.mobiledatacollection.ui.study.OthersFragment;
 import ncxp.de.mobiledatacollection.ui.study.SensorFragment;
 import ncxp.de.mobiledatacollection.ui.study.SurveyFragment;
 import ncxp.de.mobiledatacollection.ui.study.adapter.ViewPagerAdapter;
+import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModel;
+import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModelFactory;
 
 public class StudyActivity extends AppCompatActivity {
 
@@ -26,6 +40,7 @@ public class StudyActivity extends AppCompatActivity {
 	private BottomNavigationView navigationView;
 	private ViewPager            viewPager;
 	private MenuItem             previousMenuItem;
+	private StudyViewModel       viewModel;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +55,31 @@ public class StudyActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 		toolbar.setNavigationOnClickListener(view -> this.finish());
+		configureViewModel();
+	}
+
+	public static StudyViewModel obtainViewModel(FragmentActivity activity) {
+		return ViewModelProviders.of(activity, createFactory(activity)).get(StudyViewModel.class);
+	}
+
+	private void configureViewModel() {
+		StudyViewModelFactory factory = createFactory(this);
+		viewModel = ViewModelProviders.of(this, factory).get(StudyViewModel.class);
+		viewModel.init();
+	}
+
+	private static StudyViewModelFactory createFactory(FragmentActivity activity) {
+		StudyDatabase database = StudyDatabase.getInstance(activity);
+		StudyDao studyDao = database.study();
+		SurveyDao surveyDao = database.survey();
+		DeviceSensorDao deviceDao = database.deviceSensor();
+		StudyDeviceSensorJoinDao studyDeviceSensorJoinDao = database.studyDeviceSensorJoinDao();
+		StudyRepository studyRepo = new StudyRepository(studyDao);
+		SurveyRepository surveyRepo = new SurveyRepository(surveyDao);
+		DeviceSensorRepository deviceRepo = new DeviceSensorRepository(deviceDao);
+		SensorDataManager sensorDataManager = SensorDataManager.getInstance(activity);
+		StudyDeviceSensorJoinRepository studyDeviceSensorJoinRepo = new StudyDeviceSensorJoinRepository(studyDeviceSensorJoinDao);
+		return new StudyViewModelFactory(studyRepo, surveyRepo, deviceRepo, sensorDataManager, studyDeviceSensorJoinRepo);
 	}
 
 	private void setupViewPagerAdapter() {
@@ -72,6 +112,7 @@ public class StudyActivity extends AppCompatActivity {
 
 
 	private boolean onNavigationItemClicked(MenuItem item) {
+
 		switch (item.getItemId()) {
 			case R.id.sensors:
 				viewPager.setCurrentItem(0);
@@ -117,21 +158,26 @@ public class StudyActivity extends AppCompatActivity {
 		alertDialog.show();
 		Button positiveButtion = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
 		positiveButtion.setOnClickListener((view) -> {
+			boolean validInput = true;
+			validInput &= validateInput(titleInput, R.string.dialog_study_error_title);
+			validInput &= validateInput(descriptionInput, R.string.dialog_study_error_description);
 
-			boolean canDismissDialog = true;
-			if (titleInput.getText().toString().isEmpty()) {
-				titleInput.setError("Die Studie benötigt einen Titel");
-				canDismissDialog = false;
-			}
-
-			if (descriptionInput.getText().toString().isEmpty()) {
-				descriptionInput.setError("Die Studie benötigt eine Beschreibung");
-				canDismissDialog = false;
-			}
-			if (canDismissDialog) {
+			if (validInput) {
+				String name = titleInput.getText().toString();
+				String description = descriptionInput.getText().toString();
+				viewModel.saveStudy(name, description);
 				alertDialog.dismiss();
+				finish();
 			}
 
 		});
+	}
+
+	private boolean validateInput(TextInputEditText editText, int errorCode) {
+		if (editText.getText().toString().isEmpty()) {
+			editText.setError(getString(errorCode));
+			return false;
+		}
+		return true;
 	}
 }

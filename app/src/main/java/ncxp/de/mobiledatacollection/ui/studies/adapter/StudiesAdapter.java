@@ -59,4 +59,10 @@ public class StudiesAdapter extends RecyclerView.Adapter<StudyViewHolder> {
 		notifyDataSetChanged();
 	}
 
+	public void replaceItems(List<Study> newStudies) {
+		studies = newStudies;
+		notifyDataSetChanged();
+	}
+
+
 }

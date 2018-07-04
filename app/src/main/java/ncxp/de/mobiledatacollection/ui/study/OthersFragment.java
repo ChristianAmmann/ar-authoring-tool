@@ -1,6 +1,5 @@
 package ncxp.de.mobiledatacollection.ui.study;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,18 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ncxp.de.mobiledatacollection.R;
-import ncxp.de.mobiledatacollection.datalogger.SensorDataManager;
+import ncxp.de.mobiledatacollection.StudyActivity;
 import ncxp.de.mobiledatacollection.datalogger.SettingGroup;
-import ncxp.de.mobiledatacollection.model.StudyDatabase;
-import ncxp.de.mobiledatacollection.model.dao.StudyDao;
-import ncxp.de.mobiledatacollection.model.dao.SurveyDao;
 import ncxp.de.mobiledatacollection.model.data.CapturingData;
 import ncxp.de.mobiledatacollection.model.data.SensorSettings;
-import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
-import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
 import ncxp.de.mobiledatacollection.ui.study.adapter.OtherAdapter;
 import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModel;
-import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModelFactory;
 
 public class OthersFragment extends Fragment {
 
@@ -38,11 +31,10 @@ public class OthersFragment extends Fragment {
 		return new OthersFragment();
 	}
 
-
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.configureViewModel();
+		viewModel = StudyActivity.obtainViewModel(getActivity());
 	}
 
 	@Nullable
@@ -55,17 +47,6 @@ public class OthersFragment extends Fragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		othersRecyclerView = view.findViewById(R.id.recyclerview_other);
 		setupOtherView();
-	}
-
-	private void configureViewModel() {
-		StudyDao study = StudyDatabase.getInstance(getContext()).study();
-		SurveyDao survey = StudyDatabase.getInstance(getContext()).survey();
-		StudyRepository studyRepo = new StudyRepository(study);
-		SurveyRepository surveyRepo = new SurveyRepository(survey);
-		SensorDataManager sensorDataManager = SensorDataManager.getInstance(getContext());
-		StudyViewModelFactory factory = new StudyViewModelFactory(studyRepo, surveyRepo, sensorDataManager);
-		viewModel = ViewModelProviders.of(getActivity(), factory).get(StudyViewModel.class);
-		viewModel.init();
 	}
 
 	private void setupOtherView() {

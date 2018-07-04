@@ -7,28 +7,39 @@ import android.arch.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import ncxp.de.mobiledatacollection.datalogger.AvailableDeviceSensor;
 import ncxp.de.mobiledatacollection.datalogger.SensorDataManager;
+import ncxp.de.mobiledatacollection.model.data.DeviceSensor;
 import ncxp.de.mobiledatacollection.model.data.Study;
+import ncxp.de.mobiledatacollection.model.data.StudyDeviceSensorJoin;
 import ncxp.de.mobiledatacollection.model.data.Survey;
+import ncxp.de.mobiledatacollection.model.repository.DeviceSensorRepository;
+import ncxp.de.mobiledatacollection.model.repository.StudyDeviceSensorJoinRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
 
 public class StudyViewModel extends ViewModel {
 
-	private StudyRepository                              studyRepo;
-	private SurveyRepository                             surveyRepo;
-	private SensorDataManager                            sensorDataManager;
-	private Study                                        study;
-	private MutableLiveData<List<Survey>>                currentCreatedSurveys;
-	private MutableLiveData<List<AvailableDeviceSensor>> availableSensors;
+	private StudyRepository                     studyRepo;
+	private SurveyRepository                    surveyRepo;
+	private DeviceSensorRepository              deviceRepo;
+	private StudyDeviceSensorJoinRepository     studyDeviceSensorJoinRepo;
+	private SensorDataManager                   sensorDataManager;
+	private Study                               study;
+	private MutableLiveData<List<Survey>>       currentCreatedSurveys;
+	private MutableLiveData<List<DeviceSensor>> availableSensors;
 
 	private LiveData<List<Survey>> savedSurveys;
 
-	public StudyViewModel(StudyRepository studyRepo, SurveyRepository surveyRepo, SensorDataManager sensorDataManager) {
+	public StudyViewModel(StudyRepository studyRepo,
+						  SurveyRepository surveyRepo,
+						  DeviceSensorRepository deviceRepo,
+						  SensorDataManager sensorDataManager,
+						  StudyDeviceSensorJoinRepository studyDeviceSensorJoinRepo) {
 		this.studyRepo = studyRepo;
 		this.surveyRepo = surveyRepo;
+		this.deviceRepo = deviceRepo;
 		this.sensorDataManager = sensorDataManager;
+		this.studyDeviceSensorJoinRepo = studyDeviceSensorJoinRepo;
 		this.currentCreatedSurveys = new MutableLiveData<>();
 		currentCreatedSurveys.setValue(new ArrayList<>());
 		this.availableSensors = new MutableLiveData<>();
@@ -38,23 +49,27 @@ public class StudyViewModel extends ViewModel {
 
 	public void init() {
 		savedSurveys = surveyRepo.getSurveys();
+		initAvailableDeviceSensor();
 	}
 
 	public LiveData<List<Survey>> getSavedSurveys() {
 		return this.savedSurveys;
 	}
 
-	public MutableLiveData<List<AvailableDeviceSensor>> getAvailableDeviceSensor() {
-		List<AvailableDeviceSensor> availableDeviceSensors = new ArrayList<>();
-		sensorDataManager.getAvailableDeviceSensors().forEach(sensor -> {
-			AvailableDeviceSensor availableDeviceSensor = new AvailableDeviceSensor(sensor);
-			if (availableDeviceSensor.getType() != null) {
-				availableDeviceSensors.add(availableDeviceSensor);
-			}
+	public MutableLiveData<List<DeviceSensor>> getAvailableSensors() {
+		return availableSensors;
+	}
 
+	private void initAvailableDeviceSensor() {
+		List<DeviceSensor> availableDeviceSensors = new ArrayList<>();
+		sensorDataManager.getAvailableDeviceSensors().forEach(sensor -> {
+			DeviceSensor deviceSensor = new DeviceSensor();
+			deviceSensor.setSensor(sensor);
+			if (deviceSensor.getType() != null) {
+				availableDeviceSensors.add(deviceSensor);
+			}
 		});
 		availableSensors.setValue(availableDeviceSensors);
-		return availableSensors;
 	}
 
 	public MutableLiveData<List<Survey>> getCurrentCreatedSurveys() {
@@ -73,5 +88,18 @@ public class StudyViewModel extends ViewModel {
 
 	public void removeSurvey(Survey survey) {
 		currentCreatedSurveys.getValue().remove(survey);
+	}
+
+	public void saveStudy(String name, String description) {
+		Study study = new Study();
+		study.setName(name);
+		study.setDescription(description);
+		long id = studyRepo.saveStudy(study);
+		study.setId(id);
+		availableSensors.getValue().stream().filter(DeviceSensor::isActive).forEach(deviceSensor -> {
+			long deviceId = deviceRepo.saveDeviceSensor(deviceSensor);
+			StudyDeviceSensorJoin join = new StudyDeviceSensorJoin(study.getId(), deviceId);
+			studyDeviceSensorJoinRepo.saveStudyDeviceSensorJoin(join);
+		});
 	}
 }

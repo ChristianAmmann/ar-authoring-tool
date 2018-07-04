@@ -11,9 +11,9 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 @Entity(tableName = Survey.TABLE_NAME, foreignKeys = @ForeignKey(entity = Study.class, parentColumns = "id", childColumns = "studyId", onDelete = CASCADE))
 public class Survey implements Parcelable {
 
-	public static final String TABLE_NAME = "surveys";
+	public static final String TABLE_NAME = "Survey";
 
-	@PrimaryKey
+	@PrimaryKey(autoGenerate = true)
 	private long   id;
 	private String projectDirectory;
 	private String identifier;

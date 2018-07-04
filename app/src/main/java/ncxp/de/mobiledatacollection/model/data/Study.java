@@ -6,16 +6,14 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = Study.TABLE_NAME)
 public class Study {
 
-	public static final String TABLE_NAME = "studies";
+	public static final String TABLE_NAME = "Study";
 
-	@PrimaryKey
+	@PrimaryKey(autoGenerate = true)
 	private long   id;
 	private String name;
 	private String description;
 
-	public Study(long id, String name) {
-		this.id = id;
-		this.name = name;
+	public Study() {
 	}
 
 	public long getId() {

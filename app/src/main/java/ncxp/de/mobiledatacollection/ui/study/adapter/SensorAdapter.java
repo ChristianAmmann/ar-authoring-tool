@@ -8,16 +8,19 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import ncxp.de.mobiledatacollection.R;
-import ncxp.de.mobiledatacollection.datalogger.AvailableDeviceSensor;
+import ncxp.de.mobiledatacollection.model.data.DeviceSensor;
+import ncxp.de.mobiledatacollection.ui.study.OptionSensorListener;
 import ncxp.de.mobiledatacollection.ui.study.viewholder.ConfigViewHolder;
 import ncxp.de.mobiledatacollection.ui.study.viewholder.SectionViewHolder;
 
 public class SensorAdapter extends RecyclerView.Adapter {
 
-	private List<Object> sectionedDeviceSensors;
+	private List<Object>         sectionedDeviceSensors;
+	private OptionSensorListener listener;
 
-	public SensorAdapter(List<Object> sectionedDeviceSensors) {
+	public SensorAdapter(List<Object> sectionedDeviceSensors, OptionSensorListener listener) {
 		this.sectionedDeviceSensors = sectionedDeviceSensors;
+		this.listener = listener;
 	}
 
 	@NonNull
@@ -45,11 +48,14 @@ public class SensorAdapter extends RecyclerView.Adapter {
 				break;
 			case R.layout.item_config:
 				ConfigViewHolder configViewHolder = (ConfigViewHolder) holder;
-				AvailableDeviceSensor deviceSensor = (AvailableDeviceSensor) sectionedDeviceSensors.get(position);
-				configViewHolder.getConfigName().setText(deviceSensor.getNameId());
-				configViewHolder.getConfigDescription().setText(deviceSensor.getDescriptionId());
+				DeviceSensor deviceSensor = (DeviceSensor) sectionedDeviceSensors.get(position);
+				configViewHolder.getConfigName().setText(deviceSensor.getType().getNameId());
+				configViewHolder.getConfigDescription().setText(deviceSensor.getType().getDescriptionId());
 				configViewHolder.getSwitchButton().setChecked(deviceSensor.isActive());
-				configViewHolder.getSwitchButton().setOnCheckedChangeListener((view, isChecked) -> deviceSensor.setActive(isChecked));
+				configViewHolder.getSwitchButton().setOnCheckedChangeListener((view, isChecked) -> {
+					listener.onActiveChanged(deviceSensor, isChecked);
+					deviceSensor.setActive(isChecked);
+				});
 				break;
 		}
 	}
@@ -57,7 +63,7 @@ public class SensorAdapter extends RecyclerView.Adapter {
 	@Override
 	public int getItemViewType(int position) {
 		Object item = sectionedDeviceSensors.get(position);
-		if (item instanceof AvailableDeviceSensor) {
+		if (item instanceof DeviceSensor) {
 			return R.layout.item_config;
 		}
 		if (item instanceof Integer) {

@@ -24,5 +24,11 @@ public class StudyRepository {
 		return studyDao.selectById(id);
 	}
 
+	public long saveStudy(Study study) {
+		return studyDao.insert(study);
+	}
 
+	public void deleteStudy(Study study) {
+		studyDao.deleteById(study.getId());
+	}
 }

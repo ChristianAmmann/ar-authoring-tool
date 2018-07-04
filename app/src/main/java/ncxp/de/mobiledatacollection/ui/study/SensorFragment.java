@@ -1,7 +1,6 @@
 package ncxp.de.mobiledatacollection.ui.study;
 
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,17 +16,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ncxp.de.mobiledatacollection.R;
-import ncxp.de.mobiledatacollection.datalogger.AvailableDeviceSensor;
-import ncxp.de.mobiledatacollection.datalogger.SensorDataManager;
+import ncxp.de.mobiledatacollection.StudyActivity;
 import ncxp.de.mobiledatacollection.datalogger.SensorGroup;
-import ncxp.de.mobiledatacollection.model.StudyDatabase;
-import ncxp.de.mobiledatacollection.model.dao.StudyDao;
-import ncxp.de.mobiledatacollection.model.dao.SurveyDao;
-import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
-import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
+import ncxp.de.mobiledatacollection.model.data.DeviceSensor;
 import ncxp.de.mobiledatacollection.ui.study.adapter.SensorAdapter;
 import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModel;
-import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModelFactory;
 
 public class SensorFragment extends Fragment implements OptionSensorListener {
 
@@ -42,7 +35,7 @@ public class SensorFragment extends Fragment implements OptionSensorListener {
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.configureViewModel();
+		viewModel = StudyActivity.obtainViewModel(getActivity());
 	}
 
 	@Nullable
@@ -58,32 +51,21 @@ public class SensorFragment extends Fragment implements OptionSensorListener {
 	}
 
 	private void setupSensorView() {
-		sectionSensorAdapter = new SensorAdapter(new ArrayList<>());
+		sectionSensorAdapter = new SensorAdapter(new ArrayList<>(), this);
 		sectionedRecyclerView.setHasFixedSize(true);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 		sectionedRecyclerView.setLayoutManager(layoutManager);
 		sectionedRecyclerView.setLayoutManager(layoutManager);
 		sectionedRecyclerView.setAdapter(sectionSensorAdapter);
-		sectionSensorAdapter.addItems(getSectionedDeviceSensors(viewModel.getAvailableDeviceSensor().getValue()));
+		sectionSensorAdapter.addItems(getSectionedDeviceSensors(viewModel.getAvailableSensors().getValue()));
 	}
 
-	private void configureViewModel() {
-		StudyDao study = StudyDatabase.getInstance(getContext()).study();
-		SurveyDao survey = StudyDatabase.getInstance(getContext()).survey();
-		StudyRepository studyRepo = new StudyRepository(study);
-		SurveyRepository surveyRepo = new SurveyRepository(survey);
-		SensorDataManager sensorDataManager = SensorDataManager.getInstance(getContext());
-		StudyViewModelFactory factory = new StudyViewModelFactory(studyRepo, surveyRepo, sensorDataManager);
-		viewModel = ViewModelProviders.of(getActivity(), factory).get(StudyViewModel.class);
-		viewModel.init();
-	}
-
-	private List<Object> getSectionedDeviceSensors(List<AvailableDeviceSensor> availableDeviceSensors) {
+	private List<Object> getSectionedDeviceSensors(List<DeviceSensor> availableDeviceSensors) {
 		List<Object> sectionedDeviceSensors = new ArrayList<>();
 		for (SensorGroup group : SensorGroup.values()) {
-			List<AvailableDeviceSensor> sensorsOfGroup = availableDeviceSensors.stream()
-																			   .filter(availableDeviceSensor -> availableDeviceSensor.getType().getGroup().equals(group))
-																			   .collect(Collectors.toList());
+			List<DeviceSensor> sensorsOfGroup = availableDeviceSensors.stream()
+																	  .filter(availableDeviceSensor -> availableDeviceSensor.getType().getGroup().equals(group))
+																	  .collect(Collectors.toList());
 			sectionedDeviceSensors.add(group.getGroupId());
 			sectionedDeviceSensors.addAll(sensorsOfGroup);
 		}
@@ -91,7 +73,7 @@ public class SensorFragment extends Fragment implements OptionSensorListener {
 	}
 
 	@Override
-	public void onActiveChanged(AvailableDeviceSensor deviceSensor, boolean active) {
+	public void onActiveChanged(DeviceSensor deviceSensor, boolean active) {
 		deviceSensor.setActive(active);
 	}
 }

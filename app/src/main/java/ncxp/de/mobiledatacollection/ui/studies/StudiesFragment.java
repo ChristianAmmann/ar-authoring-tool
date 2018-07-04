@@ -64,7 +64,7 @@ public class StudiesFragment extends Fragment implements MoreListener, ShareList
 		studiesView.setAdapter(studiesAdapter);
 		viewModel.getStudies().observe(StudiesFragment.this, studies -> {
 			showPlaceHolder(studies);
-			studiesAdapter.addItems(studies);
+			studiesAdapter.replaceItems(studies);
 		});
 	}
 
@@ -107,6 +107,7 @@ public class StudiesFragment extends Fragment implements MoreListener, ShareList
 		builder.setTitle(R.string.dialog_delete_title);
 		builder.setPositiveButton(R.string.delete, (dialog, which) -> {
 			studiesAdapter.deleteItem(study);
+			viewModel.deleteStudy(study);
 			//TODO Remove in db with viewmodel
 		});
 		builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
