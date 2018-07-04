@@ -1,9 +1,10 @@
-package ncxp.de.mobiledatacollection.ui.studies;
+package ncxp.de.mobiledatacollection.ui.studies.viewmodel;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
+import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModel;
 
 public class StudiesViewModelFactory implements ViewModelProvider.Factory {
 

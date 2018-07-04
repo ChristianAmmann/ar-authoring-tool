@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.ui.studies.MoreListener;
 import ncxp.de.mobiledatacollection.ui.studies.ShareListener;
+import ncxp.de.mobiledatacollection.ui.studies.viewholder.StudyViewHolder;
 
 public class StudiesAdapter extends RecyclerView.Adapter<StudyViewHolder> {
 
@@ -40,6 +42,22 @@ public class StudiesAdapter extends RecyclerView.Adapter<StudyViewHolder> {
 		holder.getAmountOfTestPersonView().setText("0 Probanden teilgenommen");
 		holder.getMoreButton().setOnClickListener(view -> moreListener.onPopupMenuClick(view, study));
 		holder.getShareButton().setOnClickListener(view -> shareListener.shareStudy(position));
+		holder.getDescriptionView().setText(study.getDescription());
+		holder.getStartButton().setOnClickListener((view) -> {
+			//start AR
+		});
+		//TODO get sensors
+		LinearLayout expandableView = holder.getExpandableView();
+		holder.getSensorsView().setText("Sensor 1\nSensor 1\nSensor 1\nSensor 1\nSensor 1\nSensor 1\nSensor 1\n");
+		holder.getExpandArrowButton().setOnClickListener(view -> {
+			int visibility = expandableView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
+			if (visibility == View.GONE) {
+				holder.getExpandArrowButton().setImageResource(R.drawable.chevron_up);
+			} else {
+				holder.getExpandArrowButton().setImageResource(R.drawable.chevron_down);
+			}
+			expandableView.setVisibility(visibility);
+		});
 
 	}
 

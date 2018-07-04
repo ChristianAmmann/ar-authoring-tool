@@ -26,6 +26,8 @@ import ncxp.de.mobiledatacollection.model.dao.StudyDao;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 import ncxp.de.mobiledatacollection.ui.studies.adapter.StudiesAdapter;
+import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModel;
+import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModelFactory;
 
 public class StudiesFragment extends Fragment implements MoreListener, ShareListener {
 
@@ -108,7 +110,6 @@ public class StudiesFragment extends Fragment implements MoreListener, ShareList
 		builder.setPositiveButton(R.string.delete, (dialog, which) -> {
 			studiesAdapter.deleteItem(study);
 			viewModel.deleteStudy(study);
-			//TODO Remove in db with viewmodel
 		});
 		builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
 		builder.create().show();

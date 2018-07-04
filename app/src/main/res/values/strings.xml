@@ -59,6 +59,11 @@
 	<string name="settings_sensor_accuracy_description">Genauigkeit von Gering zu Hoch. Dabei werden nur Sensorwerte mit der gewählten Genauigkeit gespeichert.</string>
 	<string name="settings_sensor_timeinterval_title">Messabstände</string>
 	<string name="settings_sensor_timeinterval_description">Der Wert gibt an nach wievielen Sekunden Sensordaten abgefragt werden</string>
+	<string name="study_status_idle">idle</string>
+	<string name="study_status_running">Läuft</string>
+	<string name="study_status_stopped">Pausiert</string>
+	<string name="init_time_text">00:00</string>
+	<string name="time_format">%1$i:%2$i</string>
 
 	<!-- Sensorenbeschreibung und Gruppen -->
 	<string name="group_motion_sensor">Bewegungssensoren</string>
@@ -128,5 +133,13 @@
 	<string name="survey_settings">Fragebogen Einstellung</string>
 	<string name="survey_description_hint">z.B. SUS Fragebogen</string>
 	<string name="survey_title_hint">z.B. Mein Fragebogen</string>
+	<string name="data_collection">Datenerhebung</string>
+	<string name="study_description">Kurzbeschreibung</string>
+	<string name="expand_bottom_toolbar">Untere Toolbar öffnen</string>
+	<string name="test_modus_action">Testmodus aktivieren/deaktivieren</string>
+	<string name="add_subject_button">Probanden zur Studie hinzufügen</string>
+	<string name="timer_on_off">Timer an/aus</string>
+	<string name="done">Fertig</string>
+	<string name="pause">Pausieren</string>
 
 </resources>

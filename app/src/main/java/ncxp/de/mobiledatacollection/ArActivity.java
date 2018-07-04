@@ -1,6 +1,7 @@
 package ncxp.de.mobiledatacollection;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -36,12 +38,11 @@ public class ArActivity extends AppCompatActivity {
 	private ModelRenderable andyRenderable;
 	private GestureDetector trackableGestureDetector;
 
-	private ImageButton settingsButton;
-	private String      currentSelectionTechnique;
-	private String      currentRotationTechnique;
-	private String      currentScaleTechnique;
-	private float       displayCenterY;
-	private float       displayCenterX;
+	private ImageButton  settingsButton;
+	private ImageButton  expandBottomToolbarButton;
+	private LinearLayout bottomToolbar;
+	private float        displayCenterY;
+	private float        displayCenterX;
 
 	@Override
 	@SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
@@ -52,6 +53,22 @@ public class ArActivity extends AppCompatActivity {
 
 		setContentView(R.layout.activity_ar);
 		settingsButton = findViewById(R.id.ar_settings_button);
+		bottomToolbar = findViewById(R.id.bottom_toolbar);
+		expandBottomToolbarButton = findViewById(R.id.expand_bottom_toolbar_button);
+		expandBottomToolbarButton.setOnClickListener((view) -> {
+			int visibility = bottomToolbar.getVisibility() == View.GONE ? View.VISIBLE : View.GONE;
+			CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) expandBottomToolbarButton.getLayoutParams();
+			if (visibility == View.GONE) {
+				params.setAnchorId(R.id.ux_fragment);
+				params.anchorGravity = Gravity.BOTTOM | Gravity.CENTER;
+				expandBottomToolbarButton.setImageResource(R.drawable.chevron_up);
+			} else {
+				params.setAnchorId(R.id.bottom_toolbar);
+				params.anchorGravity = Gravity.TOP | Gravity.CENTER;
+				expandBottomToolbarButton.setImageResource(R.drawable.chevron_down);
+			}
+			bottomToolbar.setVisibility(visibility);
+		});
 		settingsButton.setOnClickListener(this::onSettingsClicked);
 		arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
@@ -138,9 +155,9 @@ public class ArActivity extends AppCompatActivity {
 		Spinner scaleSpinner = dialogView.findViewById(R.id.spinner_scale);
 
 		builder.setView(dialogView).setPositiveButton(R.string.apply, ((dialog, which) -> {
-			currentSelectionTechnique = selectionSpinner.getSelectedItem().toString();
+			/*currentSelectionTechnique = selectionSpinner.getSelectedItem().toString();
 			currentRotationTechnique = rotationSpinner.getSelectedItem().toString();
-			currentSelectionTechnique = scaleSpinner.getSelectedItem().toString();
+			currentSelectionTechnique = scaleSpinner.getSelectedItem().toString();*/
 
 		})).setNegativeButton(R.string.cancel, ((dialog, which) -> dialog.dismiss()));
 		builder.create().show();

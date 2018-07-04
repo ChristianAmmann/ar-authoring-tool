@@ -1,4 +1,4 @@
-package ncxp.de.mobiledatacollection.ui.studies;
+package ncxp.de.mobiledatacollection.ui.studies.viewmodel;
 
 
 import android.arch.lifecycle.LiveData;
