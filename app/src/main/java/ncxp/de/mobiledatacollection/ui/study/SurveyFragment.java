@@ -72,12 +72,10 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 		surveyRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		surveyRecyclerView.setAdapter(surveyAdapter);
 		viewModel.getSavedSurveys().observe(SurveyFragment.this, surveys -> {
-			List<Survey> currentCreatedSurveys = viewModel.getCurrentCreatedSurveys().getValue();
-			showPlaceHolder(currentCreatedSurveys);
 			showPlaceHolder(surveys);
 			surveyAdapter.addItems(surveys);
-			surveyAdapter.addItems(currentCreatedSurveys);
 		});
+		viewModel.init();
 	}
 
 	@Override
@@ -189,8 +187,7 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 					survey.setIdentifier(identifier);
 					surveyAdapter.updateItem(survey);
 				} else {
-					Survey createdDialog = viewModel.createSurvey(name, description, projectDirectory, identifier);
-					surveyAdapter.addItem(createdDialog);
+					viewModel.createSurvey(name, description, projectDirectory, identifier);
 				}
 				showPlaceHolder(false);
 				alertDialog.dismiss();

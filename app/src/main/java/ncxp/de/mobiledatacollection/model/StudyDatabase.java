@@ -39,7 +39,7 @@ public abstract class StudyDatabase extends RoomDatabase {
 	public static StudyDatabase getInstance(final Context context) {
 		if (instance == null) {
 			//TODO MainThread
-			instance = Room.databaseBuilder(context, StudyDatabase.class, DATABASE_NAME).allowMainThreadQueries().build();
+			instance = Room.databaseBuilder(context, StudyDatabase.class, DATABASE_NAME).build();
 		}
 		return instance;
 	}

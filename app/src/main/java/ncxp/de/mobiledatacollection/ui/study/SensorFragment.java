@@ -12,12 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.StudyActivity;
-import ncxp.de.mobiledatacollection.datalogger.SensorGroup;
 import ncxp.de.mobiledatacollection.model.data.DeviceSensor;
 import ncxp.de.mobiledatacollection.ui.study.adapter.SensorAdapter;
 import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModel;
@@ -57,19 +54,9 @@ public class SensorFragment extends Fragment implements OptionSensorListener {
 		sectionedRecyclerView.setLayoutManager(layoutManager);
 		sectionedRecyclerView.setLayoutManager(layoutManager);
 		sectionedRecyclerView.setAdapter(sectionSensorAdapter);
-		sectionSensorAdapter.addItems(getSectionedDeviceSensors(viewModel.getAvailableSensors().getValue()));
-	}
-
-	private List<Object> getSectionedDeviceSensors(List<DeviceSensor> availableDeviceSensors) {
-		List<Object> sectionedDeviceSensors = new ArrayList<>();
-		for (SensorGroup group : SensorGroup.values()) {
-			List<DeviceSensor> sensorsOfGroup = availableDeviceSensors.stream()
-																	  .filter(availableDeviceSensor -> availableDeviceSensor.getType().getGroup().equals(group))
-																	  .collect(Collectors.toList());
-			sectionedDeviceSensors.add(group.getGroupId());
-			sectionedDeviceSensors.addAll(sensorsOfGroup);
-		}
-		return sectionedDeviceSensors;
+		viewModel.getAvailableSensors().observe(SensorFragment.this, (deviceSensors) -> {
+			sectionSensorAdapter.replaceItems(viewModel.getSectionedDeviceSensors());
+		});
 	}
 
 	@Override

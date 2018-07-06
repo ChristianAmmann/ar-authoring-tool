@@ -81,4 +81,9 @@ public class SensorAdapter extends RecyclerView.Adapter {
 		sectionedDeviceSensors.addAll(newSectionedDeviceSensors);
 		notifyDataSetChanged();
 	}
+
+	public void replaceItems(List<Object> newSectionedDeviceSensors) {
+		sectionedDeviceSensors = newSectionedDeviceSensors;
+		notifyDataSetChanged();
+	}
 }

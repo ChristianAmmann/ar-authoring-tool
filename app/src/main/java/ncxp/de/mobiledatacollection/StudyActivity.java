@@ -23,6 +23,7 @@ import ncxp.de.mobiledatacollection.model.dao.DeviceSensorDao;
 import ncxp.de.mobiledatacollection.model.dao.StudyDao;
 import ncxp.de.mobiledatacollection.model.dao.StudyDeviceSensorJoinDao;
 import ncxp.de.mobiledatacollection.model.dao.SurveyDao;
+import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.repository.DeviceSensorRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyDeviceSensorJoinRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
@@ -35,6 +36,8 @@ import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModel;
 import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModelFactory;
 
 public class StudyActivity extends AppCompatActivity {
+
+	public static final String STUDY_KEY = "study_key";
 
 	private Toolbar              toolbar;
 	private BottomNavigationView navigationView;
@@ -65,7 +68,10 @@ public class StudyActivity extends AppCompatActivity {
 	private void configureViewModel() {
 		StudyViewModelFactory factory = createFactory(this);
 		viewModel = ViewModelProviders.of(this, factory).get(StudyViewModel.class);
-		viewModel.init();
+		Study study = getIntent().getParcelableExtra(STUDY_KEY);
+		if (study != null) {
+			viewModel.setStudy(study);
+		}
 	}
 
 	private static StudyViewModelFactory createFactory(FragmentActivity activity) {
@@ -152,7 +158,10 @@ public class StudyActivity extends AppCompatActivity {
 		TextInputEditText titleInput = dialogView.findViewById(R.id.study_title);
 		TextInputEditText descriptionInput = dialogView.findViewById(R.id.study_description);
 		builder.setView(dialogView).setPositiveButton(R.string.save, null);
-
+		if (viewModel.getStudy() != null) {
+			titleInput.setText(viewModel.getStudy().getName());
+			descriptionInput.setText(viewModel.getStudy().getDescription());
+		}
 		builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
 		AlertDialog alertDialog = builder.create();
 		alertDialog.show();
@@ -165,7 +174,15 @@ public class StudyActivity extends AppCompatActivity {
 			if (validInput) {
 				String name = titleInput.getText().toString();
 				String description = descriptionInput.getText().toString();
-				viewModel.saveStudy(name, description);
+				if (viewModel.getStudy() != null) {
+					Study study = viewModel.getStudy();
+					study.setName(name);
+					study.setDescription(description);
+					viewModel.update(study);
+				} else {
+					viewModel.save(name, description);
+				}
+
 				alertDialog.dismiss();
 				finish();
 			}

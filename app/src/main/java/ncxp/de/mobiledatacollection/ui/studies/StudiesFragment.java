@@ -1,6 +1,5 @@
 package ncxp.de.mobiledatacollection.ui.studies;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,13 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ncxp.de.mobiledatacollection.R;
-import ncxp.de.mobiledatacollection.model.StudyDatabase;
-import ncxp.de.mobiledatacollection.model.dao.StudyDao;
+import ncxp.de.mobiledatacollection.StudiesActivity;
+import ncxp.de.mobiledatacollection.StudyActivity;
 import ncxp.de.mobiledatacollection.model.data.Study;
-import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 import ncxp.de.mobiledatacollection.ui.studies.adapter.StudiesAdapter;
 import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModel;
-import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModelFactory;
 
 public class StudiesFragment extends Fragment implements MoreListener, ShareListener {
 
@@ -43,7 +40,7 @@ public class StudiesFragment extends Fragment implements MoreListener, ShareList
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.configureViewModel();
+		viewModel = StudiesActivity.obtainViewModel(getActivity());
 	}
 
 	@Nullable
@@ -68,13 +65,6 @@ public class StudiesFragment extends Fragment implements MoreListener, ShareList
 			showPlaceHolder(studies);
 			studiesAdapter.replaceItems(studies);
 		});
-	}
-
-	private void configureViewModel() {
-		StudyDao study = StudyDatabase.getInstance(getContext()).study();
-		StudyRepository repository = new StudyRepository(study);
-		StudiesViewModelFactory factory = new StudiesViewModelFactory(repository);
-		viewModel = ViewModelProviders.of(this, factory).get(StudiesViewModel.class);
 		viewModel.init();
 	}
 
@@ -94,7 +84,9 @@ public class StudiesFragment extends Fragment implements MoreListener, ShareList
 				//TODO export
 				break;
 			case R.id.edit:
-				//TODO edit
+				Intent intent = new Intent(getActivity(), StudyActivity.class);
+				intent.putExtra(StudyActivity.STUDY_KEY, study);
+				startActivity(intent);
 				break;
 			case R.id.delete:
 				showDeleteDialog(study);
@@ -108,8 +100,8 @@ public class StudiesFragment extends Fragment implements MoreListener, ShareList
 		builder.setMessage(R.string.dialog_delete_message);
 		builder.setTitle(R.string.dialog_delete_title);
 		builder.setPositiveButton(R.string.delete, (dialog, which) -> {
-			studiesAdapter.deleteItem(study);
 			viewModel.deleteStudy(study);
+			studiesAdapter.deleteItem(study);
 		});
 		builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
 		builder.create().show();
@@ -126,5 +118,11 @@ public class StudiesFragment extends Fragment implements MoreListener, ShareList
 	private void showPlaceHolder(List<Study> studies) {
 		int visible = (studies != null && studies.size() > 0) ? View.INVISIBLE : View.VISIBLE;
 		placeHolder.setVisibility(visible);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		viewModel.refreshStudies();
 	}
 }

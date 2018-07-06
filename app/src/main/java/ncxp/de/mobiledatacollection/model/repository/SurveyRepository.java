@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData;
 import java.util.List;
 
 import ncxp.de.mobiledatacollection.model.dao.SurveyDao;
+import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.data.Survey;
 
 public class SurveyRepository {
@@ -15,11 +16,17 @@ public class SurveyRepository {
 		this.surveyDao = surveyDao;
 	}
 
-	public LiveData<List<Survey>> getSurveys() {
-		return surveyDao.selectAll();
-	}
-
 	public LiveData<Survey> getSurvey(long id) {
 		return surveyDao.selectById(id);
+	}
+
+	public LiveData<List<Survey>> getSurveysFromStudy(Study study) {
+		return surveyDao.getSurveysFromStudy(study.getId());
+	}
+
+	public void saveSurveys(List<Survey> surveys) {
+		Survey[] surveysArray = new Survey[surveys.size()];
+		surveysArray = surveys.toArray(surveysArray);
+		surveyDao.insertAll(surveysArray);
 	}
 }

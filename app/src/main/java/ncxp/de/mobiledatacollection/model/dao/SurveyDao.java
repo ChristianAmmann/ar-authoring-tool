@@ -28,6 +28,9 @@ public interface SurveyDao {
 	@Query("DELETE FROM " + Survey.TABLE_NAME + " WHERE id = :id")
 	int deleteById(long id);
 
+	@Query("SELECT * FROM " + Survey.TABLE_NAME + " WHERE studyId=:id")
+	LiveData<List<Survey>> getSurveysFromStudy(long id);
+
 	@Update
 	int update(Survey survey);
 }
