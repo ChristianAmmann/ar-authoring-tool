@@ -9,18 +9,15 @@ import java.util.List;
 
 import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.model.data.DeviceSensor;
-import ncxp.de.mobiledatacollection.ui.study.OptionSensorListener;
 import ncxp.de.mobiledatacollection.ui.study.viewholder.ConfigViewHolder;
 import ncxp.de.mobiledatacollection.ui.study.viewholder.SectionViewHolder;
 
 public class SensorAdapter extends RecyclerView.Adapter {
 
-	private List<Object>         sectionedDeviceSensors;
-	private OptionSensorListener listener;
+	private List<Object> sectionedDeviceSensors;
 
-	public SensorAdapter(List<Object> sectionedDeviceSensors, OptionSensorListener listener) {
+	public SensorAdapter(List<Object> sectionedDeviceSensors) {
 		this.sectionedDeviceSensors = sectionedDeviceSensors;
-		this.listener = listener;
 	}
 
 	@NonNull
@@ -52,9 +49,8 @@ public class SensorAdapter extends RecyclerView.Adapter {
 				configViewHolder.getConfigName().setText(deviceSensor.getType().getNameId());
 				configViewHolder.getConfigDescription().setText(deviceSensor.getType().getDescriptionId());
 				configViewHolder.getSwitchButton().setChecked(deviceSensor.isActive());
-				configViewHolder.getSwitchButton().setOnCheckedChangeListener((view, isChecked) -> {
-					listener.onActiveChanged(deviceSensor, isChecked);
-					deviceSensor.setActive(isChecked);
+				configViewHolder.getSwitchButton().setOnClickListener((view) -> {
+					deviceSensor.setActive(configViewHolder.getSwitchButton().isChecked());
 				});
 				break;
 		}

@@ -7,9 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ncxp.de.mobiledatacollection.R;
+import ncxp.de.mobiledatacollection.model.data.DeviceSensor;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.ui.studies.MoreListener;
 import ncxp.de.mobiledatacollection.ui.studies.ShareListener;
@@ -44,11 +47,9 @@ public class StudiesAdapter extends RecyclerView.Adapter<StudyViewHolder> {
 		holder.getShareButton().setOnClickListener(view -> shareListener.shareStudy(position));
 		holder.getDescriptionView().setText(study.getDescription());
 		holder.getStartButton().setOnClickListener((view) -> {
-			//start AR
+			//TODO start AR
 		});
-		//TODO get sensors
 		LinearLayout expandableView = holder.getExpandableView();
-		holder.getSensorsView().setText("Sensor 1\nSensor 1\nSensor 1\nSensor 1\nSensor 1\nSensor 1\nSensor 1\n");
 		holder.getExpandArrowButton().setOnClickListener(view -> {
 			int visibility = expandableView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
 			if (visibility == View.GONE) {
@@ -58,6 +59,17 @@ public class StudiesAdapter extends RecyclerView.Adapter<StudyViewHolder> {
 			}
 			expandableView.setVisibility(visibility);
 		});
+		List<DeviceSensor> sensors = study.getSensors();
+		StringBuilder text = new StringBuilder();
+		List<String> names = new ArrayList<>();
+		if (sensors != null) {
+			names = sensors.stream().map(DeviceSensor::getName).collect(Collectors.toList());
+		}
+		for (String name : names) {
+			text.append("\u2022 ").append(name).append("\n");
+		}
+		holder.getSensorsView().setText(text.toString());
+
 
 	}
 

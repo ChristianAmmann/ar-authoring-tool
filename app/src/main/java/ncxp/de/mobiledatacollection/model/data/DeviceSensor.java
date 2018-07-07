@@ -22,7 +22,7 @@ public class DeviceSensor implements Serializable {
 	@Ignore
 	private SensorType type;
 	@Ignore
-	private boolean    active = false;
+	private boolean    active;
 
 
 	public DeviceSensor() {

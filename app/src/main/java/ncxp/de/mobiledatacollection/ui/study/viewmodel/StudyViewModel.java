@@ -24,15 +24,15 @@ import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
 
 public class StudyViewModel extends ViewModel {
 
-	private StudyRepository                      studyRepo;
-	private SurveyRepository                     surveyRepo;
-	private DeviceSensorRepository               deviceRepo;
-	private StudyDeviceSensorJoinRepository      studyDeviceSensorJoinRepo;
-	private SensorDataManager                    sensorDataManager;
-	private Study                                study;
-	private MediatorLiveData<List<Survey>>       savedSurveys;
-	private MutableLiveData<List<DeviceSensor>>  availableSensors;
-	private MediatorLiveData<List<DeviceSensor>> savedSensors;
+	private StudyRepository                     studyRepo;
+	private SurveyRepository                    surveyRepo;
+	private DeviceSensorRepository              deviceRepo;
+	private StudyDeviceSensorJoinRepository     studyDeviceSensorJoinRepo;
+	private SensorDataManager                   sensorDataManager;
+	private Study                               study;
+	private MediatorLiveData<List<Survey>>      savedSurveys;
+	private MutableLiveData<List<DeviceSensor>> availableSensors;
+	private List<DeviceSensor>                  savedSensors;
 
 	public StudyViewModel(StudyRepository studyRepo,
 						  SurveyRepository surveyRepo,
@@ -44,10 +44,9 @@ public class StudyViewModel extends ViewModel {
 		this.deviceRepo = deviceRepo;
 		this.sensorDataManager = sensorDataManager;
 		this.studyDeviceSensorJoinRepo = studyDeviceSensorJoinRepo;
-		this.availableSensors = new MutableLiveData<>();
 		this.savedSurveys = new MediatorLiveData<>();
-		this.savedSensors = new MediatorLiveData<>();
-		availableSensors.setValue(new ArrayList<>());
+		this.availableSensors = new MutableLiveData<>();
+		this.savedSensors = new ArrayList<>();
 	}
 
 
@@ -64,7 +63,6 @@ public class StudyViewModel extends ViewModel {
 			loadSurveys();
 		}
 		loadActiveSensors();
-		initAvailableDeviceSensor();
 	}
 
 	public LiveData<List<Survey>> getSavedSurveys() {
@@ -87,19 +85,9 @@ public class StudyViewModel extends ViewModel {
 	private void loadActiveSensors() {
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
-			LiveData<List<DeviceSensor>> deviceSensorsForStudy = studyDeviceSensorJoinRepo.getDeviceSensorsForStudy(study);
-			savedSensors.addSource(deviceSensorsForStudy, (deviceSensors -> {
-				if (deviceSensors != null) {
-					savedSensors.removeSource(deviceSensorsForStudy);
-					savedSensors.setValue(deviceSensors);
-					initAvailableDeviceSensor();
-				}
-			}));
+			savedSensors = studyDeviceSensorJoinRepo.getDeviceSensorsForStudy(study);
+			initAvailableDeviceSensor();
 		});
-	}
-
-	public LiveData<List<DeviceSensor>> getActiveDeviceSensor() {
-		return this.savedSensors;
 	}
 
 	public MutableLiveData<List<DeviceSensor>> getAvailableSensors() {
@@ -111,14 +99,14 @@ public class StudyViewModel extends ViewModel {
 		sensorDataManager.getAvailableDeviceSensors().forEach(sensor -> {
 			DeviceSensor deviceSensor = new DeviceSensor();
 			deviceSensor.setSensor(sensor);
-			if (savedSensors.getValue() != null) {
-				savedSensors.getValue().stream().filter(savedSensor -> savedSensor.getName().equals(deviceSensor.getName())).forEach(savedSensors -> deviceSensor.setActive(true));
+			if (!savedSensors.isEmpty()) {
+				savedSensors.stream().filter(savedSensor -> savedSensor.getName().equals(deviceSensor.getName())).forEach(savedSensors -> deviceSensor.setActive(true));
 			}
 			if (deviceSensor.getType() != null) {
 				availableDeviceSensors.add(deviceSensor);
 			}
 		});
-		availableSensors.setValue(availableDeviceSensors);
+		availableSensors.postValue(availableDeviceSensors);
 	}
 
 	public void createSurvey(String name, String description, String projectDirectory, String identifier) {

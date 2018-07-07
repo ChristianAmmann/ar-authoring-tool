@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +15,10 @@ import java.util.ArrayList;
 
 import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.StudyActivity;
-import ncxp.de.mobiledatacollection.model.data.DeviceSensor;
 import ncxp.de.mobiledatacollection.ui.study.adapter.SensorAdapter;
 import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModel;
 
-public class SensorFragment extends Fragment implements OptionSensorListener {
+public class SensorFragment extends Fragment {
 
 	private StudyViewModel viewModel;
 	private RecyclerView   sectionedRecyclerView;
@@ -49,7 +47,7 @@ public class SensorFragment extends Fragment implements OptionSensorListener {
 	}
 
 	private void setupSensorView() {
-		sectionSensorAdapter = new SensorAdapter(new ArrayList<>(), this);
+		sectionSensorAdapter = new SensorAdapter(new ArrayList<>());
 		sectionedRecyclerView.setHasFixedSize(true);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 		sectionedRecyclerView.setLayoutManager(layoutManager);
@@ -58,13 +56,5 @@ public class SensorFragment extends Fragment implements OptionSensorListener {
 		viewModel.getAvailableSensors().observe(SensorFragment.this, (deviceSensors) -> {
 			sectionSensorAdapter.replaceItems(viewModel.getSectionedDeviceSensors());
 		});
-		viewModel.getActiveDeviceSensor().observe(SensorFragment.this, (deviceSensors -> {
-			Log.d("Tag", "activeDeviceSensors: " + deviceSensors.toString());
-		}));
-	}
-
-	@Override
-	public void onActiveChanged(DeviceSensor deviceSensor, boolean active) {
-		deviceSensor.setActive(active);
 	}
 }

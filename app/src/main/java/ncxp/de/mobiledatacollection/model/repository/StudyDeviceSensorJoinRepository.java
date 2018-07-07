@@ -1,7 +1,5 @@
 package ncxp.de.mobiledatacollection.model.repository;
 
-import android.arch.lifecycle.LiveData;
-
 import java.util.List;
 
 import ncxp.de.mobiledatacollection.model.dao.StudyDeviceSensorJoinDao;
@@ -21,7 +19,7 @@ public class StudyDeviceSensorJoinRepository {
 		deviceSensorJoinDao.insert(studyDeviceSensorJoin);
 	}
 
-	public LiveData<List<DeviceSensor>> getDeviceSensorsForStudy(Study study) {
+	public List<DeviceSensor> getDeviceSensorsForStudy(Study study) {
 		return deviceSensorJoinDao.getDeviceSensorsForStudy(study.getId());
 	}
 }

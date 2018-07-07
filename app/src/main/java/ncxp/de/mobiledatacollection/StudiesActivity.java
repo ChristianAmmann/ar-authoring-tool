@@ -13,6 +13,8 @@ import android.view.View;
 
 import ncxp.de.mobiledatacollection.model.StudyDatabase;
 import ncxp.de.mobiledatacollection.model.dao.StudyDao;
+import ncxp.de.mobiledatacollection.model.dao.StudyDeviceSensorJoinDao;
+import ncxp.de.mobiledatacollection.model.repository.StudyDeviceSensorJoinRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 import ncxp.de.mobiledatacollection.ui.studies.StudiesFragment;
 import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModel;
@@ -66,6 +68,8 @@ public class StudiesActivity extends AppCompatActivity {
 		StudyDatabase database = StudyDatabase.getInstance(activity);
 		StudyDao studyDao = database.study();
 		StudyRepository studyRepo = new StudyRepository(studyDao);
-		return new StudiesViewModelFactory(studyRepo);
+		StudyDeviceSensorJoinDao studyDeviceDao = database.studyDeviceSensorJoinDao();
+		StudyDeviceSensorJoinRepository studyDeviceRepo = new StudyDeviceSensorJoinRepository(studyDeviceDao);
+		return new StudiesViewModelFactory(studyRepo, studyDeviceRepo);
 	}
 }

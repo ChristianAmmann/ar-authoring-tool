@@ -1,9 +1,12 @@
 package ncxp.de.mobiledatacollection.model.data;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.util.List;
 
 @Entity(tableName = Study.TABLE_NAME)
 public class Study implements Parcelable {
@@ -11,9 +14,11 @@ public class Study implements Parcelable {
 	public static final String TABLE_NAME = "Study";
 
 	@PrimaryKey(autoGenerate = true)
-	private long   id;
-	private String name;
-	private String description;
+	private long               id;
+	private String             name;
+	private String             description;
+	@Ignore
+	private List<DeviceSensor> sensors;
 
 	public Study() {
 	}
@@ -40,6 +45,14 @@ public class Study implements Parcelable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public List<DeviceSensor> getSensors() {
+		return sensors;
+	}
+
+	public void setSensors(List<DeviceSensor> sensors) {
+		this.sensors = sensors;
 	}
 
 	protected Study(Parcel in) {
