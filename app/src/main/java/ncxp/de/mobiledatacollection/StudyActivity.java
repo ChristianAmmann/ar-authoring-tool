@@ -1,7 +1,6 @@
 package ncxp.de.mobiledatacollection;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TextInputEditText;
@@ -15,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import ncxp.de.mobiledatacollection.datalogger.SensorDataManager;
 import ncxp.de.mobiledatacollection.model.StudyDatabase;
@@ -157,16 +155,7 @@ public class StudyActivity extends AppCompatActivity {
 		View dialogView = inflater.inflate(R.layout.dialog_study_save, null);
 		TextInputEditText titleInput = dialogView.findViewById(R.id.study_title);
 		TextInputEditText descriptionInput = dialogView.findViewById(R.id.study_description);
-		builder.setView(dialogView).setPositiveButton(R.string.save, null);
-		if (viewModel.getStudy() != null) {
-			titleInput.setText(viewModel.getStudy().getName());
-			descriptionInput.setText(viewModel.getStudy().getDescription());
-		}
-		builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
-		AlertDialog alertDialog = builder.create();
-		alertDialog.show();
-		Button positiveButtion = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-		positiveButtion.setOnClickListener((view) -> {
+		builder.setView(dialogView).setPositiveButton(R.string.save, (dialog, which) -> {
 			boolean validInput = true;
 			validInput &= validateInput(titleInput, R.string.dialog_study_error_title);
 			validInput &= validateInput(descriptionInput, R.string.dialog_study_error_description);
@@ -183,11 +172,16 @@ public class StudyActivity extends AppCompatActivity {
 					viewModel.save(name, description);
 				}
 
-				alertDialog.dismiss();
+				dialog.dismiss();
 				finish();
 			}
-
 		});
+		if (viewModel.getStudy() != null) {
+			titleInput.setText(viewModel.getStudy().getName());
+			descriptionInput.setText(viewModel.getStudy().getDescription());
+		}
+		builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
+		builder.create().show();
 	}
 
 	private boolean validateInput(TextInputEditText editText, int errorCode) {

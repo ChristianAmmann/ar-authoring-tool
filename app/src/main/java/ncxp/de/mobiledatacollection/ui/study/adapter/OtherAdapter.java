@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.List;
 
@@ -13,13 +14,16 @@ import ncxp.de.mobiledatacollection.model.data.SensorSettings;
 import ncxp.de.mobiledatacollection.ui.study.viewholder.ConfigViewHolder;
 import ncxp.de.mobiledatacollection.ui.study.viewholder.SectionViewHolder;
 import ncxp.de.mobiledatacollection.ui.study.viewholder.SensorSettingsViewHolder;
+import ncxp.de.mobiledatacollection.ui.study.viewmodel.OptionOthersListener;
 
 public class OtherAdapter extends RecyclerView.Adapter {
 
-	private List<Object> sectionedOtherOptions;
+	private List<Object>         sectionedOtherOptions;
+	private OptionOthersListener listener;
 
-	public OtherAdapter(List<Object> sectionedOtherOptions) {
+	public OtherAdapter(List<Object> sectionedOtherOptions, OptionOthersListener listener) {
 		this.sectionedOtherOptions = sectionedOtherOptions;
+		this.listener = listener;
 	}
 
 	@NonNull
@@ -59,9 +63,12 @@ public class OtherAdapter extends RecyclerView.Adapter {
 			case R.layout.item_sensor_options:
 				SensorSettingsViewHolder settingsViewHolder = (SensorSettingsViewHolder) holder;
 				SensorSettings sensorSettings = (SensorSettings) sectionedOtherOptions.get(position);
-				String time = sensorSettings.getTimeInterval() + " s";
-				settingsViewHolder.getTimeButton().setText(time);
-				settingsViewHolder.getAccuracySeekBar().setProgress(sensorSettings.getAccuracy());
+				Button timeButton = settingsViewHolder.getTimeButton();
+				timeButton.setText(sensorSettings.getSeconds() + "," + sensorSettings.getMilliseconds() + " s");
+				timeButton.setOnClickListener((view) -> {
+					listener.onTimePickerClicked(timeButton, sensorSettings);
+				});
+
 				break;
 		}
 	}

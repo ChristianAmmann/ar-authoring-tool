@@ -63,7 +63,7 @@
 	<string name="study_status_running">Läuft</string>
 	<string name="study_status_stopped">Pausiert</string>
 	<string name="init_time_text">00:00</string>
-	<string name="time_format">%1$i:%2$i</string>
+	<string name="time_format">%1$d,%2$d s</string>
 
 	<!-- Sensorenbeschreibung und Gruppen -->
 	<string name="group_motion_sensor">Bewegungssensoren</string>
@@ -141,5 +141,8 @@
 	<string name="timer_on_off">Timer an/aus</string>
 	<string name="done">Fertig</string>
 	<string name="pause">Pausieren</string>
+	<string name="time_divider">,</string>
+	<string name="seconds">Sekunden</string>
+	<string name="milliseconds">Millisekunden</string>
 
 </resources>

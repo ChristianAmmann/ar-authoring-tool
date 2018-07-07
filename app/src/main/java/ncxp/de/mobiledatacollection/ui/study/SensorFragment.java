@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,9 @@ public class SensorFragment extends Fragment implements OptionSensorListener {
 		viewModel.getAvailableSensors().observe(SensorFragment.this, (deviceSensors) -> {
 			sectionSensorAdapter.replaceItems(viewModel.getSectionedDeviceSensors());
 		});
+		viewModel.getActiveDeviceSensor().observe(SensorFragment.this, (deviceSensors -> {
+			Log.d("Tag", "activeDeviceSensors: " + deviceSensors.toString());
+		}));
 	}
 
 	@Override

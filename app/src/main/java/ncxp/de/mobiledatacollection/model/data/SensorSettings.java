@@ -25,6 +25,15 @@ public class SensorSettings {
 		return timeInterval;
 	}
 
+	public int getSeconds() {
+		return (int) timeInterval;
+	}
+
+	public int getMilliseconds() {
+		return (int) ((timeInterval - (int) timeInterval) * 100);
+
+	}
+
 	public void setTimeInterval(double timeInterval) {
 		this.timeInterval = timeInterval;
 	}

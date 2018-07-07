@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:app="http://schemas.android.com/apk/res-auto"
 			  xmlns:tools="http://schemas.android.com/tools"
 			  android:layout_width="match_parent"
 			  android:layout_height="wrap_content"
@@ -41,16 +42,14 @@
 
 		</LinearLayout>
 
-		<SeekBar
-			android:id="@+id/accuracy_seek_bar"
+		<android.support.v7.widget.AppCompatSpinner
+			android:id="@+id/accuracy_spinner"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
-			android:layout_weight="0.25"
-			android:max="2"
+			android:entries="@array/accuracy"
 			android:paddingEnd="5dp"
-			android:paddingStart="5dp"
-			android:tickMark="@drawable/tickmark"/>
+			android:paddingStart="5dp"/>
 
 
 	</LinearLayout>
@@ -91,11 +90,13 @@
 
 		<Button
 			android:id="@+id/time_button"
+			style="@style/BorderlessButton"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
 			android:paddingEnd="5dp"
-			android:paddingStart="5dp"/>
+			android:paddingStart="5dp"
+			android:textAllCaps="false"/>
 
 	</LinearLayout>
 </LinearLayout>

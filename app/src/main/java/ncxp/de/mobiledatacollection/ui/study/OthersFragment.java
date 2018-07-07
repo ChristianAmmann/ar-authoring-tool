@@ -4,11 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.NumberPicker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +22,10 @@ import ncxp.de.mobiledatacollection.datalogger.SettingGroup;
 import ncxp.de.mobiledatacollection.model.data.CapturingData;
 import ncxp.de.mobiledatacollection.model.data.SensorSettings;
 import ncxp.de.mobiledatacollection.ui.study.adapter.OtherAdapter;
+import ncxp.de.mobiledatacollection.ui.study.viewmodel.OptionOthersListener;
 import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModel;
 
-public class OthersFragment extends Fragment {
+public class OthersFragment extends Fragment implements OptionOthersListener {
 
 	private StudyViewModel viewModel;
 	private RecyclerView   othersRecyclerView;
@@ -50,7 +54,7 @@ public class OthersFragment extends Fragment {
 	}
 
 	private void setupOtherView() {
-		sectionAdapter = new OtherAdapter(new ArrayList<>());
+		sectionAdapter = new OtherAdapter(new ArrayList<>(), this);
 		othersRecyclerView.setHasFixedSize(true);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 		othersRecyclerView.setLayoutManager(layoutManager);
@@ -75,5 +79,30 @@ public class OthersFragment extends Fragment {
 		sectionedOptions.add(taskCompletionTime);
 		sectionedOptions.add(amountOfTouchEvents);
 		return sectionedOptions;
+	}
+
+	@Override
+	public void onTimePickerClicked(Button timeButton, SensorSettings settings) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+		LayoutInflater inflater = getLayoutInflater();
+		builder.setTitle(R.string.settings_sensor_timeinterval_title);
+		View dialogView = inflater.inflate(R.layout.dialog_time_picker, null);
+		NumberPicker secondsPicker = dialogView.findViewById(R.id.seconds);
+		NumberPicker millisecondsPicker = dialogView.findViewById(R.id.milliseconds);
+		int seconds = (int) settings.getTimeInterval();
+		int milliseconds = (int) ((settings.getTimeInterval() - (int) settings.getTimeInterval()) * 100);
+		secondsPicker.setMaxValue(3600);
+		secondsPicker.setMinValue(0);
+		millisecondsPicker.setMinValue(0);
+		millisecondsPicker.setMaxValue(999);
+		secondsPicker.setValue(seconds);
+		millisecondsPicker.setValue(milliseconds);
+		builder.setView(dialogView).setPositiveButton(R.string.save, (dialog, which) -> {
+			int newSeconds = secondsPicker.getValue();
+			int newMilliseconds = millisecondsPicker.getValue();
+			double timeInterval = newSeconds + newMilliseconds / 1000;
+			settings.setTimeInterval(timeInterval);
+			timeButton.setText(getString(R.string.time_format, newSeconds, newMilliseconds));
+		}).setNegativeButton(R.string.cancel, null).create().show();
 	}
 }
