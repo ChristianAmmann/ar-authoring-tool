@@ -49,9 +49,7 @@ public class SensorAdapter extends RecyclerView.Adapter {
 				configViewHolder.getConfigName().setText(deviceSensor.getType().getNameId());
 				configViewHolder.getConfigDescription().setText(deviceSensor.getType().getDescriptionId());
 				configViewHolder.getSwitchButton().setChecked(deviceSensor.isActive());
-				configViewHolder.getSwitchButton().setOnClickListener((view) -> {
-					deviceSensor.setActive(configViewHolder.getSwitchButton().isChecked());
-				});
+				configViewHolder.getSwitchButton().setOnClickListener((view) -> deviceSensor.setActive(configViewHolder.getSwitchButton().isChecked()));
 				break;
 		}
 	}

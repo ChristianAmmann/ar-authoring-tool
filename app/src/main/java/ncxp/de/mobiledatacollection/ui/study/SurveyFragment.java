@@ -71,7 +71,7 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 		surveyAdapter = new SurveyAdapter(new ArrayList<>(), this);
 		surveyRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		surveyRecyclerView.setAdapter(surveyAdapter);
-		viewModel.getSavedSurveys().observe(SurveyFragment.this, surveys -> {
+		viewModel.getSurveys().observe(SurveyFragment.this, surveys -> {
 			showPlaceHolder(surveys);
 			surveyAdapter.addItems(surveys);
 		});

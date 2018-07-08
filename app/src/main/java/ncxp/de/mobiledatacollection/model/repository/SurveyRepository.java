@@ -20,7 +20,7 @@ public class SurveyRepository {
 		return surveyDao.selectById(id);
 	}
 
-	public LiveData<List<Survey>> getSurveysFromStudy(Study study) {
+	public List<Survey> getSurveysFromStudy(Study study) {
 		return surveyDao.getSurveysFromStudy(study.getId());
 	}
 

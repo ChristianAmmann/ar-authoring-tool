@@ -42,8 +42,8 @@ public class StudiesViewModel extends ViewModel {
 			studies.addSource(fetchedData, (myStudies) -> {
 				if (myStudies != null) {
 					studies.removeSource(fetchedData);
-					myStudies.forEach(this::loadDevicesSensors);
 					studies.setValue(myStudies);
+					myStudies.forEach(this::loadDevicesSensors);
 				}
 			});
 		});

@@ -32,6 +32,7 @@ public class SensorFragment extends Fragment {
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		viewModel = StudyActivity.obtainViewModel(getActivity());
+		viewModel.init();
 	}
 
 	@Nullable
@@ -53,8 +54,11 @@ public class SensorFragment extends Fragment {
 		sectionedRecyclerView.setLayoutManager(layoutManager);
 		sectionedRecyclerView.setLayoutManager(layoutManager);
 		sectionedRecyclerView.setAdapter(sectionSensorAdapter);
-		viewModel.getAvailableSensors().observe(SensorFragment.this, (deviceSensors) -> {
-			sectionSensorAdapter.replaceItems(viewModel.getSectionedDeviceSensors());
+		viewModel.getSensors().observe(SensorFragment.this, (deviceSensors) -> {
+			if (deviceSensors != null) {
+				sectionSensorAdapter.replaceItems(viewModel.getSectionedDeviceSensors(deviceSensors));
+			}
 		});
+
 	}
 }

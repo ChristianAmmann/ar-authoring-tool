@@ -29,7 +29,7 @@ public interface SurveyDao {
 	int deleteById(long id);
 
 	@Query("SELECT * FROM " + Survey.TABLE_NAME + " WHERE studyId=:id")
-	LiveData<List<Survey>> getSurveysFromStudy(long id);
+	List<Survey> getSurveysFromStudy(long id);
 
 	@Update
 	int update(Survey survey);
