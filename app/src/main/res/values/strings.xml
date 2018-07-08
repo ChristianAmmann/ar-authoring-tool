@@ -144,5 +144,6 @@
 	<string name="time_divider">,</string>
 	<string name="seconds">Sekunden</string>
 	<string name="milliseconds">Millisekunden</string>
+	<string name="export_database">Datenbank exportieren</string>
 
 </resources>

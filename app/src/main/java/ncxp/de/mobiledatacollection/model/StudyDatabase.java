@@ -19,7 +19,7 @@ import ncxp.de.mobiledatacollection.model.data.TestPerson;
 @Database(entities = {Study.class, Survey.class, TestPerson.class, DeviceSensor.class, StudyDeviceSensorJoin.class}, version = 1, exportSchema = false)
 public abstract class StudyDatabase extends RoomDatabase {
 
-	private static final String DATABASE_NAME = "studies.db";
+	public static final String DATABASE_NAME = "studies.db";
 
 	private static StudyDatabase instance;
 

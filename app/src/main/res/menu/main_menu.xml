@@ -6,6 +6,10 @@
 		android:icon="@drawable/magnify"
 		android:title="@string/search"
 		app:showAsAction="ifRoom"/>
+
+	<item
+		android:id="@+id/export"
+		android:title="@string/export_database"/>
 	<item
 		android:id="@+id/help"
 		android:title="@string/help"/>
