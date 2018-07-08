@@ -1,23 +1,15 @@
-package ncxp.de.mobiledatacollection.model.data;
+package ncxp.de.mobiledatacollection.ui.study.adapter;
 
-public class CapturingData {
+public class OptionItem {
+	private String     name;
+	private String     description;
+	private boolean    isActive = false;
+	private OptionType type;
 
-	private long    id;
-	private String  name;
-	private String  description;
-	private boolean isActive = false;
-
-	public CapturingData(String name, String description) {
+	public OptionItem(String name, String description, OptionType type) {
 		this.name = name;
 		this.description = description;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
+		this.type = type;
 	}
 
 	public String getName() {
@@ -42,5 +34,13 @@ public class CapturingData {
 
 	public void setActive(boolean active) {
 		isActive = active;
+	}
+
+	public OptionType getType() {
+		return type;
+	}
+
+	public void setType(OptionType type) {
+		this.type = type;
 	}
 }

@@ -19,9 +19,10 @@ import java.util.List;
 import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.StudyActivity;
 import ncxp.de.mobiledatacollection.datalogger.SettingGroup;
-import ncxp.de.mobiledatacollection.model.data.CapturingData;
-import ncxp.de.mobiledatacollection.model.data.SensorSettings;
+import ncxp.de.mobiledatacollection.ui.study.adapter.OptionItem;
+import ncxp.de.mobiledatacollection.ui.study.adapter.OptionType;
 import ncxp.de.mobiledatacollection.ui.study.adapter.OtherAdapter;
+import ncxp.de.mobiledatacollection.ui.study.adapter.SensorSettings;
 import ncxp.de.mobiledatacollection.ui.study.viewmodel.OptionOthersListener;
 import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModel;
 
@@ -65,17 +66,18 @@ public class OthersFragment extends Fragment implements OptionOthersListener {
 
 	private List<Object> getSectionedOptions() {
 		List<Object> sectionedOptions = new ArrayList<>();
-
 		sectionedOptions.add(SettingGroup.SENSOR_CONFIGURATION.getGroupId());
 		sectionedOptions.add(new SensorSettings());
 		sectionedOptions.add(SettingGroup.VIDEO_AUDIO.getGroupId());
-		CapturingData videoData = new CapturingData("Bildschrim aufzeichnen", "Während der Studie wird der Bildschrim vom Probanden aufgezeichnet");
-		CapturingData audioData = new CapturingData("Ton aufzeichnen", "Während der Studie wird der Ton vom Probanden aufgezeichnet");
-		sectionedOptions.add(videoData);
-		sectionedOptions.add(audioData);
+		OptionItem videoItem = new OptionItem(getString(R.string.screen_capturing), getString(R.string.screen_capturing_description), OptionType.VIDEO);
+		OptionItem audioItem = new OptionItem(getString(R.string.audio_capturing), getString(R.string.audio_capturing_description), OptionType.AUDIO);
+		sectionedOptions.add(videoItem);
+		sectionedOptions.add(audioItem);
 		sectionedOptions.add(SettingGroup.OTHERS.getGroupId());
-		CapturingData taskCompletionTime = new CapturingData("Bearbeitungszeit", "Die benötigte Zeit eines Probanden um die Studie zu absolvieren");
-		CapturingData amountOfTouchEvents = new CapturingData("Anzahl der Touch-Eingaben", "Benötigte Anzahl der Touch-Eingaben um die Studie zu absolvieren");
+		OptionItem taskCompletionTime = new OptionItem(getString(R.string.task_completion_time),
+													   getString(R.string.task_completion_time_description),
+													   OptionType.TASK_COMPLETION_TIME);
+		OptionItem amountOfTouchEvents = new OptionItem(getString(R.string.touch_events), getString(R.string.touch_events_description), OptionType.AMOUNT_OF_TOUCH_EVENTS);
 		sectionedOptions.add(taskCompletionTime);
 		sectionedOptions.add(amountOfTouchEvents);
 		return sectionedOptions;
@@ -89,8 +91,8 @@ public class OthersFragment extends Fragment implements OptionOthersListener {
 		View dialogView = inflater.inflate(R.layout.dialog_time_picker, null);
 		NumberPicker secondsPicker = dialogView.findViewById(R.id.seconds);
 		NumberPicker millisecondsPicker = dialogView.findViewById(R.id.milliseconds);
-		int seconds = (int) settings.getTimeInterval();
-		int milliseconds = (int) ((settings.getTimeInterval() - (int) settings.getTimeInterval()) * 100);
+		int seconds = (int) settings.getSensorMeasuringDistance();
+		int milliseconds = (int) ((settings.getSensorMeasuringDistance() - (int) settings.getSensorMeasuringDistance()) * 100);
 		secondsPicker.setMaxValue(3600);
 		secondsPicker.setMinValue(0);
 		millisecondsPicker.setMinValue(0);
@@ -101,7 +103,7 @@ public class OthersFragment extends Fragment implements OptionOthersListener {
 			int newSeconds = secondsPicker.getValue();
 			int newMilliseconds = millisecondsPicker.getValue();
 			double timeInterval = newSeconds + newMilliseconds / 1000;
-			settings.setTimeInterval(timeInterval);
+			settings.setSensorMeasuringDistance(timeInterval);
 			timeButton.setText(getString(R.string.time_format, newSeconds, newMilliseconds));
 		}).setNegativeButton(R.string.cancel, null).create().show();
 	}

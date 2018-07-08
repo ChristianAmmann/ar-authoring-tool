@@ -2,7 +2,7 @@ package ncxp.de.mobiledatacollection.ui.study.viewmodel;
 
 import android.widget.Button;
 
-import ncxp.de.mobiledatacollection.model.data.SensorSettings;
+import ncxp.de.mobiledatacollection.ui.study.adapter.SensorSettings;
 
 public interface OptionOthersListener {
 

@@ -9,8 +9,6 @@ import android.widget.Button;
 import java.util.List;
 
 import ncxp.de.mobiledatacollection.R;
-import ncxp.de.mobiledatacollection.model.data.CapturingData;
-import ncxp.de.mobiledatacollection.model.data.SensorSettings;
 import ncxp.de.mobiledatacollection.ui.study.viewholder.ConfigViewHolder;
 import ncxp.de.mobiledatacollection.ui.study.viewholder.SectionViewHolder;
 import ncxp.de.mobiledatacollection.ui.study.viewholder.SensorSettingsViewHolder;
@@ -54,7 +52,7 @@ public class OtherAdapter extends RecyclerView.Adapter {
 				break;
 			case R.layout.item_config:
 				ConfigViewHolder configViewHolder = (ConfigViewHolder) holder;
-				CapturingData data = (CapturingData) sectionedOtherOptions.get(position);
+				OptionItem data = (OptionItem) sectionedOtherOptions.get(position);
 				configViewHolder.getConfigName().setText(data.getName());
 				configViewHolder.getConfigDescription().setText(data.getDescription());
 				configViewHolder.getSwitchButton().setChecked(data.isActive());
@@ -62,11 +60,11 @@ public class OtherAdapter extends RecyclerView.Adapter {
 				break;
 			case R.layout.item_sensor_options:
 				SensorSettingsViewHolder settingsViewHolder = (SensorSettingsViewHolder) holder;
-				SensorSettings sensorSettings = (SensorSettings) sectionedOtherOptions.get(position);
+				SensorSettings studySettings = (SensorSettings) sectionedOtherOptions.get(position);
 				Button timeButton = settingsViewHolder.getTimeButton();
-				timeButton.setText(sensorSettings.getSeconds() + "," + sensorSettings.getMilliseconds() + " s");
+				timeButton.setText(studySettings.getSeconds() + "," + studySettings.getMilliseconds() + " s");
 				timeButton.setOnClickListener((view) -> {
-					listener.onTimePickerClicked(timeButton, sensorSettings);
+					listener.onTimePickerClicked(timeButton, studySettings);
 				});
 
 				break;
@@ -82,7 +80,7 @@ public class OtherAdapter extends RecyclerView.Adapter {
 		if (item instanceof SensorSettings) {
 			return R.layout.item_sensor_options;
 		}
-		if (item instanceof CapturingData) {
+		if (item instanceof OptionItem) {
 			return R.layout.item_config;
 		}
 		return position;

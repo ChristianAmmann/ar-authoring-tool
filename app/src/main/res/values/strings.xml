@@ -145,5 +145,12 @@
 	<string name="seconds">Sekunden</string>
 	<string name="milliseconds">Millisekunden</string>
 	<string name="export_database">Datenbank exportieren</string>
-
+	<string name="screen_capturing">Bildschrim aufzeichnen</string>
+	<string name="screen_capturing_description">Während der Studie wird der Bildschrim vom Probanden aufgezeichnet</string>
+	<string name="audio_capturing">Ton aufzeichnen</string>
+	<string name="audio_capturing_description">Während der Studie wird der Ton vom Probanden aufgezeichnet</string>
+	<string name="task_completion_time">Bearbeitungszeit</string>
+	<string name="task_completion_time_description">Die benötigte Zeit eines Probanden um die Studie zu absolvieren</string>
+	<string name="touch_events">Anzahl der Touch-Eingaben</string>
+	<string name="touch_events_description">Benötigte Anzahl der Touch-Eingaben um die Studie zu absolvieren</string>
 </resources>

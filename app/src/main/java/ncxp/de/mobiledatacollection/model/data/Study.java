@@ -3,6 +3,7 @@ package ncxp.de.mobiledatacollection.model.data;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.hardware.SensorManager;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -17,6 +18,12 @@ public class Study implements Parcelable {
 	private long               id;
 	private String             name;
 	private String             description;
+	// Between 1 - 3
+	private int                sensorAccuracy          = SensorManager.SENSOR_STATUS_ACCURACY_HIGH;
+	//in s
+	private double             sensorMeasuringDistance = 1.0;
+	private boolean            isCapturingScreen       = false;
+	private boolean            isCapturingAudio        = false;
 	@Ignore
 	private List<DeviceSensor> sensors;
 
@@ -53,6 +60,47 @@ public class Study implements Parcelable {
 
 	public void setSensors(List<DeviceSensor> sensors) {
 		this.sensors = sensors;
+	}
+
+	public int getSensorAccuracy() {
+		return sensorAccuracy;
+	}
+
+	public void setSensorAccuracy(int sensorAccuracy) {
+		this.sensorAccuracy = sensorAccuracy;
+	}
+
+	public double getSensorMeasuringDistance() {
+		return sensorMeasuringDistance;
+	}
+
+	public int getSeconds() {
+		return (int) sensorMeasuringDistance;
+	}
+
+	public int getMilliseconds() {
+		return (int) ((sensorMeasuringDistance - (int) sensorMeasuringDistance) * 100);
+
+	}
+
+	public void setSensorMeasuringDistance(double sensorMeasuringDistance) {
+		this.sensorMeasuringDistance = sensorMeasuringDistance;
+	}
+
+	public boolean isCapturingScreen() {
+		return isCapturingScreen;
+	}
+
+	public void setCapturingScreen(boolean capturingScreen) {
+		isCapturingScreen = capturingScreen;
+	}
+
+	public boolean isCapturingAudio() {
+		return isCapturingAudio;
+	}
+
+	public void setCapturingAudio(boolean capturingAudio) {
+		isCapturingAudio = capturingAudio;
 	}
 
 	protected Study(Parcel in) {
