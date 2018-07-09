@@ -121,10 +121,18 @@
 	<string name="snackbar_hint_sosci_survey">Durch das Testen des Fragenbogens werden Sie auf SoSci Survey als Proband/Besucher gezählt.</string>
 	<string name="snackbar_error_sosci_survey">Sollte ihren Fragenbogen nicht korrekt angezeigt werden, passen Sie die Einstellung der Umfrage an.</string>
 	<string name="ok">ok</string>
-	<string name="onboarding_survey_import_title">Fragebogen importieren</string>
-	<string name="onboarding_survey_import_description">Hier eine gute Erklärung erstellen, sodass der Benutzer weiß was er zu tun hat. Skittles Skittles Skittles</string>
-	<string name="onboarding_survey_platform_id_title">Wo finde ich meine Fragebogen-Id?</string>
-	<string name="onboarding_survey_platform_id_description">Hier eine super tolle Beschreibung mit Bild, sodass der Benutzer mir nicht den Kopf abhackt :).</string>
+	<string name="onboarding_survey_import_title">Fragebogen einbinden</string>
+	<string name="onboarding_survey_import_description">Fragebogen können über die Seite Sosci Survey erstellt werden und die App importiert werden. Dabei ist es
+		entscheidend, dass der Fragebogen veröffentlicht ist und Probanden auf diesen zugreifen können. Das Veröffentlichen können Sie auf der SoSci Survey Seite
+		freischalten. Die weitere Schritten erklären Ihnen welche Informationen benötigt werden, um erfolgreich einen Fragenbogen in die App einzubinden</string>
+	<string name="onboarding_survey_platform_id_title">Wie binde ich einen Fragebogen ein?</string>
+	<string name="onboarding_survey_platform_id_description">Für das Einbinden eines Fragenbogens sind zwei Informationen wichtig: Das Projektverzeichnis des Fragenbogens
+		in SoSci-Survey und gegebenfalls die Kennung des Fragebogens. Wenn Sie keine Kennung für den Fragebogen auf SoSci-Survey angegeben haben, lassen Sie diese Angabe
+		einfach leer. Im Folgenden sehen Sie ein Beispiel wie die Kennung und das Projektverzeichnis zu finden ist:</string>
+	<string name="onboarding_survey_javascript_title">Kommunikation zum Fragenbogen aufbauen</string>
+	<string name="onboarding_survey_javascript_description">Nachdem ein Proband ihr Fragebogen beantwortet hat, braucht die App eine Möglichkeit mit ihrem Fragebogen zu
+		kommunizieren, sodass Sie am Ende den Probanden anonym zur den gespeicherten Daten auf der App verbinden können. Hierzu müssen Sie folgenden Code-Schnipsel auf die
+	letzte Seite (z.B. Vielen Dank-Seite) im HTML-Bereich einfügen:</string>
 	<string name="internet_address">Internetadresse</string>
 	<string name="soscisurvey_base_url">https://www.soscisurvey.de/</string>
 	<string name="soscisurvey_url_suffix">/?q=</string>

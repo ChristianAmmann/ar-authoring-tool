@@ -12,7 +12,7 @@
 		android:layout_height="wrap_content"
 		android:fontFamily="sans-serif-medium"
 		android:paddingBottom="@dimen/spacing_medium"
-		android:text="Kommunikation zum Fragenbogen aufbauen"
+		android:text="@string/onboarding_survey_javascript_title"
 		android:textColor="@android:color/white"
 		android:textSize="@dimen/material_typography_h6"/>
 
@@ -20,7 +20,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:fontFamily="sans-serif"
-		android:text="Hier eine super tolle Beschreibung mit Bild, sodass der Benutzer mir nicht den Kopf abhackt :)."
+		android:text="@string/onboarding_survey_javascript_description"
 		android:textColor="@android:color/white"
 		android:textSize="@dimen/material_typography_subtitle1"/>
 

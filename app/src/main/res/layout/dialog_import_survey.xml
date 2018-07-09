@@ -99,7 +99,6 @@
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_weight="1"
 			android:fontFamily="sans-serif"
 			android:text="@string/soscisurvey_base_url"
 			android:textSize="@dimen/material_typography_caption"/>
@@ -108,7 +107,6 @@
 			android:id="@+id/survey_project_directory_url"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_weight="1"
 			android:fontFamily="sans-serif"
 			android:text="@string/survey_project"
 			android:textColor="@color/colorAccent"
@@ -117,7 +115,6 @@
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_weight="1"
 			android:fontFamily="sans-serif"
 			android:text="@string/soscisurvey_url_suffix"
 			android:textSize="@dimen/material_typography_caption"/>
@@ -126,7 +123,6 @@
 			android:id="@+id/survey_identifier_url"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_weight="1"
 			android:fontFamily="sans-serif"
 			android:text="@string/survey_identifier"
 			android:textColor="@color/colorAccent"
