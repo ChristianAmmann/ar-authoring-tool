@@ -1,9 +1,12 @@
 package ncxp.de.mobiledatacollection.ui.study.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 
 import java.util.List;
@@ -18,9 +21,11 @@ public class OtherAdapter extends RecyclerView.Adapter {
 
 	private List<Object>         sectionedOtherOptions;
 	private OptionOthersListener listener;
+	private Context              context;
 
-	public OtherAdapter(List<Object> sectionedOtherOptions, OptionOthersListener listener) {
+	public OtherAdapter(List<Object> sectionedOtherOptions, Context context, OptionOthersListener listener) {
 		this.sectionedOtherOptions = sectionedOtherOptions;
+		this.context = context;
 		this.listener = listener;
 	}
 
@@ -56,15 +61,28 @@ public class OtherAdapter extends RecyclerView.Adapter {
 				configViewHolder.getConfigName().setText(data.getName());
 				configViewHolder.getConfigDescription().setText(data.getDescription());
 				configViewHolder.getSwitchButton().setChecked(data.isActive());
-				configViewHolder.getSwitchButton().setOnCheckedChangeListener((view, isChecked) -> data.setActive(isChecked));
+				configViewHolder.getSwitchButton().setOnCheckedChangeListener((view, isChecked) -> {
+					data.setActive(isChecked);
+					listener.onOptionItemClicked(data);
+				});
 				break;
 			case R.layout.item_sensor_options:
 				SensorSettingsViewHolder settingsViewHolder = (SensorSettingsViewHolder) holder;
 				SensorSettings studySettings = (SensorSettings) sectionedOtherOptions.get(position);
 				Button timeButton = settingsViewHolder.getTimeButton();
-				timeButton.setText(studySettings.getSeconds() + "," + studySettings.getMilliseconds() + " s");
-				timeButton.setOnClickListener((view) -> {
-					listener.onTimePickerClicked(timeButton, studySettings);
+				timeButton.setText(context.getString(R.string.time_format, studySettings.getSensorMeasuringDistance()));
+				timeButton.setOnClickListener((view) -> listener.onTimePickerClicked(timeButton, studySettings));
+				settingsViewHolder.getAccuracySpinner().setSelection(studySettings.getSensorAccuracy() - 1);
+				settingsViewHolder.getAccuracySpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+					@Override
+					public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+						studySettings.setSensorAccuracy(position + 1);
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+
+					}
 				});
 
 				break;

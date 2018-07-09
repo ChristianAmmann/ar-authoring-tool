@@ -29,7 +29,7 @@ public class SensorSettings {
 	}
 
 	public int getMilliseconds() {
-		return (int) ((sensorMeasuringDistance - (int) sensorMeasuringDistance) * 100);
+		return (int) ((sensorMeasuringDistance - (int) sensorMeasuringDistance) * 1000);
 
 	}
 

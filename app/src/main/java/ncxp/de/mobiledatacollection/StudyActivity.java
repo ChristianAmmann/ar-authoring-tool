@@ -20,10 +20,12 @@ import ncxp.de.mobiledatacollection.model.StudyDatabase;
 import ncxp.de.mobiledatacollection.model.dao.DeviceSensorDao;
 import ncxp.de.mobiledatacollection.model.dao.StudyDao;
 import ncxp.de.mobiledatacollection.model.dao.StudyDeviceSensorJoinDao;
+import ncxp.de.mobiledatacollection.model.dao.StudyMeasurementJoinDao;
 import ncxp.de.mobiledatacollection.model.dao.SurveyDao;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.repository.DeviceSensorRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyDeviceSensorJoinRepository;
+import ncxp.de.mobiledatacollection.model.repository.StudyMeasurementJoinRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
 import ncxp.de.mobiledatacollection.ui.study.OthersFragment;
@@ -83,7 +85,9 @@ public class StudyActivity extends AppCompatActivity {
 		DeviceSensorRepository deviceRepo = new DeviceSensorRepository(deviceDao);
 		SensorDataManager sensorDataManager = SensorDataManager.getInstance(activity);
 		StudyDeviceSensorJoinRepository studyDeviceSensorJoinRepo = new StudyDeviceSensorJoinRepository(studyDeviceSensorJoinDao);
-		return new StudyViewModelFactory(studyRepo, surveyRepo, deviceRepo, sensorDataManager, studyDeviceSensorJoinRepo);
+		StudyMeasurementJoinDao studyMeasurementJoinDao = database.studyMeasurementJoinDao();
+		StudyMeasurementJoinRepository studyMeasurementJoinRepo = new StudyMeasurementJoinRepository(studyMeasurementJoinDao);
+		return new StudyViewModelFactory(studyRepo, surveyRepo, deviceRepo, sensorDataManager, studyDeviceSensorJoinRepo, studyMeasurementJoinRepo);
 	}
 
 	private void setupViewPagerAdapter() {
@@ -167,6 +171,8 @@ public class StudyActivity extends AppCompatActivity {
 					Study study = viewModel.getStudy();
 					study.setName(name);
 					study.setDescription(description);
+					study.setSensorAccuracy(viewModel.getSensorSettings().getSensorAccuracy());
+					study.setSensorMeasuringDistance(viewModel.getSensorSettings().getSensorMeasuringDistance());
 					viewModel.update(study);
 				} else {
 					viewModel.save(name, description);

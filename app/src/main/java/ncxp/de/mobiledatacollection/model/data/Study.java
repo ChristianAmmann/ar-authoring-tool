@@ -7,6 +7,7 @@ import android.hardware.SensorManager;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = Study.TABLE_NAME)
@@ -74,15 +75,6 @@ public class Study implements Parcelable {
 		return sensorMeasuringDistance;
 	}
 
-	public int getSeconds() {
-		return (int) sensorMeasuringDistance;
-	}
-
-	public int getMilliseconds() {
-		return (int) ((sensorMeasuringDistance - (int) sensorMeasuringDistance) * 100);
-
-	}
-
 	public void setSensorMeasuringDistance(double sensorMeasuringDistance) {
 		this.sensorMeasuringDistance = sensorMeasuringDistance;
 	}
@@ -107,6 +99,16 @@ public class Study implements Parcelable {
 		id = in.readLong();
 		name = in.readString();
 		description = in.readString();
+		sensorAccuracy = in.readInt();
+		sensorMeasuringDistance = in.readDouble();
+		isCapturingScreen = in.readByte() != 0x00;
+		isCapturingAudio = in.readByte() != 0x00;
+		if (in.readByte() == 0x01) {
+			sensors = new ArrayList<>();
+			in.readList(sensors, DeviceSensor.class.getClassLoader());
+		} else {
+			sensors = null;
+		}
 	}
 
 	@Override
@@ -119,6 +121,16 @@ public class Study implements Parcelable {
 		dest.writeLong(id);
 		dest.writeString(name);
 		dest.writeString(description);
+		dest.writeInt(sensorAccuracy);
+		dest.writeDouble(sensorMeasuringDistance);
+		dest.writeByte((byte) (isCapturingScreen ? 0x01 : 0x00));
+		dest.writeByte((byte) (isCapturingAudio ? 0x01 : 0x00));
+		if (sensors == null) {
+			dest.writeByte((byte) (0x00));
+		} else {
+			dest.writeByte((byte) (0x01));
+			dest.writeList(sensors);
+		}
 	}
 
 	@SuppressWarnings("unused")

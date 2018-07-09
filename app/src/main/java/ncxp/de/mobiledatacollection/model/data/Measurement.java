@@ -12,9 +12,7 @@ public class Measurement {
 	private long   id;
 	private String name;
 
-	public Measurement(long id, String name) {
-		this.id = id;
-		this.name = name;
+	public Measurement() {
 	}
 
 	public long getId() {
