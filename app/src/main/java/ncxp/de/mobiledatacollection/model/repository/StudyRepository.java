@@ -16,7 +16,7 @@ public class StudyRepository {
 		this.studyDao = studyDao;
 	}
 
-	public LiveData<List<Study>> getStudies() {
+	public List<Study> getStudies() {
 		return studyDao.selectAll();
 	}
 

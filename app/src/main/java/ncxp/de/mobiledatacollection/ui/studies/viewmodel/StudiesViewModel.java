@@ -2,7 +2,7 @@ package ncxp.de.mobiledatacollection.ui.studies.viewmodel;
 
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import java.util.List;
@@ -16,14 +16,14 @@ import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 
 public class StudiesViewModel extends ViewModel {
 
-	private MediatorLiveData<List<Study>>   studies;
+	private MutableLiveData<List<Study>>    studies;
 	private StudyRepository                 studyRepo;
 	private StudyDeviceSensorJoinRepository studyDeviceSensorJoinRepository;
 
 	public StudiesViewModel(StudyRepository studyRepo, StudyDeviceSensorJoinRepository studyDeviceSensorJoinRepository) {
 		this.studyRepo = studyRepo;
 		this.studyDeviceSensorJoinRepository = studyDeviceSensorJoinRepository;
-		studies = new MediatorLiveData<>();
+		studies = new MutableLiveData<>();
 	}
 
 	public LiveData<List<Study>> getStudies() {
@@ -37,15 +37,8 @@ public class StudiesViewModel extends ViewModel {
 	private void loadStudies() {
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
-			LiveData<List<Study>> fetchedData = studyRepo.getStudies();
-
-			studies.addSource(fetchedData, (myStudies) -> {
-				if (myStudies != null) {
-					studies.removeSource(fetchedData);
-					studies.setValue(myStudies);
-					myStudies.forEach(this::loadDevicesSensors);
-				}
-			});
+			List<Study> fetchedData = studyRepo.getStudies();
+			studies.postValue(fetchedData);
 		});
 	}
 
@@ -65,6 +58,9 @@ public class StudiesViewModel extends ViewModel {
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
 			studyRepo.deleteStudy(study);
+			List<Study> currentStudies = studies.getValue();
+			currentStudies.remove(study);
+			studies.postValue(currentStudies);
 		});
 	}
 

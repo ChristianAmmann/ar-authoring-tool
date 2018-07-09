@@ -22,7 +22,7 @@ public interface StudyDao {
 	long[] insertAll(Study[] studies);
 
 	@Query("SELECT * FROM " + Study.TABLE_NAME)
-	LiveData<List<Study>> selectAll();
+	List<Study> selectAll();
 
 	@Query("SELECT * FROM " + Study.TABLE_NAME + " WHERE id = :id")
 	LiveData<Study> selectById(long id);
