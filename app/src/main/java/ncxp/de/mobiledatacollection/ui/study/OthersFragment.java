@@ -84,7 +84,9 @@ public class OthersFragment extends Fragment implements OptionOthersListener {
 		OptionItem taskCompletionTime = new OptionItem(getString(R.string.task_completion_time),
 													   getString(R.string.task_completion_time_description),
 													   OptionType.TASK_COMPLETION_TIME);
+		taskCompletionTime.setActive(viewModel.isMeasurementActive(getString(R.string.task_completion_time)));
 		OptionItem amountOfTouchEvents = new OptionItem(getString(R.string.touch_events), getString(R.string.touch_events_description), OptionType.AMOUNT_OF_TOUCH_EVENTS);
+		amountOfTouchEvents.setActive(viewModel.isMeasurementActive(getString(R.string.touch_events)));
 		sectionedOptions.add(taskCompletionTime);
 		sectionedOptions.add(amountOfTouchEvents);
 		return sectionedOptions;
@@ -126,10 +128,12 @@ public class OthersFragment extends Fragment implements OptionOthersListener {
 				viewModel.setCapturingAudio(item.isActive());
 				break;
 			case TASK_COMPLETION_TIME:
-				viewModel.createMeasurement(item.getName());
-				break;
 			case AMOUNT_OF_TOUCH_EVENTS:
-				viewModel.createMeasurement(item.getName());
+				if (item.isActive()) {
+					viewModel.createMeasurement(item.getName());
+				} else {
+					viewModel.removeMeasurement(item.getName());
+				}
 				break;
 		}
 	}

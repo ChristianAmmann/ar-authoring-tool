@@ -16,8 +16,10 @@ import ncxp.de.mobiledatacollection.model.data.DeviceSensor;
 import ncxp.de.mobiledatacollection.model.data.Measurement;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.data.StudyDeviceSensorJoin;
+import ncxp.de.mobiledatacollection.model.data.StudyMeasurementJoin;
 import ncxp.de.mobiledatacollection.model.data.Survey;
 import ncxp.de.mobiledatacollection.model.repository.DeviceSensorRepository;
+import ncxp.de.mobiledatacollection.model.repository.MeasurementRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyDeviceSensorJoinRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyMeasurementJoinRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
@@ -30,6 +32,7 @@ public class StudyViewModel extends ViewModel {
 	private SurveyRepository                surveyRepo;
 	private DeviceSensorRepository          deviceRepo;
 	private StudyDeviceSensorJoinRepository studyDeviceSensorJoinRepo;
+	private MeasurementRepository           measurementRepo;
 	private StudyMeasurementJoinRepository  studyMeasurementJoinRepo;
 	private SensorDataManager               sensorDataManager;
 
@@ -46,6 +49,7 @@ public class StudyViewModel extends ViewModel {
 						  DeviceSensorRepository deviceRepo,
 						  SensorDataManager sensorDataManager,
 						  StudyDeviceSensorJoinRepository studyDeviceSensorJoinRepo,
+						  MeasurementRepository measurementRepo,
 						  StudyMeasurementJoinRepository studyMeasurementJoinRepo) {
 		this.studyRepo = studyRepo;
 		this.surveyRepo = surveyRepo;
@@ -53,6 +57,7 @@ public class StudyViewModel extends ViewModel {
 		this.sensorDataManager = sensorDataManager;
 		this.studyDeviceSensorJoinRepo = studyDeviceSensorJoinRepo;
 		this.studyMeasurementJoinRepo = studyMeasurementJoinRepo;
+		this.measurementRepo = measurementRepo;
 		this.sensors = new MutableLiveData<>();
 		this.surveys = new MutableLiveData<>();
 		this.measurements = new MutableLiveData<>();
@@ -76,7 +81,9 @@ public class StudyViewModel extends ViewModel {
 			settings.setSensorMeasuringDistance(study.getSensorMeasuringDistance());
 			loadSurveys();
 			loadActiveSensors();
+			loadMeasurements();
 		} else {
+			settings = new SensorSettings();
 			initAvailableDeviceSensor(null);
 		}
 	}
@@ -136,12 +143,19 @@ public class StudyViewModel extends ViewModel {
 		Measurement measurement = new Measurement();
 		measurement.setName(name);
 		List<Measurement> newMeasurements = new ArrayList<>();
+		if (measurements.getValue() != null) {
+			newMeasurements = measurements.getValue();
+		}
 		newMeasurements.add(measurement);
 		measurements.postValue(newMeasurements);
 	}
 
-	public void removeMeasurement(Measurement measurement) {
-		measurements.getValue().remove(measurement);
+	public void removeMeasurement(String name) {
+		Measurement measurement = new Measurement();
+		measurement.setName(name);
+		if (measurements.getValue() != null) {
+			measurements.getValue().remove(measurement);
+		}
 	}
 
 	public void createSurvey(String name, String description, String projectDirectory, String identifier) {
@@ -174,6 +188,7 @@ public class StudyViewModel extends ViewModel {
 			long studyId = saveStudy(study);
 			saveActiveDeviceSensors(studyId);
 			saveSurveys(studyId);
+			saveMeasurements(studyId);
 		});
 	}
 
@@ -185,6 +200,7 @@ public class StudyViewModel extends ViewModel {
 			updateStudy(updateStudy);
 			saveActiveDeviceSensors(updateStudy.getId());
 			saveSurveys(updateStudy.getId());
+			saveMeasurements(updateStudy.getId());
 		});
 	}
 
@@ -198,8 +214,8 @@ public class StudyViewModel extends ViewModel {
 
 	private void saveActiveDeviceSensors(long studyId) {
 		sensors.getValue().stream().filter(DeviceSensor::isActive).forEach(deviceSensor -> {
-			long deviceId = deviceRepo.saveDeviceSensor(deviceSensor);
-			StudyDeviceSensorJoin join = new StudyDeviceSensorJoin(studyId, deviceId);
+			deviceRepo.saveDeviceSensor(deviceSensor);
+			StudyDeviceSensorJoin join = new StudyDeviceSensorJoin(studyId, deviceSensor.getName());
 			studyDeviceSensorJoinRepo.saveStudyDeviceSensorJoin(join);
 		});
 	}
@@ -207,6 +223,14 @@ public class StudyViewModel extends ViewModel {
 	private void saveSurveys(long studyId) {
 		surveys.getValue().forEach(survey -> survey.setStudyId(studyId));
 		surveyRepo.saveSurveys(surveys.getValue());
+	}
+
+	private void saveMeasurements(long studyId) {
+		measurements.getValue().forEach(measurement -> {
+			long measurementId = measurementRepo.saveMeasurement(measurement);
+			StudyMeasurementJoin join = new StudyMeasurementJoin(studyId, measurementId);
+			studyMeasurementJoinRepo.saveStudyMeasurementJoin(join);
+		});
 	}
 
 	public List<Object> getSectionedDeviceSensors(List<DeviceSensor> deviceSensors) {
@@ -243,5 +267,12 @@ public class StudyViewModel extends ViewModel {
 
 	public boolean isCapturingAudio() {
 		return isCapturingAudio;
+	}
+
+	public boolean isMeasurementActive(String name) {
+		if (measurements.getValue() != null) {
+			return measurements.getValue().stream().anyMatch(measurement -> measurement.getName().equals(name));
+		}
+		return false;
 	}
 }

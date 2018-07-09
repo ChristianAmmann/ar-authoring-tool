@@ -18,12 +18,14 @@ import android.view.View;
 import ncxp.de.mobiledatacollection.datalogger.SensorDataManager;
 import ncxp.de.mobiledatacollection.model.StudyDatabase;
 import ncxp.de.mobiledatacollection.model.dao.DeviceSensorDao;
+import ncxp.de.mobiledatacollection.model.dao.MeasurementDao;
 import ncxp.de.mobiledatacollection.model.dao.StudyDao;
 import ncxp.de.mobiledatacollection.model.dao.StudyDeviceSensorJoinDao;
 import ncxp.de.mobiledatacollection.model.dao.StudyMeasurementJoinDao;
 import ncxp.de.mobiledatacollection.model.dao.SurveyDao;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.repository.DeviceSensorRepository;
+import ncxp.de.mobiledatacollection.model.repository.MeasurementRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyDeviceSensorJoinRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyMeasurementJoinRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
@@ -85,9 +87,11 @@ public class StudyActivity extends AppCompatActivity {
 		DeviceSensorRepository deviceRepo = new DeviceSensorRepository(deviceDao);
 		SensorDataManager sensorDataManager = SensorDataManager.getInstance(activity);
 		StudyDeviceSensorJoinRepository studyDeviceSensorJoinRepo = new StudyDeviceSensorJoinRepository(studyDeviceSensorJoinDao);
+		MeasurementDao measurementDao = database.measurement();
+		MeasurementRepository measurementRepository = new MeasurementRepository(measurementDao);
 		StudyMeasurementJoinDao studyMeasurementJoinDao = database.studyMeasurementJoinDao();
 		StudyMeasurementJoinRepository studyMeasurementJoinRepo = new StudyMeasurementJoinRepository(studyMeasurementJoinDao);
-		return new StudyViewModelFactory(studyRepo, surveyRepo, deviceRepo, sensorDataManager, studyDeviceSensorJoinRepo, studyMeasurementJoinRepo);
+		return new StudyViewModelFactory(studyRepo, surveyRepo, deviceRepo, sensorDataManager, measurementRepository, studyDeviceSensorJoinRepo, studyMeasurementJoinRepo);
 	}
 
 	private void setupViewPagerAdapter() {

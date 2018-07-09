@@ -4,6 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.hardware.Sensor;
+import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 
@@ -14,8 +15,8 @@ public class DeviceSensor implements Serializable {
 
 	public static final String TABLE_NAME = "DeviceSensor";
 
-	@PrimaryKey(autoGenerate = true)
-	private long       id;
+	@PrimaryKey
+	@NonNull
 	private String     name;
 	@Ignore
 	private Sensor     sensor;
@@ -26,14 +27,6 @@ public class DeviceSensor implements Serializable {
 
 
 	public DeviceSensor() {
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public String getName() {

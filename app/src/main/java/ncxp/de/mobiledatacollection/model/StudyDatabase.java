@@ -6,6 +6,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 import ncxp.de.mobiledatacollection.model.dao.DeviceSensorDao;
+import ncxp.de.mobiledatacollection.model.dao.MeasurementDao;
 import ncxp.de.mobiledatacollection.model.dao.StudyDao;
 import ncxp.de.mobiledatacollection.model.dao.StudyDeviceSensorJoinDao;
 import ncxp.de.mobiledatacollection.model.dao.StudyMeasurementJoinDao;
@@ -48,9 +49,10 @@ public abstract class StudyDatabase extends RoomDatabase {
 
 	public abstract StudyMeasurementJoinDao studyMeasurementJoinDao();
 
+	public abstract MeasurementDao measurement();
+
 	public static StudyDatabase getInstance(final Context context) {
 		if (instance == null) {
-			//TODO MainThread
 			instance = Room.databaseBuilder(context, StudyDatabase.class, DATABASE_NAME).build();
 		}
 		return instance;

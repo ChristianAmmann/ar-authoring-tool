@@ -15,6 +15,6 @@ public interface StudyDeviceSensorJoinDao {
 	@Insert
 	void insert(StudyDeviceSensorJoin studyDeviceSensorJoin);
 
-	@Query("SELECT * FROM " + DeviceSensor.TABLE_NAME + " INNER JOIN " + StudyDeviceSensorJoin.TABLE_NAME + " ON id=deviceSensorId WHERE studyId=:id")
+	@Query("SELECT * FROM " + DeviceSensor.TABLE_NAME + " INNER JOIN " + StudyDeviceSensorJoin.TABLE_NAME + " ON name=deviceSensorId WHERE studyId=:id")
 	List<DeviceSensor> getDeviceSensorsForStudy(long id);
 }
