@@ -26,8 +26,8 @@
 			android:id="@+id/action_bar"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			app:navigationIcon="@drawable/augmented_reality"
-			app:theme="@style/ToolbarTheme"/>
+			android:theme="@style/ToolbarTheme"
+			app:navigationIcon="@drawable/augmented_reality"/>
 
 
 	</android.support.design.widget.AppBarLayout>

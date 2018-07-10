@@ -31,12 +31,11 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_margin="@dimen/settings_padding"
-		android:layout_toEndOf="@id/ux_fragment"
 		android:background="@null"
 		android:contentDescription="@string/settings"
 		android:src="@drawable/settings"
 		app:layout_anchor="@+id/ux_fragment"
-		app:layout_anchorGravity="right|top"/>
+		app:layout_anchorGravity="top|right"/>
 
 	<ImageButton
 		android:id="@+id/expand_bottom_toolbar_button"
@@ -59,7 +58,7 @@
 		android:gravity="center_vertical"
 		android:minHeight="?attr/actionBarSize"
 		android:orientation="horizontal"
-		android:visibility="visible"
+		android:visibility="gone"
 		app:layout_anchor="@+id/ux_fragment"
 		app:layout_anchorGravity="bottom|center">
 
@@ -103,6 +102,7 @@
 			android:src="@drawable/test_tube_off"/>
 
 		<ImageButton
+			android:id="@+id/add_subject_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_weight="0.1"

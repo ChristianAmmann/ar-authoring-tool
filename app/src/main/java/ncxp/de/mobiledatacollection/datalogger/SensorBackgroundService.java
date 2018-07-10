@@ -6,59 +6,44 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import ncxp.de.mobiledatacollection.model.StudyDatabase;
+import ncxp.de.mobiledatacollection.model.dao.DataDao;
+import ncxp.de.mobiledatacollection.model.data.Data;
 import ncxp.de.mobiledatacollection.model.data.Study;
+import ncxp.de.mobiledatacollection.model.data.TestPerson;
+import ncxp.de.mobiledatacollection.model.repository.DataRepository;
 
 public class SensorBackgroundService extends Service implements SensorEventListener {
 
-	/**
-	 * a tag for logging
-	 */
-	private static final String TAG = SensorBackgroundService.class.getSimpleName();
-
-	/**
-	 * again we need the sensor manager and sensor reference
-	 */
-	private SensorManager sensorManager = null;
-
-	/**
-	 * an optional flag for logging
-	 */
-	private boolean logging = false;
-
-	/**
-	 * also keep track of the previous value
-	 */
-	private static float previousValue;
-
-	/**
-	 * treshold values
-	 */
-	private float mThresholdMin, mThresholdMax;
-	public static final String KEY_STUDY = "study_";
-
-	private Study study;
+	private static final String         TAG                 = SensorBackgroundService.class.getSimpleName();
+	private              long           sensorTimeReference = 0l;
+	private              SensorManager  sensorManager       = null;
+	public static final  String         KEY_STUDY           = "study_";
+	private              Study          study;
+	private              TestPerson     person;
+	private              DataRepository dataRepository;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		DataDao dataDao = StudyDatabase.getInstance(getApplicationContext()).dataDao();
+		dataRepository = new DataRepository(dataDao);
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		Bundle args = intent.getExtras();
-		if (args != null) {
-			if (args.containsKey(KEY_STUDY)) {
-				study = args.getParcelable(KEY_STUDY);
-			}
+		if (intent.getExtras() != null && intent.getExtras().containsKey(KEY_STUDY)) {
+			study = intent.getExtras().getParcelable(KEY_STUDY);
+			//TODO Real testperson
+			person = new TestPerson(1, study.getId());
 		}
 
 		if (study != null && study.getSensors() != null) {
@@ -84,14 +69,41 @@ public class SensorBackgroundService extends Service implements SensorEventListe
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
+		if (sensorTimeReference == 0L) {
+			sensorTimeReference = event.timestamp;
+		}
+		long timestamp = event.timestamp - sensorTimeReference;
 		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-			//TODO do something
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSSS");
-			Date date = new Date(event.timestamp);
-			String timpstamp = format.format(date);
-			Log.d(TAG, "Sensor: " + event.sensor.getName() + " Genauigkeit: " + event.accuracy + " Timestamp: " + timpstamp + " Values: " + event.values.toString());
+			//TODO Save data
+			//Log.d(TAG, "Sensor: " + event.sensor.getName() + " ACC: " + event.accuracy + " Time: " + timestamp + " " + arrayToString(event.values));
+			save(event.sensor.getName(), event.accuracy, timestamp, event.values);
 		} else if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
 			//TODO do something
 		}
+	}
+
+	public void save(String sensorName, int accuracy, long timestamp, float[] values) {
+		//TODO Accuracy filter or save database
+		ExecutorService executorService = Executors.newFixedThreadPool(2);
+		executorService.submit(() -> {
+			//TODO fix persistence
+			Data data = new Data();
+			data.setSource(sensorName);
+			data.setTestPersonId(person.getId());
+			data.setTimestamp(timestamp);
+			data.setValues(arrayToString(values));
+			dataRepository.saveData(data);
+			Log.d(TAG, data.toString());
+		});
+
+	}
+
+
+	private String arrayToString(float[] array) {
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i < array.length; i++) {
+			result.append(array[i]).append(";");
+		}
+		return result.toString();
 	}
 }

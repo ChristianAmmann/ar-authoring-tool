@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import ncxp.de.mobiledatacollection.model.dao.DataDao;
 import ncxp.de.mobiledatacollection.model.dao.DeviceSensorDao;
 import ncxp.de.mobiledatacollection.model.dao.MeasurementDao;
 import ncxp.de.mobiledatacollection.model.dao.StudyDao;
@@ -12,6 +13,7 @@ import ncxp.de.mobiledatacollection.model.dao.StudyDeviceSensorJoinDao;
 import ncxp.de.mobiledatacollection.model.dao.StudyMeasurementJoinDao;
 import ncxp.de.mobiledatacollection.model.dao.SurveyDao;
 import ncxp.de.mobiledatacollection.model.dao.TestPersonDao;
+import ncxp.de.mobiledatacollection.model.data.Data;
 import ncxp.de.mobiledatacollection.model.data.DeviceSensor;
 import ncxp.de.mobiledatacollection.model.data.Measurement;
 import ncxp.de.mobiledatacollection.model.data.Study;
@@ -25,8 +27,9 @@ import ncxp.de.mobiledatacollection.model.data.TestPerson;
 		Survey.class,
 		TestPerson.class,
 		DeviceSensor.class,
-		StudyDeviceSensorJoin.class,
 		Measurement.class,
+		Data.class,
+		StudyDeviceSensorJoin.class,
 		StudyMeasurementJoin.class}, version = 1, exportSchema = false)
 public abstract class StudyDatabase extends RoomDatabase {
 
@@ -34,14 +37,13 @@ public abstract class StudyDatabase extends RoomDatabase {
 
 	private static StudyDatabase instance;
 
-	@SuppressWarnings("WeakerAccess")
 	public abstract StudyDao study();
 
-	@SuppressWarnings("WeakerAccess")
 	public abstract SurveyDao survey();
 
-	@SuppressWarnings("WeakerAccess")
 	public abstract TestPersonDao testPerson();
+
+	public abstract DataDao dataDao();
 
 	public abstract DeviceSensorDao deviceSensor();
 

@@ -4,7 +4,8 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
-import android.database.Cursor;
+
+import java.util.List;
 
 import ncxp.de.mobiledatacollection.model.data.TestPerson;
 
@@ -18,10 +19,10 @@ public interface TestPersonDao {
 	long[] insertAll(TestPerson[] testPerson);
 
 	@Query("SELECT * FROM " + TestPerson.TABLE_NAME)
-	Cursor selectAll();
+	List<TestPerson> selectAll();
 
 	@Query("SELECT * FROM " + TestPerson.TABLE_NAME + " WHERE id = :id")
-	Cursor selectById(long id);
+	TestPerson selectById(long id);
 
 	@Query("DELETE FROM " + TestPerson.TABLE_NAME + " WHERE id = :id")
 	int deleteById(long id);

@@ -12,12 +12,30 @@ public class TestPerson {
 	public static final String TABLE_NAME = "Subject";
 
 	@PrimaryKey(autoGenerate = true)
-	private final long id;
-	private final long studyId;
+	private long id;
+	private long studyId;
+	//For connecting data with survey
+	private long surveySubjectId;
 
 	public TestPerson(long id, long studyId) {
 		this.id = id;
 		this.studyId = studyId;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setStudyId(long studyId) {
+		this.studyId = studyId;
+	}
+
+	public long getSurveySubjectId() {
+		return surveySubjectId;
+	}
+
+	public void setSurveySubjectId(long surveySubjectId) {
+		this.surveySubjectId = surveySubjectId;
 	}
 
 	public long getId() {

@@ -20,8 +20,8 @@
 				android:id="@+id/toolbar"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				app:navigationIcon="@drawable/close"
-				app:theme="@style/ToolbarTheme"/>
+				android:theme="@style/ToolbarTheme"
+				app:navigationIcon="@drawable/close"/>
 		</android.support.design.widget.CollapsingToolbarLayout>
 
 

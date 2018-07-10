@@ -31,8 +31,12 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
+import ncxp.de.mobiledatacollection.model.data.Study;
+
 public class ArActivity extends AppCompatActivity {
 	private static final String TAG = ArActivity.class.getSimpleName();
+
+	public static final String KEY_STUDY = "study_key";
 
 	private ArFragment      arFragment;
 	private ModelRenderable andyRenderable;
@@ -40,6 +44,7 @@ public class ArActivity extends AppCompatActivity {
 
 	private ImageButton  settingsButton;
 	private ImageButton  expandBottomToolbarButton;
+	private ImageButton  addSubjectButton;
 	private LinearLayout bottomToolbar;
 	private float        displayCenterY;
 	private float        displayCenterX;
@@ -50,28 +55,14 @@ public class ArActivity extends AppCompatActivity {
 	// FutureReturnValueIgnored is not valid
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_ar);
-		settingsButton = findViewById(R.id.ar_settings_button);
-		bottomToolbar = findViewById(R.id.bottom_toolbar);
-		expandBottomToolbarButton = findViewById(R.id.expand_bottom_toolbar_button);
-		expandBottomToolbarButton.setOnClickListener((view) -> {
-			int visibility = bottomToolbar.getVisibility() == View.GONE ? View.VISIBLE : View.GONE;
-			CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) expandBottomToolbarButton.getLayoutParams();
-			if (visibility == View.GONE) {
-				params.setAnchorId(R.id.ux_fragment);
-				params.anchorGravity = Gravity.BOTTOM | Gravity.CENTER;
-				expandBottomToolbarButton.setImageResource(R.drawable.chevron_up);
-			} else {
-				params.setAnchorId(R.id.bottom_toolbar);
-				params.anchorGravity = Gravity.TOP | Gravity.CENTER;
-				expandBottomToolbarButton.setImageResource(R.drawable.chevron_down);
-			}
-			bottomToolbar.setVisibility(visibility);
-		});
+		if (getIntent() != null) {
+			Study study = getIntent().getParcelableExtra(KEY_STUDY);
+		}
+		initView();
+		initBottomBar();
 		settingsButton.setOnClickListener(this::onSettingsClicked);
-		arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
-
+		addSubjectButton.setOnClickListener(this::onAddSubjectClicked);
 		displayCenterX = this.getResources().getDisplayMetrics().widthPixels / 2 - 100;
 		displayCenterY = this.getResources().getDisplayMetrics().heightPixels / 2;
 
@@ -123,12 +114,57 @@ public class ArActivity extends AppCompatActivity {
 		});
 	}
 
+	private void initView() {
+		expandBottomToolbarButton = findViewById(R.id.expand_bottom_toolbar_button);
+		settingsButton = findViewById(R.id.ar_settings_button);
+		addSubjectButton = findViewById(R.id.add_subject_button);
+		bottomToolbar = findViewById(R.id.bottom_toolbar);
+		arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+	}
+
+	private void initBottomBar() {
+		expandBottomToolbarButton.setOnClickListener((view) -> {
+			int visibility = bottomToolbar.getVisibility() == View.GONE ? View.VISIBLE : View.GONE;
+			CoordinatorLayout.LayoutParams paramsExpand = (CoordinatorLayout.LayoutParams) expandBottomToolbarButton.getLayoutParams();
+			if (visibility == View.GONE) {
+				paramsExpand.setAnchorId(R.id.ux_fragment);
+				paramsExpand.anchorGravity = Gravity.BOTTOM | Gravity.CENTER;
+				expandBottomToolbarButton.setImageResource(R.drawable.chevron_up);
+			} else {
+				paramsExpand.setAnchorId(R.id.bottom_toolbar);
+				paramsExpand.anchorGravity = Gravity.TOP | Gravity.CENTER;
+				expandBottomToolbarButton.setImageResource(R.drawable.chevron_down);
+			}
+			bottomToolbar.setVisibility(visibility);
+		});
+	}
+
 	private void onSettingsClicked(View view) {
 		PopupMenu popupMenu = new PopupMenu(this, view);
 		MenuInflater inflater = popupMenu.getMenuInflater();
 		inflater.inflate(R.menu.ar_menu, popupMenu.getMenu());
 		popupMenu.setOnMenuItemClickListener(this::onPopupMenuClicked);
 		popupMenu.show();
+	}
+
+	private void onAddSubjectClicked(View view) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Proband hinzufügen?")
+			   .setMessage("Soll ein neue Proband zur Studie <hier Studie einfügen> hinzugefügt werden?\nStellen Sie sicher, dass die richtige AR-Szene komplett geladen ist. " +
+								   "Nachdem Hinzufügen weisen Sie " + "den " + "Proband in " + "die Studie ein. Der Proband kann " + "anschließend selbst entscheiden wann die " +
+								   "Studie beginnt")
+			   .setPositiveButton("Hinzufügen", (dialog, which) -> {
+				   //TODO create Testperson
+				   dialog.dismiss();
+				   //TODO Show curtain before starting
+				   //TODO change bottom bar and settings gone
+			   })
+			   .setNegativeButton("Abbrechen", (dialog, which) -> {
+				   dialog.dismiss();
+			   });
+		builder.create().show();
+
+		//TODO after curtain start background service
 	}
 
 	private boolean onPopupMenuClicked(MenuItem menuItem) {

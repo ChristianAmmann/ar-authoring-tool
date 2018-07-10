@@ -28,6 +28,7 @@
 
 	<style name="ARTheme" parent="Theme.AppCompat.NoActionBar"/>
 
+
 	<!-- Typography
 
 	<style name="H1Text" parent="">

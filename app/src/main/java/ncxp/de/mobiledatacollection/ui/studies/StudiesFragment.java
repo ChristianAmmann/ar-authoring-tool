@@ -19,10 +19,10 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import ncxp.de.mobiledatacollection.ArActivity;
 import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.StudiesActivity;
 import ncxp.de.mobiledatacollection.StudyActivity;
-import ncxp.de.mobiledatacollection.datalogger.SensorBackgroundService;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.ui.studies.adapter.StudiesAdapter;
 import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModel;
@@ -81,9 +81,12 @@ public class StudiesFragment extends Fragment implements StudyListener {
 
 	@Override
 	public void onStudyStartClick(Study study) {
-		Intent serviceIntent = new Intent(getActivity(), SensorBackgroundService.class);
+		Intent intent = new Intent(getActivity(), ArActivity.class);
+		intent.putExtra(ArActivity.KEY_STUDY, study);
+		getActivity().startActivity(intent);
+		/*Intent serviceIntent = new Intent(getActivity(), SensorBackgroundService.class);
 		serviceIntent.putExtra(SensorBackgroundService.KEY_STUDY, study);
-		getActivity().startService(serviceIntent);
+		getActivity().startService(serviceIntent);*/
 	}
 
 	private boolean onPopupMenuItemClicked(MenuItem menuItem, Study study) {

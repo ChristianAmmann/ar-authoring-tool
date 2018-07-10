@@ -7,32 +7,36 @@ import android.arch.persistence.room.PrimaryKey;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = Data.TABLE_NAME, foreignKeys = {
-		@ForeignKey(entity = TestPerson.class, parentColumns = "id", childColumns = "testPersonId", onDelete = CASCADE),
-		@ForeignKey(entity = DeviceSensor.class, parentColumns = "id", childColumns = "deviceSensorId", onDelete = CASCADE)})
+		@ForeignKey(entity = TestPerson.class, parentColumns = "id", childColumns = "testPersonId", onDelete = CASCADE)})
 public class Data {
 
-	public static final String TABLE_NAME = "data";
+	public static final String TABLE_NAME = "Data";
 
 	@PrimaryKey(autoGenerate = true)
-	private final long    id;
-	private final long    testPersonId;
-	private final long    deviceSensorId;
-	private       long    timestamp;
-	private       String  source;
-	private       float[] values;
+	private long   id;
+	private long   testPersonId;
+	private long   timestamp;
+	private String source;
+	private String values;
 
-	public Data(long id, long testPersonId, long deviceSensorId, long timestamp, String source, float[] values) {
-		this.id = id;
-		this.testPersonId = testPersonId;
-		this.deviceSensorId = deviceSensorId;
-		this.timestamp = timestamp;
-		this.source = source;
-		this.values = values;
+	public Data() {}
+
+	public long getId() {
+		return id;
 	}
 
-	/**
-	 * Getter & Setter
-	 */
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public long getTestPersonId() {
+		return testPersonId;
+	}
+
+	public void setTestPersonId(long testPersonId) {
+		this.testPersonId = testPersonId;
+	}
+
 	public long getTimestamp() {
 		return timestamp;
 	}
@@ -49,12 +53,16 @@ public class Data {
 		this.source = source;
 	}
 
-	public float[] getValues() {
+	public String getValues() {
 		return values;
 	}
 
-	public void setValues(float[] values) {
+	public void setValues(String values) {
 		this.values = values;
 	}
 
+	@Override
+	public String toString() {
+		return "Data{" + "testPersonId=" + testPersonId + ", timestamp=" + timestamp + ", source='" + source + '\'' + ", values='" + values + '\'' + '}';
+	}
 }
