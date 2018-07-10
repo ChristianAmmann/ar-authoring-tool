@@ -22,11 +22,12 @@ import java.util.List;
 import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.StudiesActivity;
 import ncxp.de.mobiledatacollection.StudyActivity;
+import ncxp.de.mobiledatacollection.datalogger.SensorBackgroundService;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.ui.studies.adapter.StudiesAdapter;
 import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModel;
 
-public class StudiesFragment extends Fragment implements MoreListener, ShareListener {
+public class StudiesFragment extends Fragment implements StudyListener {
 
 	private StudiesViewModel viewModel;
 	private RecyclerView     studiesView;
@@ -58,7 +59,7 @@ public class StudiesFragment extends Fragment implements MoreListener, ShareList
 
 	private void setupStudiesView() {
 		studiesView.setHasFixedSize(true);
-		studiesAdapter = new StudiesAdapter(new ArrayList<>(), this, this);
+		studiesAdapter = new StudiesAdapter(new ArrayList<>(), this);
 		studiesView.setLayoutManager(new LinearLayoutManager(getContext()));
 		studiesView.setAdapter(studiesAdapter);
 		viewModel.getStudies().observe(StudiesFragment.this, studies -> {
@@ -76,6 +77,13 @@ public class StudiesFragment extends Fragment implements MoreListener, ShareList
 		popupMenu.setOnMenuItemClickListener(menuItem -> onPopupMenuItemClicked(menuItem, study));
 		popupMenu.show();
 
+	}
+
+	@Override
+	public void onStudyStartClick(Study study) {
+		Intent serviceIntent = new Intent(getActivity(), SensorBackgroundService.class);
+		serviceIntent.putExtra(SensorBackgroundService.KEY_STUDY, study);
+		getActivity().startService(serviceIntent);
 	}
 
 	private boolean onPopupMenuItemClicked(MenuItem menuItem, Study study) {

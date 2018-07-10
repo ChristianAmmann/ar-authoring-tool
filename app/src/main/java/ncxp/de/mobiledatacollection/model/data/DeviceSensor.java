@@ -18,10 +18,11 @@ public class DeviceSensor implements Serializable {
 	@PrimaryKey
 	@NonNull
 	private String     name;
+	private int        type;
 	@Ignore
 	private Sensor     sensor;
 	@Ignore
-	private SensorType type;
+	private SensorType sensorType;
 	@Ignore
 	private boolean    active;
 
@@ -43,16 +44,17 @@ public class DeviceSensor implements Serializable {
 
 	public void setSensor(Sensor sensor) {
 		this.sensor = sensor;
-		this.type = SensorType.getSensorType(sensor.getType());
+		this.sensorType = SensorType.getSensorType(sensor.getType());
 		this.name = sensor.getName();
+		this.type = sensor.getType();
 	}
 
-	public SensorType getType() {
-		return type;
+	public SensorType getSensorType() {
+		return sensorType;
 	}
 
-	public void setType(SensorType type) {
-		this.type = type;
+	public void setSensorType(SensorType sensorType) {
+		this.sensorType = sensorType;
 	}
 
 	public boolean isActive() {
@@ -61,5 +63,13 @@ public class DeviceSensor implements Serializable {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 }

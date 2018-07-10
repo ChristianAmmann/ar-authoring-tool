@@ -14,20 +14,18 @@ import java.util.stream.Collectors;
 import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.model.data.DeviceSensor;
 import ncxp.de.mobiledatacollection.model.data.Study;
-import ncxp.de.mobiledatacollection.ui.studies.MoreListener;
-import ncxp.de.mobiledatacollection.ui.studies.ShareListener;
+import ncxp.de.mobiledatacollection.ui.studies.StudyListener;
 import ncxp.de.mobiledatacollection.ui.studies.viewholder.StudyViewHolder;
 
 public class StudiesAdapter extends RecyclerView.Adapter<StudyViewHolder> {
 
 	private List<Study>   studies;
-	private MoreListener  moreListener;
-	private ShareListener shareListener;
+	private StudyListener studyListener;
 
-	public StudiesAdapter(List<Study> studies, MoreListener moreListener, ShareListener shareListener) {
+	public StudiesAdapter(List<Study> studies, StudyListener studyListener) {
 		this.studies = studies;
-		this.moreListener = moreListener;
-		this.shareListener = shareListener;
+		this.studyListener = studyListener;
+
 	}
 
 	@NonNull
@@ -43,12 +41,10 @@ public class StudiesAdapter extends RecyclerView.Adapter<StudyViewHolder> {
 		holder.getStudyNameView().setText(study.getName());
 		//TODO Right text
 		holder.getAmountOfTestPersonView().setText("0 Probanden teilgenommen");
-		holder.getMoreButton().setOnClickListener(view -> moreListener.onPopupMenuClick(view, study));
-		holder.getShareButton().setOnClickListener(view -> shareListener.shareStudy(position));
+		holder.getMoreButton().setOnClickListener(view -> studyListener.onPopupMenuClick(view, study));
+		holder.getShareButton().setOnClickListener(view -> studyListener.shareStudy(position));
 		holder.getDescriptionView().setText(study.getDescription());
-		holder.getStartButton().setOnClickListener((view) -> {
-			//TODO start AR
-		});
+		holder.getStartButton().setOnClickListener((view) -> studyListener.onStudyStartClick(study));
 		LinearLayout expandableView = holder.getExpandableView();
 		holder.getExpandArrowButton().setOnClickListener(view -> {
 			int visibility = expandableView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;

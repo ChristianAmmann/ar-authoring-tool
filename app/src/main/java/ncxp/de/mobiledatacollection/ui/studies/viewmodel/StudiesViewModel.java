@@ -38,6 +38,7 @@ public class StudiesViewModel extends ViewModel {
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
 			List<Study> fetchedData = studyRepo.getStudies();
+			fetchedData.forEach(this::loadDevicesSensors);
 			studies.postValue(fetchedData);
 		});
 	}
@@ -48,8 +49,10 @@ public class StudiesViewModel extends ViewModel {
 			List<DeviceSensor> deviceSensorsForStudy = studyDeviceSensorJoinRepository.getDeviceSensorsForStudy(study);
 			int position = studies.getValue().indexOf(study);
 			study.setSensors(deviceSensorsForStudy);
-			studies.getValue().remove(position);
-			studies.getValue().add(position, study);
+			List<Study> currentStudies = studies.getValue();
+			currentStudies.remove(position);
+			currentStudies.add(position, study);
+			studies.postValue(currentStudies);
 		});
 	}
 

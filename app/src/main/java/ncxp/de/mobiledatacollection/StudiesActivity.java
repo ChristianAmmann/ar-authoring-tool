@@ -119,7 +119,6 @@ public class StudiesActivity extends AppCompatActivity {
 		}
 	}
 
-
 	/*private void exportDatabase() {
 		if (!isExternalPermissionForDatabaseGranted()) {
 			return;

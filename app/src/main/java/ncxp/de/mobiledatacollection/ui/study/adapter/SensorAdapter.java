@@ -46,8 +46,8 @@ public class SensorAdapter extends RecyclerView.Adapter {
 			case R.layout.item_config:
 				ConfigViewHolder configViewHolder = (ConfigViewHolder) holder;
 				DeviceSensor deviceSensor = (DeviceSensor) sectionedDeviceSensors.get(position);
-				configViewHolder.getConfigName().setText(deviceSensor.getType().getNameId());
-				configViewHolder.getConfigDescription().setText(deviceSensor.getType().getDescriptionId());
+				configViewHolder.getConfigName().setText(deviceSensor.getSensorType().getNameId());
+				configViewHolder.getConfigDescription().setText(deviceSensor.getSensorType().getDescriptionId());
 				configViewHolder.getSwitchButton().setChecked(deviceSensor.isActive());
 				configViewHolder.getSwitchButton().setOnClickListener((view) -> deviceSensor.setActive(configViewHolder.getSwitchButton().isChecked()));
 				break;

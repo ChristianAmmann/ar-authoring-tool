@@ -120,7 +120,7 @@ public class StudyViewModel extends ViewModel {
 			if (activeSensors != null && !activeSensors.isEmpty()) {
 				activeSensors.stream().filter(savedSensor -> savedSensor.getName().equals(deviceSensor.getName())).forEach(savedSensors -> deviceSensor.setActive(true));
 			}
-			if (deviceSensor.getType() != null) {
+			if (deviceSensor.getSensorType() != null) {
 				availableDeviceSensors.add(deviceSensor);
 			}
 		});
@@ -237,7 +237,7 @@ public class StudyViewModel extends ViewModel {
 		List<Object> sectionedDeviceSensors = new ArrayList<>();
 		for (SensorGroup group : SensorGroup.values()) {
 			List<DeviceSensor> sensorsOfGroup = deviceSensors.stream()
-															 .filter(availableDeviceSensor -> availableDeviceSensor.getType().getGroup().equals(group))
+															 .filter(availableDeviceSensor -> availableDeviceSensor.getSensorType().getGroup().equals(group))
 															 .collect(Collectors.toList());
 			sectionedDeviceSensors.add(group.getGroupId());
 			sectionedDeviceSensors.addAll(sensorsOfGroup);
