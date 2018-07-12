@@ -161,4 +161,6 @@
 	<string name="task_completion_time_description">Die benötigte Zeit eines Probanden um die Studie zu absolvieren</string>
 	<string name="touch_events">Anzahl der Touch-Eingaben</string>
 	<string name="touch_events_description">Benötigte Anzahl der Touch-Eingaben um die Studie zu absolvieren</string>
+
+	<string name="survey_javascript">&lt;script type=\"text/javascript\"&gt;Android.finishedSurvey();&lt;/script&gt;</string>
 </resources>
