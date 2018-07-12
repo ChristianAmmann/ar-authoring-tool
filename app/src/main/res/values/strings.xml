@@ -163,4 +163,6 @@
 	<string name="touch_events_description">Benötigte Anzahl der Touch-Eingaben um die Studie zu absolvieren</string>
 
 	<string name="survey_javascript">&lt;script type=\"text/javascript\"&gt;Android.finishedSurvey();&lt;/script&gt;</string>
+	<string name="copy_code">Code kopieren</string>
+	<string name="open_sosci_survey">SoSci Survey öffnen</string>
 </resources>

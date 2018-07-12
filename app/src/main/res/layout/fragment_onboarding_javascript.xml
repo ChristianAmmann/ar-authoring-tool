@@ -45,7 +45,7 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
 			android:layout_weight="1"
-			android:text="Code kopieren"
+			android:text="@string/copy_code"
 			android:textColor="@android:color/white"
 			android:theme="@style/ButtonStyleOnBoarding"/>
 
@@ -55,7 +55,7 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
 			android:layout_weight="1"
-			android:text="SoSci Survey öffnen"
+			android:text="@string/open_sosci_survey"
 			android:textColor="@android:color/white"
 			android:theme="@style/ButtonStyleOnBoarding"/>
 	</LinearLayout>

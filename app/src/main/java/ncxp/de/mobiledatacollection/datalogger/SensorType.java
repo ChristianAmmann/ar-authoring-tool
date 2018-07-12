@@ -10,10 +10,8 @@ import ncxp.de.mobiledatacollection.R;
 public enum SensorType {
 
 	ACCELEROMETER(Sensor.TYPE_ACCELEROMETER, R.string.accelerometer, R.string.accelerometer_description, SensorGroup.MOTION),
-	ACCELEROMETER_UNCALIBRATED(Sensor.TYPE_ACCELEROMETER_UNCALIBRATED, R.string.accelerometer_uncalibrated, R.string.accelerometer_uncalibrated_description, SensorGroup.MOTION),
 	GRAVITY(Sensor.TYPE_GRAVITY, R.string.gravity, R.string.gravity_description, SensorGroup.MOTION),
 	GYROSCOPE(Sensor.TYPE_GYROSCOPE, R.string.gyroscope, R.string.gyroscope_description, SensorGroup.MOTION),
-	GYROSCOPE_UNCALIBRATED(Sensor.TYPE_GYROSCOPE_UNCALIBRATED, R.string.gyroscope_uncalibrated, R.string.gyroscope_uncalibrated_description, SensorGroup.MOTION),
 	LINEAR_ACCELEROMETER(Sensor.TYPE_LINEAR_ACCELERATION, R.string.linear_accelerometer, R.string.linear_accelerometer_description, SensorGroup.MOTION),
 	STEP_COUNTER(Sensor.TYPE_STEP_COUNTER, R.string.step_counter, R.string.step_counter_description, SensorGroup.MOTION),
 	ROTATION_VECTOR(Sensor.TYPE_ROTATION_VECTOR, R.string.rotation_vector, R.string.rotation_vector_description, SensorGroup.MOTION),
@@ -23,10 +21,6 @@ public enum SensorType {
 								R.string.geomagnetic_rotation_vector_description,
 								SensorGroup.POSITION),
 	MAGNETIC_FIELD(Sensor.TYPE_MAGNETIC_FIELD, R.string.magnetic_field, R.string.magnetic_field_description, SensorGroup.POSITION),
-	MAGNETIC_FIELD_UNCALIBRATED(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED,
-								R.string.magnetic_field_uncalibrated,
-								R.string.magnetic_field_uncalibrated_description,
-								SensorGroup.POSITION),
 	ORIENTATION(Sensor.TYPE_ORIENTATION, R.string.orientation, R.string.orientation_description, SensorGroup.POSITION),
 	PROXIMITY(Sensor.TYPE_PROXIMITY, R.string.proximity, R.string.proximity_description, SensorGroup.POSITION),
 	AMBIENT_TEMPERATURE(Sensor.TYPE_AMBIENT_TEMPERATURE, R.string.ambient_temperature, R.string.ambient_temperature_description, SensorGroup.ENVIROMENT),

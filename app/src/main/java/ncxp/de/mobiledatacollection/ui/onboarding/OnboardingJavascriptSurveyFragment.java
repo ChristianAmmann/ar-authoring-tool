@@ -34,8 +34,8 @@ public class OnboardingJavascriptSurveyFragment extends Fragment {
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		Button copyButton = view.findViewById(R.id.copy_button);
-		Button openSiteButton = view.findViewById(R.id.open_button);
+		copyButton = view.findViewById(R.id.copy_button);
+		openSiteButton = view.findViewById(R.id.open_button);
 		copyButton.setOnClickListener(viewClicked -> {
 			ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
 			ClipData clip = ClipData.newPlainText("Survey Javavscript", getString(R.string.survey_javascript));
