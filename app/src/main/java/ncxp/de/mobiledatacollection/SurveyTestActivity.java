@@ -219,6 +219,10 @@ public class SurveyTestActivity extends AppCompatActivity {
 				String description = surveyDescription.getText().toString();
 				String projectDirectory = surveyProjectDirectory.getText().toString();
 				String identifier = surveyIdentifier.getText().toString();
+				survey.setName(name);
+				survey.setDescription(description);
+				survey.setProjectDirectory(projectDirectory);
+				survey.setIdentifier(identifier);
 				alertDialog.dismiss();
 				updateView(survey);
 				alertDialog.dismiss();

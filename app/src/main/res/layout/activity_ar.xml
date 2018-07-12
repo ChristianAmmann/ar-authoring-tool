@@ -33,6 +33,7 @@
 		android:layout_margin="@dimen/settings_padding"
 		android:background="@null"
 		android:contentDescription="@string/settings"
+		android:paddingTop="20dp"
 		android:src="@drawable/settings"
 		app:layout_anchor="@+id/ux_fragment"
 		app:layout_anchorGravity="top|right"/>

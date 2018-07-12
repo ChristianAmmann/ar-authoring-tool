@@ -61,6 +61,13 @@ public class ArActivity extends AppCompatActivity {
 		}
 		initView();
 		initBottomBar();
+		View decorView = getWindow().getDecorView();
+		decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
+			if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+				decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View
+						.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+			}
+		});
 		settingsButton.setOnClickListener(this::onSettingsClicked);
 		addSubjectButton.setOnClickListener(this::onAddSubjectClicked);
 		displayCenterX = this.getResources().getDisplayMetrics().widthPixels / 2 - 100;
@@ -145,6 +152,7 @@ public class ArActivity extends AppCompatActivity {
 		inflater.inflate(R.menu.ar_menu, popupMenu.getMenu());
 		popupMenu.setOnMenuItemClickListener(this::onPopupMenuClicked);
 		popupMenu.show();
+
 	}
 
 	private void onAddSubjectClicked(View view) {
@@ -234,7 +242,6 @@ public class ArActivity extends AppCompatActivity {
 			}
 		}
 	}
-
 
 	private MotionEvent getMotionEventCenter(MotionEvent event) {
 		return MotionEvent.obtain(event.getDownTime(), event.getEventTime(), event.getAction(), displayCenterX, displayCenterY, event.getMetaState());
