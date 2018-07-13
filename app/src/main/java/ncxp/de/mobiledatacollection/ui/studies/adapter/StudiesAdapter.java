@@ -42,7 +42,6 @@ public class StudiesAdapter extends RecyclerView.Adapter<StudyViewHolder> {
 		//TODO Right text
 		holder.getAmountOfTestPersonView().setText("0 Probanden teilgenommen");
 		holder.getMoreButton().setOnClickListener(view -> studyListener.onPopupMenuClick(view, study));
-		holder.getShareButton().setOnClickListener(view -> studyListener.shareStudy(position));
 		holder.getDescriptionView().setText(study.getDescription());
 		holder.getStartButton().setOnClickListener((view) -> studyListener.onStudyStartClick(study));
 		LinearLayout expandableView = holder.getExpandableView();

@@ -15,7 +15,6 @@ public class StudyViewHolder extends RecyclerView.ViewHolder {
 	private TextView     studyNameView;
 	private TextView     amountOfTestPersonView;
 	private ImageButton  expandArrowButton;
-	private ImageButton  shareButton;
 	private ImageButton  moreButton;
 	private LinearLayout expandableView;
 	private TextView     descriptionView;
@@ -28,7 +27,6 @@ public class StudyViewHolder extends RecyclerView.ViewHolder {
 		studyNameView = itemView.findViewById(R.id.study_name);
 		amountOfTestPersonView = itemView.findViewById(R.id.amount_of_testperson);
 		expandArrowButton = itemView.findViewById(R.id.expand_arrow);
-		shareButton = itemView.findViewById(R.id.share);
 		moreButton = itemView.findViewById(R.id.more);
 		expandableView = itemView.findViewById(R.id.expandable_view);
 		descriptionView = itemView.findViewById(R.id.study_description);
@@ -38,10 +36,6 @@ public class StudyViewHolder extends RecyclerView.ViewHolder {
 
 	public ImageButton getExpandArrowButton() {
 		return expandArrowButton;
-	}
-
-	public ImageButton getShareButton() {
-		return shareButton;
 	}
 
 	public ImageButton getMoreButton() {
