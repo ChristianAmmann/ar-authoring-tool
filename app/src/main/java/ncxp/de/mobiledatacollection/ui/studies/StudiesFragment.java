@@ -1,10 +1,14 @@
 package ncxp.de.mobiledatacollection.ui.studies;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -15,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +31,17 @@ import ncxp.de.mobiledatacollection.StudyActivity;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.ui.studies.adapter.StudiesAdapter;
 import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModel;
+import ncxp.de.mobiledatacollection.ui.studies.viewmodel.ToastMessage;
 
 public class StudiesFragment extends Fragment implements StudyListener {
+
+	private static final int EXTERNAL_PERMISSION_CODE = 4001;
 
 	private StudiesViewModel viewModel;
 	private RecyclerView     studiesView;
 	private StudiesAdapter   studiesAdapter;
 	private LinearLayout     placeHolder;
+	private Study            exportStudy;
 
 	public static StudiesFragment newInstance() {
 		return new StudiesFragment();
@@ -55,6 +64,7 @@ public class StudiesFragment extends Fragment implements StudyListener {
 		studiesView = view.findViewById(R.id.studies_recyclerview);
 		placeHolder = view.findViewById(R.id.empty_study_placeholder);
 		setupStudiesView();
+		setupToast();
 	}
 
 	private void setupStudiesView() {
@@ -67,6 +77,10 @@ public class StudiesFragment extends Fragment implements StudyListener {
 			studiesAdapter.replaceItems(studies);
 		});
 		viewModel.init();
+	}
+
+	private void setupToast() {
+		viewModel.getToastMessage().observe(this, (ToastMessage.ToastObserver) text -> Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show());
 	}
 
 	@Override
@@ -84,15 +98,16 @@ public class StudiesFragment extends Fragment implements StudyListener {
 		Intent intent = new Intent(getActivity(), ArActivity.class);
 		intent.putExtra(ArActivity.KEY_STUDY, study);
 		getActivity().startActivity(intent);
-		/*Intent serviceIntent = new Intent(getActivity(), SensorBackgroundService.class);
-		serviceIntent.putExtra(SensorBackgroundService.KEY_STUDY, study);
-		getActivity().startService(serviceIntent);*/
 	}
 
 	private boolean onPopupMenuItemClicked(MenuItem menuItem, Study study) {
 		switch (menuItem.getItemId()) {
 			case R.id.export:
-				//TODO export
+				exportStudy = study;
+				if (isExternalPermissionForDatabaseGranted()) {
+					viewModel.exportStudyAsCSV(study);
+					exportStudy = null;
+				}
 				break;
 			case R.id.edit:
 				Intent intent = new Intent(getActivity(), StudyActivity.class);
@@ -118,6 +133,7 @@ public class StudiesFragment extends Fragment implements StudyListener {
 		builder.create().show();
 	}
 
+
 	@Override
 	public void shareStudy(int position) {
 		Intent shareIntent = new Intent();
@@ -135,5 +151,27 @@ public class StudiesFragment extends Fragment implements StudyListener {
 	public void onResume() {
 		super.onResume();
 		viewModel.refreshStudies();
+	}
+
+	private boolean isExternalPermissionForDatabaseGranted() {
+		if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+			requestExternalPermission();
+			return false;
+		}
+		return true;
+	}
+
+	private void requestExternalPermission() {
+		ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXTERNAL_PERMISSION_CODE);
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case EXTERNAL_PERMISSION_CODE: {
+				viewModel.exportStudyAsCSV(exportStudy);
+				break;
+			}
+		}
 	}
 }

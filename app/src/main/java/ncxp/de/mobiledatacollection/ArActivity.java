@@ -1,5 +1,6 @@
 package ncxp.de.mobiledatacollection;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
@@ -31,6 +32,7 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
+import ncxp.de.mobiledatacollection.datalogger.SensorBackgroundService;
 import ncxp.de.mobiledatacollection.model.data.Study;
 
 public class ArActivity extends AppCompatActivity {
@@ -48,6 +50,7 @@ public class ArActivity extends AppCompatActivity {
 	private LinearLayout bottomToolbar;
 	private float        displayCenterY;
 	private float        displayCenterX;
+	private Study        study;
 
 	@Override
 	@SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
@@ -57,7 +60,7 @@ public class ArActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ar);
 		if (getIntent() != null) {
-			Study study = getIntent().getParcelableExtra(KEY_STUDY);
+			study = getIntent().getParcelableExtra(KEY_STUDY);
 		}
 		initView();
 		initBottomBar();
@@ -163,7 +166,11 @@ public class ArActivity extends AppCompatActivity {
 								   "Studie beginnt")
 			   .setPositiveButton("Hinzufügen", (dialog, which) -> {
 				   //TODO create Testperson
+
 				   dialog.dismiss();
+				   Intent serviceIntent = new Intent(this, SensorBackgroundService.class);
+				   serviceIntent.putExtra(SensorBackgroundService.KEY_STUDY, study);
+				   this.startService(serviceIntent);
 				   //TODO Show curtain before starting
 				   //TODO change bottom bar and settings gone
 			   })

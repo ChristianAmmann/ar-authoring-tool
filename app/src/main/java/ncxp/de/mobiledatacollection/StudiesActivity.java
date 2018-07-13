@@ -1,16 +1,12 @@
 package ncxp.de.mobiledatacollection;
 
-import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -20,10 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import ncxp.de.mobiledatacollection.model.StudyDatabase;
-import ncxp.de.mobiledatacollection.model.dao.StudyDao;
-import ncxp.de.mobiledatacollection.model.dao.StudyDeviceSensorJoinDao;
+import ncxp.de.mobiledatacollection.model.repository.DataRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyDeviceSensorJoinRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
+import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
+import ncxp.de.mobiledatacollection.model.repository.TestPersonRepository;
 import ncxp.de.mobiledatacollection.ui.studies.StudiesFragment;
 import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModel;
 import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModelFactory;
@@ -77,18 +74,17 @@ public class StudiesActivity extends AppCompatActivity {
 
 	private static StudiesViewModelFactory createFactory(FragmentActivity activity) {
 		StudyDatabase database = StudyDatabase.getInstance(activity);
-		StudyDao studyDao = database.study();
-		StudyRepository studyRepo = new StudyRepository(studyDao);
-		StudyDeviceSensorJoinDao studyDeviceDao = database.studyDeviceSensorJoinDao();
-		StudyDeviceSensorJoinRepository studyDeviceRepo = new StudyDeviceSensorJoinRepository(studyDeviceDao);
-		return new StudiesViewModelFactory(studyRepo, studyDeviceRepo);
+		StudyRepository studyRepo = new StudyRepository(database.study());
+		StudyDeviceSensorJoinRepository studyDeviceRepo = new StudyDeviceSensorJoinRepository(database.studyDeviceSensorJoinDao());
+		TestPersonRepository testPersonRepo = new TestPersonRepository(database.testPerson());
+		DataRepository dataRepo = new DataRepository(database.dataDao());
+		SurveyRepository surveyRepository = new SurveyRepository(database.survey());
+		return new StudiesViewModelFactory(activity.getApplication(), studyRepo, studyDeviceRepo, surveyRepository, testPersonRepo, dataRepo);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.search:
-				break;
 			case R.id.help:
 				break;
 			case R.id.impressum:
@@ -97,27 +93,7 @@ public class StudiesActivity extends AppCompatActivity {
 		return true;
 	}
 
-	private boolean isExternalPermissionForDatabaseGranted() {
-		if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-			requestExternalPermission();
-			return false;
-		}
-		return true;
-	}
 
-	private void requestExternalPermission() {
-		ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXTERNAL_PERMISSION_CODE);
-	}
-
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-		switch (requestCode) {
-			case EXTERNAL_PERMISSION_CODE: {
-
-				break;
-			}
-		}
-	}
 
 	/*private void exportDatabase() {
 		if (!isExternalPermissionForDatabaseGranted()) {

@@ -1,6 +1,9 @@
 package ncxp.de.mobiledatacollection.model.repository;
 
+import java.util.List;
+
 import ncxp.de.mobiledatacollection.model.dao.TestPersonDao;
+import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.data.TestPerson;
 
 public class TestPersonRepository {
@@ -12,5 +15,9 @@ public class TestPersonRepository {
 
 	public long saveTestPerson(TestPerson testPerson) {
 		return testPersonDao.insert(testPerson);
+	}
+
+	public List<TestPerson> getTestPersonForStudy(Study study) {
+		return testPersonDao.selectTestPersonFromStudy(study.getId());
 	}
 }

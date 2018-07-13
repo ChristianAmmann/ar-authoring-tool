@@ -30,7 +30,7 @@ import ncxp.de.mobiledatacollection.model.data.TestPerson;
 		Measurement.class,
 		Data.class,
 		StudyDeviceSensorJoin.class,
-		StudyMeasurementJoin.class}, version = 1, exportSchema = false)
+		StudyMeasurementJoin.class, }, version = 1, exportSchema = false)
 public abstract class StudyDatabase extends RoomDatabase {
 
 	public static final String DATABASE_NAME = "studies.db";

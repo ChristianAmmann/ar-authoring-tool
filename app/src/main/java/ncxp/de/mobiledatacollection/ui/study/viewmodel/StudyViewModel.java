@@ -77,8 +77,8 @@ public class StudyViewModel extends ViewModel {
 	public void init() {
 		if (study != null) {
 			settings = new SensorSettings();
-			settings.setSensorAccuracy(study.getSensorAccuracy());
-			settings.setSensorMeasuringDistance(study.getSensorMeasuringDistance());
+			settings.setSensorAccuracy(study.getAccuracy());
+			settings.setSensorMeasuringDistance(study.getSamplingRate());
 			loadSurveys();
 			loadActiveSensors();
 			loadMeasurements();
@@ -179,12 +179,12 @@ public class StudyViewModel extends ViewModel {
 			Study study = new Study();
 			study.setName(name);
 			study.setDescription(description);
-			study.setSensorAccuracy(settings.getSensorAccuracy());
-			study.setSensorMeasuringDistance(settings.getSensorMeasuringDistance());
+			study.setAccuracy(settings.getSensorAccuracy());
+			study.setSamplingRate(settings.getSensorMeasuringDistance());
 			study.setCapturingScreen(isCapturingScreen);
 			study.setCapturingAudio(isCapturingAudio);
-			study.setSensorMeasuringDistance(settings.getSensorMeasuringDistance());
-			study.setSensorAccuracy(settings.getSensorAccuracy());
+			study.setSamplingRate(settings.getSensorMeasuringDistance());
+			study.setAccuracy(settings.getSensorAccuracy());
 			long studyId = saveStudy(study);
 			saveActiveDeviceSensors(studyId);
 			saveSurveys(studyId);

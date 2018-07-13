@@ -47,7 +47,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
-			android:entries="@array/sensorAccuracy"
+			android:entries="@array/accuracy"
 			android:paddingEnd="5dp"
 			android:paddingStart="5dp"/>
 

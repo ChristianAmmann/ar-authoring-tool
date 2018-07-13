@@ -24,10 +24,10 @@ public interface StudyDao {
 	@Query("SELECT * FROM " + Study.TABLE_NAME)
 	List<Study> selectAll();
 
-	@Query("SELECT * FROM " + Study.TABLE_NAME + " WHERE id = :id")
+	@Query("SELECT * FROM " + Study.TABLE_NAME + " WHERE " + Study.COLUMN_ID + "= :id")
 	LiveData<Study> selectById(long id);
 
-	@Query("DELETE FROM " + Study.TABLE_NAME + " WHERE id = :id")
+	@Query("DELETE FROM " + Study.TABLE_NAME + " WHERE " + Study.COLUMN_ID + "= :id")
 	int deleteById(long id);
 
 	@Update

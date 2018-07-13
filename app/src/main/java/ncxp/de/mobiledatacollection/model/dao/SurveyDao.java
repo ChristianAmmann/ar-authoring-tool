@@ -22,13 +22,13 @@ public interface SurveyDao {
 	@Query("SELECT * FROM " + Survey.TABLE_NAME)
 	LiveData<List<Survey>> selectAll();
 
-	@Query("SELECT * FROM " + Survey.TABLE_NAME + " WHERE id = :id")
+	@Query("SELECT * FROM " + Survey.TABLE_NAME + " WHERE " + Survey.COLUMN_ID + " = :id")
 	LiveData<Survey> selectById(long id);
 
-	@Query("DELETE FROM " + Survey.TABLE_NAME + " WHERE id = :id")
+	@Query("DELETE FROM " + Survey.TABLE_NAME + " WHERE " + Survey.COLUMN_ID + "= :id")
 	int deleteById(long id);
 
-	@Query("SELECT * FROM " + Survey.TABLE_NAME + " WHERE studyId=:id")
+	@Query("SELECT * FROM " + Survey.TABLE_NAME + " WHERE " + Survey.COLUMN_STUDY_ID + "=:id")
 	List<Survey> getSurveysFromStudy(long id);
 
 	@Update

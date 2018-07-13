@@ -1,5 +1,6 @@
 package ncxp.de.mobiledatacollection.model.data;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
@@ -13,11 +14,15 @@ import ncxp.de.mobiledatacollection.datalogger.SensorType;
 @Entity(tableName = DeviceSensor.TABLE_NAME)
 public class DeviceSensor implements Serializable {
 
-	public static final String TABLE_NAME = "DeviceSensor";
+	public static final String TABLE_NAME  = "DeviceSensor";
+	public static final String COLUMN_ID   = "id";
+	public static final String COLUMN_TYPE = "sensor_type";
 
 	@PrimaryKey
 	@NonNull
+	@ColumnInfo(name = COLUMN_ID)
 	private String     name;
+	@ColumnInfo(name = COLUMN_TYPE)
 	private int        type;
 	@Ignore
 	private Sensor     sensor;

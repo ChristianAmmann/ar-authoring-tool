@@ -15,44 +15,41 @@ import java.util.concurrent.Executors;
 
 import ncxp.de.mobiledatacollection.model.StudyDatabase;
 import ncxp.de.mobiledatacollection.model.dao.DataDao;
+import ncxp.de.mobiledatacollection.model.dao.TestPersonDao;
 import ncxp.de.mobiledatacollection.model.data.Data;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.data.TestPerson;
 import ncxp.de.mobiledatacollection.model.repository.DataRepository;
+import ncxp.de.mobiledatacollection.model.repository.TestPersonRepository;
 
 public class SensorBackgroundService extends Service implements SensorEventListener {
 
-	private static final String         TAG                 = SensorBackgroundService.class.getSimpleName();
-	private              long           sensorTimeReference = 0l;
-	private              SensorManager  sensorManager       = null;
-	public static final  String         KEY_STUDY           = "study_";
-	private              Study          study;
-	private              TestPerson     person;
-	private              DataRepository dataRepository;
+	private static final String               TAG                 = SensorBackgroundService.class.getSimpleName();
+	private              long                 sensorTimeReference = 0l;
+	private              SensorManager        sensorManager       = null;
+	public static final  String               KEY_STUDY           = "study_";
+	private              Study                study;
+	private              TestPerson           person;
+	private              DataRepository       dataRepository;
+	private              TestPersonRepository testPersonRepository;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		DataDao dataDao = StudyDatabase.getInstance(getApplicationContext()).dataDao();
+		StudyDatabase database = StudyDatabase.getInstance(getApplicationContext());
+		DataDao dataDao = database.dataDao();
+		TestPersonDao personDao = database.testPerson();
 		dataRepository = new DataRepository(dataDao);
+		testPersonRepository = new TestPersonRepository(personDao);
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		if (intent.getExtras() != null && intent.getExtras().containsKey(KEY_STUDY)) {
+		Log.d(TAG, "onStart");
+		if (intent != null && intent.getExtras() != null && intent.getExtras().containsKey(KEY_STUDY)) {
 			study = intent.getExtras().getParcelable(KEY_STUDY);
-			//TODO Real testperson
-			person = new TestPerson(1, study.getId());
-		}
-
-		if (study != null && study.getSensors() != null) {
-			study.getSensors().stream().forEach(deviceSensor -> {
-				List<Sensor> sensors = sensorManager.getSensorList(deviceSensor.getType());
-				sensors.stream()
-					   .filter(sensor -> !sensor.isWakeUpSensor())
-					   .forEach(sensor -> sensorManager.registerListener(this, sensor, ((int) study.getSensorMeasuringDistance() * 1000000)));
-			});
+			createTestperson();
 		}
 		return START_STICKY;
 	}
@@ -75,29 +72,46 @@ public class SensorBackgroundService extends Service implements SensorEventListe
 			sensorTimeReference = event.timestamp;
 		}
 		long timestamp = event.timestamp - sensorTimeReference;
-		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-			//TODO Save data
-			//Log.d(TAG, "Sensor: " + event.sensor.getName() + " ACC: " + event.accuracy + " Time: " + timestamp + " " + arrayToString(event.values));
-			save(event.sensor.getName(), event.accuracy, timestamp, event.values);
-		} else if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
-			//TODO do something
-		}
+		save(event.sensor.getName(), event.accuracy, timestamp, event.values);
 	}
 
 	public void save(String sensorName, int accuracy, long timestamp, float[] values) {
-		//TODO Accuracy filter or save database
+		if (accuracy < study.getAccuracy()) {
+			return;
+		}
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
-			//TODO fix persistence
 			Data data = new Data();
 			data.setSource(sensorName);
 			data.setTestPersonId(person.getId());
 			data.setTimestamp(timestamp);
 			data.setValues(arrayToString(values));
 			dataRepository.saveData(data);
-			Log.d(TAG, data.toString());
 		});
+	}
 
+	private void startCollecting() {
+		if (study != null && study.getSensors() != null) {
+			study.getSensors().stream().forEach(deviceSensor -> {
+				List<Sensor> sensors = sensorManager.getSensorList(deviceSensor.getType());
+				sensors.stream()
+					   .filter(sensor -> !sensor.isWakeUpSensor())
+					   .forEach(sensor -> sensorManager.registerListener(this, sensor, ((int) study.getSamplingRate().doubleValue() * 1000000)));
+			});
+		}
+	}
+
+	private void createTestperson() {
+		Log.d(TAG, "createTestPerson");
+		ExecutorService executorService = Executors.newFixedThreadPool(2);
+		executorService.submit(() -> {
+			person = new TestPerson();
+			person.setStudyId(study.getId());
+			long id = testPersonRepository.saveTestPerson(person);
+			person.setId(id);
+			Log.d(TAG, "" + id);
+			startCollecting();
+		});
 	}
 
 

@@ -15,7 +15,8 @@ public interface StudyMeasurementJoinDao {
 	@Insert
 	void insert(StudyMeasurementJoin studyMeasurementJoin);
 
-	@Query("SELECT * FROM " + Measurement.TABLE_NAME + " INNER JOIN " + StudyMeasurementJoin.TABLE_NAME + " ON id=measurementId WHERE studyId=:id")
+	@Query("SELECT * FROM " + Measurement.TABLE_NAME + " INNER JOIN " + StudyMeasurementJoin.TABLE_NAME + " ON " + Measurement.COLUMN_ID + "=" + StudyMeasurementJoin
+			.COLUMN_MEASUREMENT_ID + " WHERE " + StudyMeasurementJoin.COLUMN_STUDY_ID + "=:id")
 	List<Measurement> getMeasurementsForStudy(long id);
 
 

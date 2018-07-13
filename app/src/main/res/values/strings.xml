@@ -165,4 +165,5 @@
 	<string name="survey_javascript">&lt;script type=\"text/javascript\"&gt;Android.finishedSurvey();&lt;/script&gt;</string>
 	<string name="copy_code">Code kopieren</string>
 	<string name="open_sosci_survey">SoSci Survey öffnen</string>
+	<string name="export_toast">Die Studie ist unter %1$s exportiert</string>
 </resources>

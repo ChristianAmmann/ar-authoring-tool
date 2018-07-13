@@ -175,8 +175,8 @@ public class StudyActivity extends AppCompatActivity {
 					Study study = viewModel.getStudy();
 					study.setName(name);
 					study.setDescription(description);
-					study.setSensorAccuracy(viewModel.getSensorSettings().getSensorAccuracy());
-					study.setSensorMeasuringDistance(viewModel.getSensorSettings().getSensorMeasuringDistance());
+					study.setAccuracy(viewModel.getSensorSettings().getSensorAccuracy());
+					study.setSamplingRate(viewModel.getSensorSettings().getSensorMeasuringDistance());
 					viewModel.update(study);
 				} else {
 					viewModel.save(name, description);
