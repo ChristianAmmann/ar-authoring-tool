@@ -109,7 +109,6 @@ public class SensorBackgroundService extends Service implements SensorEventListe
 			person.setStudyId(study.getId());
 			long id = testPersonRepository.saveTestPerson(person);
 			person.setId(id);
-			Log.d(TAG, "" + id);
 			startCollecting();
 		});
 	}

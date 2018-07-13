@@ -2,6 +2,7 @@ package ncxp.de.mobiledatacollection;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,9 +14,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.ar.core.Anchor;
@@ -34,6 +38,7 @@ import com.google.ar.sceneform.ux.TransformableNode;
 
 import ncxp.de.mobiledatacollection.datalogger.SensorBackgroundService;
 import ncxp.de.mobiledatacollection.model.data.Study;
+import ncxp.de.mobiledatacollection.model.data.TestPersonState;
 
 public class ArActivity extends AppCompatActivity {
 	private static final String TAG = ArActivity.class.getSimpleName();
@@ -44,13 +49,22 @@ public class ArActivity extends AppCompatActivity {
 	private ModelRenderable andyRenderable;
 	private GestureDetector trackableGestureDetector;
 
-	private ImageButton  settingsButton;
-	private ImageButton  expandBottomToolbarButton;
-	private ImageButton  addSubjectButton;
-	private LinearLayout bottomToolbar;
-	private float        displayCenterY;
-	private float        displayCenterX;
-	private Study        study;
+	private ImageButton     settingsButton;
+	private ImageButton     expandBottomToolbarButton;
+	private ImageButton     testModusButton;
+	private ImageButton     addSubjectButton;
+	private ImageButton     cancelButton;
+	private ImageButton     playAndPauseButton;
+	private ImageButton     finishButton;
+	private ImageView       timeIcon;
+	private LinearLayout    bottomToolbar;
+	private TestPersonState state = TestPersonState.STOPPED;
+	private TextView        studyStatusView;
+	private Chronometer     chronometer;
+	private float           displayCenterY;
+	private float           displayCenterX;
+	private Study           study;
+
 
 	@Override
 	@SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
@@ -71,8 +85,14 @@ public class ArActivity extends AppCompatActivity {
 						.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 			}
 		});
+		chronometer.setOnChronometerTickListener(chronometerChanged -> chronometer = chronometerChanged);
 		settingsButton.setOnClickListener(this::onSettingsClicked);
 		addSubjectButton.setOnClickListener(this::onAddSubjectClicked);
+		playAndPauseButton.setOnClickListener(this::onPlayAndPauseClicked);
+		cancelButton.setOnClickListener(this::onCancelClicked);
+		finishButton.setOnClickListener(this::onFinishClicked);
+
+		testModusButton.setOnClickListener(this::onTestModusClicked);
 		displayCenterX = this.getResources().getDisplayMetrics().widthPixels / 2 - 100;
 		displayCenterY = this.getResources().getDisplayMetrics().heightPixels / 2;
 
@@ -129,6 +149,13 @@ public class ArActivity extends AppCompatActivity {
 		settingsButton = findViewById(R.id.ar_settings_button);
 		addSubjectButton = findViewById(R.id.add_subject_button);
 		bottomToolbar = findViewById(R.id.bottom_toolbar);
+		playAndPauseButton = findViewById(R.id.play_and_pause);
+		finishButton = findViewById(R.id.finish);
+		cancelButton = findViewById(R.id.cancel);
+		testModusButton = findViewById(R.id.test_modus);
+		timeIcon = findViewById(R.id.timer_icon);
+		studyStatusView = findViewById(R.id.study_status);
+		chronometer = findViewById(R.id.time_view);
 		arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 	}
 
@@ -159,27 +186,100 @@ public class ArActivity extends AppCompatActivity {
 	}
 
 	private void onAddSubjectClicked(View view) {
+		showAddSubjectDialog();
+	}
+
+	private void onPlayAndPauseClicked(View view) {
+		//TODO stop service
+		if (state.equals(TestPersonState.RUNNING)) {
+			state = TestPersonState.STOPPED;
+			chronometer.stop();
+			playAndPauseButton.setImageResource(R.drawable.play_circle_outline);
+			timeIcon.setImageDrawable(getDrawable(R.drawable.timer_off));
+		} else {
+			state = TestPersonState.RUNNING;
+			chronometer.start();
+			playAndPauseButton.setImageResource(R.drawable.pause_circle_outline);
+		}
+		setTextOfState(state);
+
+	}
+
+	private void onCancelClicked(View view) {
+		showDirectorModus();
+		hideSubjectModus();
+		timeIcon.setImageDrawable(getDrawable(R.drawable.timer_off));
+		//TODO testperson state abort
+		state = TestPersonState.IDLE;
+		setTextOfState(state);
+		chronometer.stop();
+		chronometer.setBase(SystemClock.elapsedRealtime());
+	}
+
+
+	private void onFinishClicked(View view) {
+		chronometer.stop();
+		//TODO show survey
+	}
+
+	private void onTestModusClicked(View view) {
+
+	}
+
+	private void showDirectorModus() {
+		testModusButton.setVisibility(View.VISIBLE);
+		addSubjectButton.setVisibility(View.VISIBLE);
+		settingsButton.setVisibility(View.VISIBLE);
+	}
+
+	private void hideDirectorModus() {
+		testModusButton.setVisibility(View.GONE);
+		addSubjectButton.setVisibility(View.GONE);
+		settingsButton.setVisibility(View.GONE);
+	}
+
+	private void showSubjectModus() {
+		cancelButton.setVisibility(View.VISIBLE);
+		playAndPauseButton.setVisibility(View.VISIBLE);
+		finishButton.setVisibility(View.VISIBLE);
+	}
+
+	private void hideSubjectModus() {
+		cancelButton.setVisibility(View.GONE);
+		playAndPauseButton.setVisibility(View.GONE);
+		finishButton.setVisibility(View.GONE);
+	}
+
+	private void showAddSubjectDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Proband hinzufügen?")
-			   .setMessage("Soll ein neue Proband zur Studie <hier Studie einfügen> hinzugefügt werden?\nStellen Sie sicher, dass die richtige AR-Szene komplett geladen ist. " +
-								   "Nachdem Hinzufügen weisen Sie " + "den " + "Proband in " + "die Studie ein. Der Proband kann " + "anschließend selbst entscheiden wann die " +
-								   "Studie beginnt")
-			   .setPositiveButton("Hinzufügen", (dialog, which) -> {
-				   //TODO create Testperson
+		builder.setTitle(R.string.add_subject).setMessage(getString(R.string.add_subject_hint, study.getName())).setPositiveButton(R.string.add, (dialog, which) -> {
+			showStudyStartDialog();
+		}).setNegativeButton(R.string.cancel, null).create().show();
+	}
 
-				   dialog.dismiss();
-				   Intent serviceIntent = new Intent(this, SensorBackgroundService.class);
-				   serviceIntent.putExtra(SensorBackgroundService.KEY_STUDY, study);
-				   this.startService(serviceIntent);
-				   //TODO Show curtain before starting
-				   //TODO change bottom bar and settings gone
-			   })
-			   .setNegativeButton("Abbrechen", (dialog, which) -> {
-				   dialog.dismiss();
-			   });
-		builder.create().show();
+	private void showStudyStartDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.are_you_ready).setMessage(R.string.subject_start_help).setPositiveButton(R.string.lets_go, (dialog, which) -> {
+			hideDirectorModus();
+			showSubjectModus();
+			timeIcon.setImageDrawable(getDrawable(R.drawable.timer));
+			chronometer.setBase(SystemClock.elapsedRealtime());
+			chronometer.start();
+			state = TestPersonState.RUNNING;
+			setTextOfState(state);
+			startService();
+		}).setNegativeButton(R.string.cancel, null).create().show();
+	}
 
-		//TODO after curtain start background service
+	private void startService() {
+		Intent serviceIntent = new Intent(this, SensorBackgroundService.class);
+		serviceIntent.putExtra(SensorBackgroundService.KEY_STUDY, study);
+		this.startService(serviceIntent);
+	}
+
+
+	private void setTextOfState(TestPersonState state) {
+		studyStatusView.setText(state.name());
 	}
 
 	private boolean onPopupMenuClicked(MenuItem menuItem) {

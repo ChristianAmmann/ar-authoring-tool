@@ -62,8 +62,9 @@
 	<string name="study_status_idle">idle</string>
 	<string name="study_status_running">Läuft</string>
 	<string name="study_status_stopped">Pausiert</string>
-	<string name="init_time_text">00:00</string>
+	<string name="init_time_text">00:00.00</string>
 	<string name="time_format">%1$.3f s</string>
+	<string name="stopwatch_format">%1$d:%2$s.%3$s</string>
 
 	<!-- Sensorenbeschreibung und Gruppen -->
 	<string name="group_motion_sensor">Bewegungssensoren</string>
@@ -166,4 +167,13 @@
 	<string name="copy_code">Code kopieren</string>
 	<string name="open_sosci_survey">SoSci Survey öffnen</string>
 	<string name="export_toast">Die Studie ist unter %1$s exportiert</string>
+	<string name="add_subject_hint">Soll ein neue Proband zur Studie \"%1$s\" hinzugefügt werden?\nStellen Sie sicher, dass die AR-Szene richtig geladen ist.
+		Achten Sie darauf, dass der Proband keine schnelle Bewegungen oder das Gerät schüttelt. Dadurch vermeiden Sie, dass die virtuellen Objekte an ihrer Stelle bleiben.
+		Nachdem Hinzufügen weisen Sie den Proband in die Studie ein. Der Proband kann mit dem Play-Button die Aufzeichnung starten.</string>
+	<string name="add_subject">Probanden hinzufügen?</string>
+	<string name="add">Hinzufügen</string>
+	<string name="are_you_ready">Bist du bereit?</string>
+	<string name="subject_start_help">In der Navigation kannst du die Studie pausieren und abschließen. Nur mit Absprache deines Studienleiter kannst du ebenso die Studie
+		abbrechen</string>
+	<string name="lets_go">Los geht\'s</string>
 </resources>

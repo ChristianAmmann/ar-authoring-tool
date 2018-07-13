@@ -21,14 +21,16 @@ public class TestPerson {
 
 	@PrimaryKey(autoGenerate = true)
 	@ColumnInfo(name = COLUMN_ID)
-	private Long       id;
+	private Long            id;
 	@ColumnInfo(name = COLUMN_STUDY_ID)
-	private Long       studyId;
+	private Long            studyId;
 	//For connecting data with survey
 	@ColumnInfo(name = COLUMN_SURVEY_SUBJECT_ID)
-	private Long       surveySubjectId;
+	private Long            surveySubjectId;
 	@Ignore
-	private List<Data> dataList;
+	private TestPersonState state;
+	@Ignore
+	private List<Data>      dataList;
 
 	public TestPerson() {
 	}
