@@ -109,8 +109,6 @@ public class StudiesViewModel extends AndroidViewModel {
 		loadStudies();
 	}
 
-	public void 
-
 	public void exportStudyAsCSV(Study study) {
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
@@ -120,7 +118,7 @@ public class StudiesViewModel extends AndroidViewModel {
 				person.setDataList(dataFromTestPerson);
 			});
 			List<Survey> surveysFromStudy = surveyRepo.getSurveysFromStudy(study);
-			String fileName = writeCsv(study, surveysFromStudy, testPersonForStudy)
+			String fileName = writeCsv(study, surveysFromStudy, testPersonForStudy);
 			toastMessage.postValue(getApplication().getString(R.string.export_toast, "/" + DIRECTORY + "/" + fileName));
 		});
 	}
@@ -150,6 +148,7 @@ public class StudiesViewModel extends AndroidViewModel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return "";
 	}
 
 	private void writeHeader(CSVWriter writer) {

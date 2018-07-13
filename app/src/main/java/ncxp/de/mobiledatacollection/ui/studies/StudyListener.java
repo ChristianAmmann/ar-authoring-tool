@@ -5,7 +5,6 @@ import android.view.View;
 import ncxp.de.mobiledatacollection.model.data.Study;
 
 public interface StudyListener {
-	void shareStudy(int position);
 
 	void onPopupMenuClick(View view, Study study);
 

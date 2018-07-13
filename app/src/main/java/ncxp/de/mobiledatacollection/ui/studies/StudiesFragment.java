@@ -133,15 +133,6 @@ public class StudiesFragment extends Fragment implements StudyListener {
 		builder.create().show();
 	}
 
-
-	@Override
-	public void shareStudy(int position) {
-		Intent shareIntent = new Intent();
-		shareIntent.setAction(Intent.ACTION_SEND);
-		shareIntent.setType("file/*");
-		startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_study)));
-	}
-
 	private void showPlaceHolder(List<Study> studies) {
 		int visible = (studies != null && studies.size() > 0) ? View.INVISIBLE : View.VISIBLE;
 		placeHolder.setVisibility(visible);
