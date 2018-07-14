@@ -121,6 +121,7 @@
 	<string name="sosci_survey_url">https://www.soscisurvey.de/%1$s/?q=%2$s</string>
 	<string name="snackbar_hint_sosci_survey">Durch das Testen des Fragenbogens werden Sie auf SoSci Survey als Proband/Besucher gezählt.</string>
 	<string name="snackbar_error_sosci_survey">Sollte ihren Fragenbogen nicht korrekt angezeigt werden, passen Sie die Einstellung der Umfrage an.</string>
+	<string name="snackbar_proband_error_sosci_survey">Ups… Leider kann der Fragebogen nicht auf gerufen werden. Der Studienleiter soll die Einstellungen anpassen.</string>
 	<string name="ok">ok</string>
 	<string name="onboarding_survey_import_title">Fragebogen einbinden</string>
 	<string name="onboarding_survey_import_description">Fragebogen können über die Seite Sosci Survey erstellt werden und die App importiert werden. Dabei ist es
@@ -176,4 +177,10 @@
 	<string name="subject_start_help">In der Navigation kannst du die Studie pausieren und abschließen. Nur mit Absprache deines Studienleiter kannst du ebenso die Studie
 		abbrechen</string>
 	<string name="lets_go">Los geht\'s</string>
+	<string name="cancel_study">Studie abbrechen?</string>
+	<string name="cancel_study_hint">Willst du die Studie abbrechen?</string>
+	<string name="no">Nein</string>
+	<string name="confirm">Bestätigen</string>
+	<string name="finish_study">Studie abschließen</string>
+	<string name="finish_study_hint">Bist du mit der Studie fertig?</string>
 </resources>

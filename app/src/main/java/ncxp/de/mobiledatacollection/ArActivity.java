@@ -1,12 +1,27 @@
 package ncxp.de.mobiledatacollection;
 
+import android.Manifest;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.hardware.display.DisplayManager;
+import android.hardware.display.VirtualDisplay;
+import android.media.MediaRecorder;
+import android.media.projection.MediaProjection;
+import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
+import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,34 +51,48 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
+import java.io.File;
+import java.io.IOException;
+
 import ncxp.de.mobiledatacollection.datalogger.SensorBackgroundService;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.data.TestPersonState;
 
+import static ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModel.DIRECTORY;
+
 public class ArActivity extends AppCompatActivity {
 	private static final String TAG = ArActivity.class.getSimpleName();
 
-	public static final String KEY_STUDY = "study_key";
+	public static final  String KEY_STUDY                        = "study_key";
+	private static final int    PERMISSION_CODE_SCREEN_CAPTURING = 4123;
 
 	private ArFragment      arFragment;
 	private ModelRenderable andyRenderable;
 	private GestureDetector trackableGestureDetector;
 
-	private ImageButton     settingsButton;
-	private ImageButton     expandBottomToolbarButton;
-	private ImageButton     testModusButton;
-	private ImageButton     addSubjectButton;
-	private ImageButton     cancelButton;
-	private ImageButton     playAndPauseButton;
-	private ImageButton     finishButton;
-	private ImageView       timeIcon;
-	private LinearLayout    bottomToolbar;
-	private TestPersonState state = TestPersonState.STOPPED;
-	private TextView        studyStatusView;
-	private Chronometer     chronometer;
-	private float           displayCenterY;
-	private float           displayCenterX;
-	private Study           study;
+	private ImageButton             settingsButton;
+	private ImageButton             expandBottomToolbarButton;
+	private ImageButton             testModusButton;
+	private ImageButton             addSubjectButton;
+	private ImageButton             cancelButton;
+	private ImageButton             playAndPauseButton;
+	private ImageButton             finishButton;
+	private ImageView               timeIcon;
+	private LinearLayout            bottomToolbar;
+	private TestPersonState         state = TestPersonState.STOPPED;
+	private TextView                studyStatusView;
+	private Chronometer             chronometer;
+	private float                   displayCenterY;
+	private float                   displayCenterX;
+	private Study                   study;
+	private SensorBackgroundService sensorBackgroundService;
+	private boolean                 bound = false;
+	private int                     mScreenDensity;
+	private MediaProjectionManager  mProjectionManager;
+	private MediaProjection         mMediaProjection;
+	private VirtualDisplay          mVirtualDisplay;
+	private MediaProjectionCallback mMediaProjectionCallback;
+	private MediaRecorder           mMediaRecorder;
 
 
 	@Override
@@ -76,6 +105,11 @@ public class ArActivity extends AppCompatActivity {
 		if (getIntent() != null) {
 			study = getIntent().getParcelableExtra(KEY_STUDY);
 		}
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		mScreenDensity = metrics.densityDpi;
+		mProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+		initRecorder();
 		initView();
 		initBottomBar();
 		View decorView = getWindow().getDecorView();
@@ -93,8 +127,8 @@ public class ArActivity extends AppCompatActivity {
 		finishButton.setOnClickListener(this::onFinishClicked);
 
 		testModusButton.setOnClickListener(this::onTestModusClicked);
-		displayCenterX = this.getResources().getDisplayMetrics().widthPixels / 2 - 100;
-		displayCenterY = this.getResources().getDisplayMetrics().heightPixels / 2;
+		displayCenterX = getResources().getDisplayMetrics().widthPixels / 2 - 100;
+		displayCenterY = getResources().getDisplayMetrics().heightPixels / 2;
 
 		// When you build a Renderable, Sceneform loads its resources in the background while returning
 		// a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
@@ -144,6 +178,98 @@ public class ArActivity extends AppCompatActivity {
 		});
 	}
 
+	private class MediaProjectionCallback extends MediaProjection.Callback {
+		@Override
+		public void onStop() {
+			mMediaRecorder.stop();
+			mMediaRecorder.reset();
+			mMediaProjection = null;
+		}
+	}
+
+	private void prepareRecorder() {
+		try {
+			mMediaRecorder.prepare();
+		} catch (IllegalStateException | IOException e) {
+			e.printStackTrace();
+			finish();
+		}
+	}
+
+	private void initRecorder() {
+		if (!isAudioRecordingGranted()) {
+			return;
+		}
+
+		if (mMediaRecorder == null) {
+			mMediaRecorder = new MediaRecorder();
+			mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+			mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+			mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+			mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+			mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+			mMediaRecorder.setVideoEncodingBitRate(512 * 1000);
+			mMediaRecorder.setVideoFrameRate(30);
+			mMediaRecorder.setVideoSize(getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
+			mMediaRecorder.setOutputFile(getFilePath());
+			prepareRecorder();
+		}
+	}
+
+	private boolean isAudioRecordingGranted() {
+		if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+			requestReccordAudioPermission();
+			return false;
+		}
+		return true;
+	}
+
+	private void requestReccordAudioPermission() {
+		ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_CODE_SCREEN_CAPTURING);
+	}
+
+
+	public String getFilePath() {
+		File exportDir = new File(Environment.getExternalStorageDirectory(), DIRECTORY);
+		if (!exportDir.exists()) {
+			exportDir.mkdirs();
+		}
+		File studyDir = new File(Environment.getExternalStorageDirectory() + "/" + DIRECTORY, study.getName());
+		if (!studyDir.exists()) {
+			studyDir.mkdirs();
+		}
+
+		String videoName = "capture_test.mp4";
+		return studyDir.getPath() + File.separator + videoName;
+	}
+
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+			case PERMISSION_CODE_SCREEN_CAPTURING:
+				if (resultCode == RESULT_OK) {
+					initRecorder();
+					mMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
+					mMediaProjection.registerCallback(mMediaProjectionCallback, null);
+					mVirtualDisplay = createVirtualDisplay();
+					mMediaRecorder.start();
+				}
+				break;
+		}
+	}
+
+	private VirtualDisplay createVirtualDisplay() {
+		return mMediaProjection.createVirtualDisplay("MainActivity",
+													 this.getResources().getDisplayMetrics().widthPixels,
+													 this.getResources().getDisplayMetrics().heightPixels,
+													 mScreenDensity,
+													 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+													 mMediaRecorder.getSurface(),
+													 null /*Callbacks*/,
+													 null /*Handler*/);
+	}
+
 	private void initView() {
 		expandBottomToolbarButton = findViewById(R.id.expand_bottom_toolbar_button);
 		settingsButton = findViewById(R.id.ar_settings_button);
@@ -190,36 +316,69 @@ public class ArActivity extends AppCompatActivity {
 	}
 
 	private void onPlayAndPauseClicked(View view) {
-		//TODO stop service
 		if (state.equals(TestPersonState.RUNNING)) {
 			state = TestPersonState.STOPPED;
 			chronometer.stop();
 			playAndPauseButton.setImageResource(R.drawable.play_circle_outline);
 			timeIcon.setImageDrawable(getDrawable(R.drawable.timer_off));
+			sensorBackgroundService.stop();
 		} else {
 			state = TestPersonState.RUNNING;
 			chronometer.start();
+			sensorBackgroundService.start();
 			playAndPauseButton.setImageResource(R.drawable.pause_circle_outline);
 		}
-		setTextOfState(state);
+		updateState(state);
 
 	}
 
 	private void onCancelClicked(View view) {
-		showDirectorModus();
-		hideSubjectModus();
-		timeIcon.setImageDrawable(getDrawable(R.drawable.timer_off));
-		//TODO testperson state abort
-		state = TestPersonState.IDLE;
-		setTextOfState(state);
+		showCancelDialog(state);
 		chronometer.stop();
-		chronometer.setBase(SystemClock.elapsedRealtime());
+		sensorBackgroundService.stop();
+		timeIcon.setImageDrawable(getDrawable(R.drawable.timer_off));
+		updateState(TestPersonState.STOPPED);
+	}
+
+	private void showCancelDialog(TestPersonState currentState) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.cancel_study).setMessage(R.string.cancel_study_hint).setPositiveButton(R.string.confirm, (dialog, which) -> {
+			showDirectorModus();
+			hideSubjectModus();
+			chronometer.setBase(SystemClock.elapsedRealtime());
+			updateState(TestPersonState.IDLE);
+			sensorBackgroundService.abort();
+		}).setNegativeButton(R.string.no, (dialog, which) -> {
+			updateState(currentState);
+		}).create().show();
 	}
 
 
 	private void onFinishClicked(View view) {
 		chronometer.stop();
-		//TODO show survey
+		sensorBackgroundService.stop();
+		updateState(TestPersonState.STOPPED);
+		showFinishDialog(state);
+
+	}
+
+	private void showFinishDialog(TestPersonState currentState) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.finish_study).setMessage(R.string.finish_study_hint).setPositiveButton(R.string.done, (dialog, which) -> {
+			hideSubjectModus();
+			showDirectorModus();
+			startSurveyActivity();
+		}).setNegativeButton(R.string.cancel, (dialog, which) -> {
+			sensorBackgroundService.start();
+			updateState(currentState);
+			chronometer.start();
+		}).create().show();
+	}
+
+	private void startSurveyActivity() {
+		Intent intent = new Intent(this, SurveyActivity.class);
+		intent.putExtra(SurveyActivity.PREF_KEY_STUDY_SURVEYS, study);
+		startActivity(intent);
 	}
 
 	private void onTestModusClicked(View view) {
@@ -253,6 +412,7 @@ public class ArActivity extends AppCompatActivity {
 	private void showAddSubjectDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.add_subject).setMessage(getString(R.string.add_subject_hint, study.getName())).setPositiveButton(R.string.add, (dialog, which) -> {
+			sensorBackgroundService.initialize(study);
 			showStudyStartDialog();
 		}).setNegativeButton(R.string.cancel, null).create().show();
 	}
@@ -265,20 +425,13 @@ public class ArActivity extends AppCompatActivity {
 			timeIcon.setImageDrawable(getDrawable(R.drawable.timer));
 			chronometer.setBase(SystemClock.elapsedRealtime());
 			chronometer.start();
-			state = TestPersonState.RUNNING;
-			setTextOfState(state);
-			startService();
+			updateState(TestPersonState.RUNNING);
+			sensorBackgroundService.start();
 		}).setNegativeButton(R.string.cancel, null).create().show();
 	}
 
-	private void startService() {
-		Intent serviceIntent = new Intent(this, SensorBackgroundService.class);
-		serviceIntent.putExtra(SensorBackgroundService.KEY_STUDY, study);
-		this.startService(serviceIntent);
-	}
-
-
-	private void setTextOfState(TestPersonState state) {
+	private void updateState(TestPersonState state) {
+		this.state = state;
 		studyStatusView.setText(state.name());
 	}
 
@@ -354,4 +507,32 @@ public class ArActivity extends AppCompatActivity {
 		return MotionEvent.obtain(event.getDownTime(), event.getEventTime(), event.getAction(), displayCenterX, displayCenterY, event.getMetaState());
 	}
 
+
+	private ServiceConnection connection = new ServiceConnection() {
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			SensorBackgroundService.SensorBackgroundBinder binder = (SensorBackgroundService.SensorBackgroundBinder) service;
+			sensorBackgroundService = binder.getService();
+			bound = true;
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			bound = false;
+		}
+	};
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		Intent intent = new Intent(this, SensorBackgroundService.class);
+		bindService(intent, connection, Context.BIND_AUTO_CREATE);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		unbindService(connection);
+		bound = false;
+	}
 }

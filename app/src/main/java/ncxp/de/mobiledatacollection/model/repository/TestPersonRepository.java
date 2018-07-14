@@ -20,4 +20,8 @@ public class TestPersonRepository {
 	public List<TestPerson> getTestPersonForStudy(Study study) {
 		return testPersonDao.selectTestPersonFromStudy(study.getId());
 	}
+
+	public void removeTestPerson(TestPerson testPerson) {
+		testPersonDao.deleteById(testPerson.getId());
+	}
 }

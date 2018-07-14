@@ -42,6 +42,8 @@ public class Study implements Parcelable {
 	private Boolean            isCapturingAudio  = false;
 	@Ignore
 	private List<DeviceSensor> sensors;
+	@Ignore
+	private List<Survey>       surveys;
 
 	public Study() {
 	}
@@ -110,6 +112,14 @@ public class Study implements Parcelable {
 		this.sensors = sensors;
 	}
 
+	public List<Survey> getSurveys() {
+		return surveys;
+	}
+
+	public void setSurveys(List<Survey> surveys) {
+		this.surveys = surveys;
+	}
+
 	public static String[] getCSVHeader() {
 		return new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_SENSOR_ACCURACY, COLUMN_SAMPLING_RATE, COLUMN_SCREEN_CAPTURING, COLUMN_AUDIO_CAPTURING};
 	}
@@ -129,10 +139,16 @@ public class Study implements Parcelable {
 		byte isCapturingAudioVal = in.readByte();
 		isCapturingAudio = isCapturingAudioVal == 0x02 ? null : isCapturingAudioVal != 0x00;
 		if (in.readByte() == 0x01) {
-			sensors = new ArrayList<DeviceSensor>();
+			sensors = new ArrayList<>();
 			in.readList(sensors, DeviceSensor.class.getClassLoader());
 		} else {
 			sensors = null;
+		}
+		if (in.readByte() == 0x01) {
+			surveys = new ArrayList<>();
+			in.readList(surveys, Survey.class.getClassLoader());
+		} else {
+			surveys = null;
 		}
 	}
 
@@ -178,6 +194,12 @@ public class Study implements Parcelable {
 		} else {
 			dest.writeByte((byte) (0x01));
 			dest.writeList(sensors);
+		}
+		if (surveys == null) {
+			dest.writeByte((byte) (0x00));
+		} else {
+			dest.writeByte((byte) (0x01));
+			dest.writeList(surveys);
 		}
 	}
 

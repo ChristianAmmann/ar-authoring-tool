@@ -76,24 +76,15 @@ public class StudiesViewModel extends AndroidViewModel {
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
 			List<Study> fetchedData = studyRepo.getStudies();
-			fetchedData.forEach(this::loadDevicesSensors);
+			fetchedData.forEach(study -> {
+				List<DeviceSensor> deviceSensorsForStudy = studyDeviceSensorJoinRepository.getDeviceSensorsForStudy(study);
+				study.setSensors(deviceSensorsForStudy);
+				List<Survey> surveys = surveyRepo.getSurveysFromStudy(study);
+				study.setSurveys(surveys);
+			});
 			studies.postValue(fetchedData);
 		});
 	}
-
-	private void loadDevicesSensors(Study study) {
-		ExecutorService executorService = Executors.newFixedThreadPool(2);
-		executorService.submit(() -> {
-			List<DeviceSensor> deviceSensorsForStudy = studyDeviceSensorJoinRepository.getDeviceSensorsForStudy(study);
-			int position = studies.getValue().indexOf(study);
-			study.setSensors(deviceSensorsForStudy);
-			List<Study> currentStudies = studies.getValue();
-			currentStudies.remove(position);
-			currentStudies.add(position, study);
-			studies.postValue(currentStudies);
-		});
-	}
-
 
 	public void deleteStudy(Study study) {
 		ExecutorService executorService = Executors.newFixedThreadPool(2);

@@ -19,4 +19,7 @@ public interface TestPersonDao {
 
 	@Query("SELECT * FROM " + TestPerson.TABLE_NAME + " WHERE " + TestPerson.COLUMN_STUDY_ID + "=:studyId")
 	List<TestPerson> selectTestPersonFromStudy(long studyId);
+
+	@Query("DELETE FROM " + TestPerson.TABLE_NAME + " WHERE " + TestPerson.COLUMN_ID + "= :id")
+	int deleteById(long id);
 }
