@@ -13,11 +13,14 @@
 	<string name="share_study">Datenerhebung als Datei teilen</string>
 	<string name="no_study_placeholder">Keine Studien vorhanden</string>
 	<string name="no_study_hint">Mit \"+\" können Sie Studien erstellen. Ihre erstellten Studien werden hier angezeigt</string>
+	<string name="no_arscene_placeholder">Keine AR-Szenen vorhanden</string>
+	<string name="no_arcene_hint">Mit \"+\" können Sie AR-Szenen erstellen. Ihre erstellten AR-Szenen werden hier angezeigt</string>
 	<string name="sensors">Sensoren</string>
 	<string name="survey">Fragebögen</string>
 	<string name="others">Weitere</string>
 	<string name="name_of_study">Name der Studie</string>
 	<string name="test">Testen</string>
+	<string name="load">Laden</string>
 	<string name="no_survey_placeholder">Keine Fragebogen vorhanden</string>
 	<string name="no_survey_hint">Mit \"+\" können Sie Fragebogen einfügen. Ihre einfgefügten Fragebogen werden hier angezeigt.</string>
 	<string name="description_study">Kurzbeschreibung der Studie</string>
@@ -28,6 +31,8 @@
 	<string name="dialog_delete_message">Durch das Löschen werden alle Einstellungen und Studiendaten gelöscht! Sie können Ihre Studiendaten durch Exportieren
 		sicherstellen.</string>
 	<string name="cancel">Abbrechen</string>
+	<string name="dialog_delete_arscene_title">AR-Szene löschen?</string>
+	<string name="dialog_delete_arscene_message">Durch das Löschen wird die Zuordnung von QR-Codes und den virtuellen Objekten gelöscht.</string>
 
 	<string name="dialog_survey_delete_title">Fragebogen entfernen?</string>
 	<string name="dialog_survey_delete_message">Durch das Entfernen wird der Fragebogen nicht mehr eingebunden. Die Daten des Fragebogens finden Sie auf der
@@ -183,4 +188,5 @@
 	<string name="confirm">Bestätigen</string>
 	<string name="finish_study">Studie abschließen</string>
 	<string name="finish_study_hint">Bist du mit der Studie fertig?</string>
+	<string name="my_arscenes">Meine AR-Szenen</string>
 </resources>

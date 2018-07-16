@@ -24,7 +24,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ncxp.de.mobiledatacollection.ArActivity;
+import ncxp.de.mobiledatacollection.ArSceneActivity;
 import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.StudiesActivity;
 import ncxp.de.mobiledatacollection.StudyActivity;
@@ -95,8 +95,8 @@ public class StudiesFragment extends Fragment implements StudyListener {
 
 	@Override
 	public void onStudyStartClick(Study study) {
-		Intent intent = new Intent(getActivity(), ArActivity.class);
-		intent.putExtra(ArActivity.KEY_STUDY, study);
+		Intent intent = new Intent(getActivity(), ArSceneActivity.class);
+		//TODO Study intent.putExtra(ArSceneActivity.KEY_STUDY, study);
 		getActivity().startActivity(intent);
 	}
 

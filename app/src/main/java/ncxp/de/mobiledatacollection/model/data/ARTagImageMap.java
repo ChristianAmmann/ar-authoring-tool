@@ -5,18 +5,18 @@ import android.arch.persistence.room.Entity;
 @Entity
 public class ARTagImageMap {
 
-	private int    arTagId;
+	private int    arMarkerId;
 	private String imageName;
 
 	public ARTagImageMap() {
 	}
 
-	public int getArTagId() {
-		return arTagId;
+	public int getArMarkerId() {
+		return arMarkerId;
 	}
 
-	public void setArTagId(int arTagId) {
-		this.arTagId = arTagId;
+	public void setArMarkerId(int arMarkerId) {
+		this.arMarkerId = arMarkerId;
 	}
 
 	public String getImageName() {
