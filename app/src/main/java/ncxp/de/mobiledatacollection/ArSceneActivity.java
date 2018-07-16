@@ -1,6 +1,7 @@
 package ncxp.de.mobiledatacollection;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
@@ -29,7 +30,8 @@ public class ArSceneActivity extends AppCompatActivity {
 
 		fab = findViewById(R.id.fab_add_arscene);
 		fab.setOnClickListener(view -> {
-			//TODO Start ARScene Create kontext
+			Intent intent = new Intent(this, ArImageMarkerActivity.class);
+			startActivity(intent);
 		});
 		toolbar = findViewById(R.id.arscene_toolbar);
 		setSupportActionBar(toolbar);
