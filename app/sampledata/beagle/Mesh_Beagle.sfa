@@ -1,0 +1,49 @@
+{
+   materials: [
+      {
+         name: "lambert2SG",
+         parameters: [
+            {
+               baseColor: "Tex_Beagle",
+            },
+            {
+               baseColorTint: [
+                  1,
+                  1,
+                  1,
+                  1,
+               ],
+            },
+            {
+               metallic: 0,
+            },
+            {
+               roughness: 0.14280000000000001,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/obj_material.sfm",
+      },
+   ],
+   model: {
+      attributes: [
+         "Position",
+         "TexCoord",
+         "Orientation",
+      ],
+      collision: {},
+      file: "../../mobiledatacollection/app/sampledata/beagle/Mesh_Beagle.obj",
+      name: "Mesh_Beagle",
+      scale: 0.2
+   },
+   samplers: [
+      {
+         file: "../../mobiledatacollection/app/sampledata/beagle/Tex_Beagle.png",
+         name: "Tex_Beagle",
+         pipeline_name: "Tex_Beagle.png",
+      },
+   ],
+   version: "0.51:1",
+}

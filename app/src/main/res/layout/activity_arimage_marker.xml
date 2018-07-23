@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			 xmlns:tools="http://schemas.android.com/tools"
-			 android:layout_width="match_parent"
-			 android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+												 xmlns:app="http://schemas.android.com/apk/res-auto"
+												 xmlns:tools="http://schemas.android.com/tools"
+												 android:layout_width="match_parent"
+												 android:layout_height="match_parent">
 
 	<com.google.ar.sceneform.ArSceneView
 		android:id="@+id/surfaceview"
@@ -15,7 +16,14 @@
 		android:layout_height="match_parent"
 		android:layout_gravity="center"
 		android:scaleType="fitCenter"
-		android:src="@drawable/fit_to_scan"
-		android:visibility="gone"/>
+		android:src="@drawable/fit_to_scan"/>
 
-</FrameLayout>
+	<android.support.v7.widget.RecyclerView
+		android:id="@+id/model_thumbnail_list"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/light_black"
+		app:layout_anchor="@+id/surfaceview"
+		app:layout_anchorGravity="bottom|center"/>
+
+</android.support.design.widget.CoordinatorLayout>

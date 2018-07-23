@@ -70,10 +70,37 @@ dependencies {
 
 }
 
-// Assets for Sceneform (AR)
-sceneform.asset('sampledata/models/andy.obj',
+sceneform.asset('../../mobiledatacollection/app/sampledata/placeholder/podest.obj',
         'default',
-        'sampledata/models/andy.sfa',
-        'src/main/res/raw/andy')
+        '../../mobiledatacollection/app/sampledata/placeholder/podest.sfa',
+        '../../mobiledatacollection/app/src/main/res/raw/podest')
 
+sceneform.asset('../../mobiledatacollection/app/sampledata/placeholder/arrow.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/placeholder/arrow.sfa',
+        '../../mobiledatacollection/app/src/main/res/raw/arrow')
 
+sceneform.asset('../../mobiledatacollection/app/sampledata/fox/Mesh_Fox.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/fox/Mesh_Fox.sfa',
+        'src/main/assets/fox')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/cat/Mesh_Cat.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/cat/Mesh_Cat.sfa',
+        'src/main/assets/cat')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/lion/Lion.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/lion/Lion.sfa',
+        'src/main/assets/lion')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/wolf/Wolf_01.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/wolf/Wolf_01.sfa',
+        'src/main/assets/wolf')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/beagle/Mesh_Beagle.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/beagle/Mesh_Beagle.sfa',
+        'src/main/assets/beagle')

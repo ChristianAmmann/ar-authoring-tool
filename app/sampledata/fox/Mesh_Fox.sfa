@@ -1,10 +1,10 @@
 {
    materials: [
       {
-         name: "unlit_material",
+         name: "lambert2SG",
          parameters: [
             {
-               baseColor: "andy",
+               baseColor: "Tex_Fox",
             },
             {
                baseColorTint: [
@@ -15,7 +15,7 @@
                ],
             },
             {
-               metallic: 1,
+               metallic: 0,
             },
             {
                roughness: 1,
@@ -33,27 +33,16 @@
          "TexCoord",
          "Orientation",
       ],
-      file: "sampledata/models/andy.obj",
-      name: "andy",
-      suggested_collision: {
-         center: {
-            x: 0,
-            y: 0,
-            z: 0,
-         },
-         size: {
-            x: 1,
-            y: 1,
-            z: 1,
-         },
-         type: "Box",
-      },
+      collision: {},
+      file: "../../mobiledatacollection/app/sampledata/fox/Mesh_Fox.obj",
+      name: "Mesh_Fox",
+      scale: 0.015,
    },
    samplers: [
       {
-         file: "sampledata/models/andy.png",
-         name: "andy",
-         pipeline_name: "andy.png",
+         file: "../../mobiledatacollection/app/sampledata/fox/Tex_Fox.png",
+         name: "Tex_Fox",
+         pipeline_name: "Tex_Fox.png",
       },
    ],
    version: "0.51:1",

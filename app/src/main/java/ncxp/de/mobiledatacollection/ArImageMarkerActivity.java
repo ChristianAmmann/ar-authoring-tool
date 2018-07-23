@@ -1,6 +1,7 @@
 package ncxp.de.mobiledatacollection;
 
 import android.Manifest;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -10,14 +11,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.Pair;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.ar.core.Anchor;
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.AugmentedImage;
 import com.google.ar.core.AugmentedImageDatabase;
@@ -32,27 +34,42 @@ import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
 import com.google.ar.sceneform.ArSceneView;
 import com.google.ar.sceneform.FrameTime;
+import com.google.ar.sceneform.Node;
+import com.google.ar.sceneform.rendering.ModelRenderable;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import ncxp.de.mobiledatacollection.sceneform.AugmentedImageNode;
+import ncxp.de.mobiledatacollection.sceneform.AugmentedImageAnchor;
+import ncxp.de.mobiledatacollection.sceneform.ObjectARImageNode;
+import ncxp.de.mobiledatacollection.sceneform.PlaceholderNode;
+import ncxp.de.mobiledatacollection.ui.arimagemarker.ArImageMarkerViewModel;
+import ncxp.de.mobiledatacollection.ui.arimagemarker.ArImageMarkerViewModelFactory;
+import ncxp.de.mobiledatacollection.ui.arimagemarker.ThumbnailAdapter;
+import ncxp.de.mobiledatacollection.ui.arimagemarker.ThumbnailListener;
 
-public class ArImageMarkerActivity extends AppCompatActivity {
+public class ArImageMarkerActivity extends AppCompatActivity implements ThumbnailListener {
 
 	private static final String TAG                    = ArImageMarkerActivity.class.getCanonicalName();
 	private static final int    CAMERA_PERMISSION_CODE = 1234;
+	private static final String FILE_TYPE              = ".sfb";
 
-	private       ImageView                                  fitToScanView;
-	private       boolean                                    installRequested;
-	private       Session                                    session;
-	private       boolean                                    shouldConfigureSession = false;
-	// Rendering. The Renderers are created here, and initialized when the GL surface is created.
-	private       ArSceneView                                arSceneView;
-	private final Map<Integer, Pair<AugmentedImage, Anchor>> augmentedImageMap      = new HashMap<>();
+	private ModelRenderable        podestRenderable;
+	private ModelRenderable        arrowRenderable;
+	private ImageView              fitToScanView;
+	private boolean                installRequested;
+	private Session                session;
+	private boolean                shouldConfigureSession = false;
+	private ArSceneView            arSceneView;
+	private RecyclerView           modelRecyclerView;
+	private ThumbnailAdapter       thumbnailAdapter;
+	private Map<String, Node>      augmentedImageMap      = new HashMap<>();
+	private ArImageMarkerViewModel viewModel;
+	private Node                   currentSelection;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,9 +77,22 @@ public class ArImageMarkerActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_arimage_marker);
 		arSceneView = findViewById(R.id.surfaceview);
 		fitToScanView = findViewById(R.id.image_view_fit_to_scan);
-
+		modelRecyclerView = findViewById(R.id.model_thumbnail_list);
+		obtainViewModel();
 		installRequested = false;
 		initializeSceneView();
+		initPlacing();
+		setupAdapter();
+		viewModel.getThumbnails().observe(this, drawables -> thumbnailAdapter.replaceItems(drawables));
+		viewModel.init();
+
+	}
+
+	private void setupAdapter() {
+		modelRecyclerView.setHasFixedSize(true);
+		thumbnailAdapter = new ThumbnailAdapter(new ArrayList<>(), this);
+		modelRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+		modelRecyclerView.setAdapter(thumbnailAdapter);
 	}
 
 	@Override
@@ -138,19 +168,31 @@ public class ArImageMarkerActivity extends AppCompatActivity {
 	private void onUpdateFrame(FrameTime frameTime) {
 		Frame frame = arSceneView.getArFrame();
 		Collection<AugmentedImage> updatedAugmentedImages = frame.getUpdatedTrackables(AugmentedImage.class);
-
 		for (AugmentedImage augmentedImage : updatedAugmentedImages) {
 			if (augmentedImage.getTrackingState() == TrackingState.TRACKING) {
-				// Check camera image matches our reference image
-				if (augmentedImage.getName().equals("delorean")) {
-					AugmentedImageNode node = new AugmentedImageNode(this, "model.sfb");
+				fitToScanView.setVisibility(View.GONE);
+				if (!augmentedImageMap.containsKey(augmentedImage.getName())) {
+					AugmentedImageAnchor node = new AugmentedImageAnchor();
 					node.setImage(augmentedImage);
+					PlaceholderNode placeholder = new PlaceholderNode(podestRenderable, arrowRenderable);
+					placeholder.setParent(node);
+					placeholder.setOnTapListener((hitTestResult, motionEvent) -> {
+						currentSelection = placeholder;
+					});
 					arSceneView.getScene().addChild(node);
+					augmentedImageMap.put(augmentedImage.getName(), node);
+				} else {
+					//TODO maybe nothing
 				}
-
 			}
 		}
 	}
+
+	private void initPlacing() {
+		ModelRenderable.builder().setSource(this, R.raw.podest).build().thenAccept(renderable -> podestRenderable = renderable);
+		ModelRenderable.builder().setSource(this, R.raw.arrow).build().thenAccept(renderable -> arrowRenderable = renderable);
+	}
+
 
 	@Override
 	public void onPause() {
@@ -223,5 +265,33 @@ public class ArImageMarkerActivity extends AppCompatActivity {
 			}
 			finish();
 		}
+	}
+
+	private void obtainViewModel() {
+		viewModel = ViewModelProviders.of(this, createFactory()).get(ArImageMarkerViewModel.class);
+	}
+
+	private ArImageMarkerViewModelFactory createFactory() {
+		return new ArImageMarkerViewModelFactory(getApplication());
+	}
+
+	@Override
+	public void onThumbnailClicked(String imageName) {
+		if (currentSelection == null) {
+			return;
+		}
+		String sjbFile = imageName.replace("png", "sfb");
+		ModelRenderable.builder().setSource(this, Uri.parse(sjbFile)).build().thenAccept(renderable -> {
+			Node parent = currentSelection.getParent();
+			parent.removeChild(currentSelection);
+			ObjectARImageNode node = new ObjectARImageNode(renderable);
+			node.setParent(parent);
+			currentSelection = node;
+		}).exceptionally(throwable -> {
+			Toast toast = Toast.makeText(this, "Laden der SFB Datei nicht möglich. Heißen Bilddatei und 3D Modell-Datei gleich?", Toast.LENGTH_LONG);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+			return null;
+		});
 	}
 }
