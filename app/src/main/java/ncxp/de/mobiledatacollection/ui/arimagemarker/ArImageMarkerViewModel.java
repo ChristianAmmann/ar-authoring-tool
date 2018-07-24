@@ -7,10 +7,13 @@ import android.arch.lifecycle.MutableLiveData;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
+import com.google.ar.sceneform.Node;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -64,6 +67,11 @@ public class ArImageMarkerViewModel extends AndroidViewModel {
 			e.printStackTrace();
 		}
 		return drawable;
+	}
+
+
+	public void save(Map<String, Node> map) {
+		//TODO save shit
 	}
 
 }

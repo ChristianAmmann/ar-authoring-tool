@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -45,6 +47,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ncxp.de.mobiledatacollection.sceneform.AugmentedImageAnchor;
+import ncxp.de.mobiledatacollection.sceneform.CursorNode;
 import ncxp.de.mobiledatacollection.sceneform.ObjectARImageNode;
 import ncxp.de.mobiledatacollection.sceneform.PlaceholderNode;
 import ncxp.de.mobiledatacollection.ui.arimagemarker.ArImageMarkerViewModel;
@@ -58,9 +61,10 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 	private static final int    CAMERA_PERMISSION_CODE = 1234;
 	private static final String FILE_TYPE              = ".sfb";
 
-	private ModelRenderable        podestRenderable;
-	private ModelRenderable        arrowRenderable;
+	private ModelRenderable        frameRenderable;
 	private ImageView              fitToScanView;
+	private ImageButton            expandThumbnailButton;
+	private ImageButton            saveSceneButton;
 	private boolean                installRequested;
 	private Session                session;
 	private boolean                shouldConfigureSession = false;
@@ -70,6 +74,7 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 	private Map<String, Node>      augmentedImageMap      = new HashMap<>();
 	private ArImageMarkerViewModel viewModel;
 	private Node                   currentSelection;
+	private CursorNode             cursorNode;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +83,12 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		arSceneView = findViewById(R.id.surfaceview);
 		fitToScanView = findViewById(R.id.image_view_fit_to_scan);
 		modelRecyclerView = findViewById(R.id.model_thumbnail_list);
+		expandThumbnailButton = findViewById(R.id.expand_thumbnail_button);
+		saveSceneButton = findViewById(R.id.save_scene);
+		saveSceneButton.setOnClickListener(view -> {
+			viewModel.save(augmentedImageMap);
+			//TODO finish Activity
+		});
 		obtainViewModel();
 		installRequested = false;
 		initializeSceneView();
@@ -85,7 +96,7 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		setupAdapter();
 		viewModel.getThumbnails().observe(this, drawables -> thumbnailAdapter.replaceItems(drawables));
 		viewModel.init();
-
+		initBottomBar();
 	}
 
 	private void setupAdapter() {
@@ -94,6 +105,24 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		modelRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 		modelRecyclerView.setAdapter(thumbnailAdapter);
 	}
+
+	private void initBottomBar() {
+		expandThumbnailButton.setOnClickListener((view) -> {
+			int visibility = modelRecyclerView.getVisibility() == View.GONE ? View.VISIBLE : View.GONE;
+			CoordinatorLayout.LayoutParams paramsExpand = (CoordinatorLayout.LayoutParams) expandThumbnailButton.getLayoutParams();
+			if (visibility == View.GONE) {
+				paramsExpand.setAnchorId(R.id.surfaceview);
+				paramsExpand.anchorGravity = Gravity.BOTTOM | Gravity.CENTER;
+				expandThumbnailButton.setImageResource(R.drawable.chevron_up);
+			} else {
+				paramsExpand.setAnchorId(R.id.model_thumbnail_list);
+				paramsExpand.anchorGravity = Gravity.TOP | Gravity.CENTER;
+				expandThumbnailButton.setImageResource(R.drawable.chevron_down);
+			}
+			modelRecyclerView.setVisibility(visibility);
+		});
+	}
+
 
 	@Override
 	protected void onResume() {
@@ -174,10 +203,12 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 				if (!augmentedImageMap.containsKey(augmentedImage.getName())) {
 					AugmentedImageAnchor node = new AugmentedImageAnchor();
 					node.setImage(augmentedImage);
-					PlaceholderNode placeholder = new PlaceholderNode(podestRenderable, arrowRenderable);
+					PlaceholderNode placeholder = new PlaceholderNode(frameRenderable);
 					placeholder.setParent(node);
 					placeholder.setOnTapListener((hitTestResult, motionEvent) -> {
+						showBottomThumbnails();
 						currentSelection = placeholder;
+						cursorNode.setParent(placeholder);
 					});
 					arSceneView.getScene().addChild(node);
 					augmentedImageMap.put(augmentedImage.getName(), node);
@@ -189,10 +220,18 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 	}
 
 	private void initPlacing() {
-		ModelRenderable.builder().setSource(this, R.raw.podest).build().thenAccept(renderable -> podestRenderable = renderable);
-		ModelRenderable.builder().setSource(this, R.raw.arrow).build().thenAccept(renderable -> arrowRenderable = renderable);
+		ModelRenderable.builder().setSource(this, R.raw.frame).build().thenAccept(renderable -> frameRenderable = renderable);
+		ModelRenderable.builder().setSource(this, R.raw.arrow).build().thenAccept(renderable -> cursorNode = new CursorNode(renderable));
 	}
 
+	private void showBottomThumbnails() {
+		expandThumbnailButton.setVisibility(View.VISIBLE);
+		modelRecyclerView.setVisibility(View.VISIBLE);
+		CoordinatorLayout.LayoutParams paramsExpand = (CoordinatorLayout.LayoutParams) expandThumbnailButton.getLayoutParams();
+		paramsExpand.setAnchorId(R.id.model_thumbnail_list);
+		paramsExpand.anchorGravity = Gravity.TOP | Gravity.CENTER;
+		expandThumbnailButton.setImageResource(R.drawable.chevron_down);
+	}
 
 	@Override
 	public void onPause() {
@@ -282,16 +321,28 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		}
 		String sjbFile = imageName.replace("png", "sfb");
 		ModelRenderable.builder().setSource(this, Uri.parse(sjbFile)).build().thenAccept(renderable -> {
-			Node parent = currentSelection.getParent();
+			AugmentedImageAnchor parent = (AugmentedImageAnchor) currentSelection.getParent();
 			parent.removeChild(currentSelection);
+			augmentedImageMap.remove(parent.getName());
 			ObjectARImageNode node = new ObjectARImageNode(renderable);
 			node.setParent(parent);
+			node.setOnTapListener((hitTestResult, motionEvent) -> {
+				currentSelection = node;
+				cursorNode.setParent(node);
+			});
+			augmentedImageMap.put(parent.getName(), node);
+			showSaveButton();
 			currentSelection = node;
+			cursorNode.setParent(node);
 		}).exceptionally(throwable -> {
 			Toast toast = Toast.makeText(this, "Laden der SFB Datei nicht möglich. Heißen Bilddatei und 3D Modell-Datei gleich?", Toast.LENGTH_LONG);
 			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.show();
 			return null;
 		});
+	}
+
+	private void showSaveButton() {
+		saveSceneButton.setVisibility(View.VISIBLE);
 	}
 }

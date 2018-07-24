@@ -11,4 +11,8 @@ public class AugmentedImageAnchor extends AnchorNode {
 		this.image = image;
 		setAnchor(image.createAnchor(image.getCenterPose()));
 	}
+
+	public AugmentedImage getImage() {
+		return image;
+	}
 }

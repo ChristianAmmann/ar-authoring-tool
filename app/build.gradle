@@ -70,11 +70,6 @@ dependencies {
 
 }
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/placeholder/podest.obj',
-        'default',
-        '../../mobiledatacollection/app/sampledata/placeholder/podest.sfa',
-        '../../mobiledatacollection/app/src/main/res/raw/podest')
-
 sceneform.asset('../../mobiledatacollection/app/sampledata/placeholder/arrow.obj',
         'default',
         '../../mobiledatacollection/app/sampledata/placeholder/arrow.sfa',
@@ -104,3 +99,8 @@ sceneform.asset('../../mobiledatacollection/app/sampledata/beagle/Mesh_Beagle.ob
         'default',
         '../../mobiledatacollection/app/sampledata/beagle/Mesh_Beagle.sfa',
         'src/main/assets/beagle')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/placeholder/model.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/placeholder/model.sfa',
+        '../../mobiledatacollection/app/src/main/res/raw/frame')
