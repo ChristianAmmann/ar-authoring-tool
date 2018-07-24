@@ -22,8 +22,8 @@ public class CursorNode extends Node {
 
 	private void create(ModelRenderable arrowRenderable) {
 		setRenderable(arrowRenderable);
-		setLocalPosition(new Vector3(0.0f, 0.015f, 0.0f));
-		setLocalScale(new Vector3(0.5f, 0.5f, 0.5f));
+		//setLocalPosition(new Vector3(0.0f, 0.1f, 0.0f));
+		//setLocalScale(new Vector3(0.5f, 0.5f, 0.5f));
 	}
 
 

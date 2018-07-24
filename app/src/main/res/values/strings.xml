@@ -189,4 +189,9 @@
 	<string name="finish_study">Studie abschließen</string>
 	<string name="finish_study_hint">Bist du mit der Studie fertig?</string>
 	<string name="my_arscenes">Meine AR-Szenen</string>
+	<string name="title_ar_scene">Titel der AR-Szene</string>
+	<string name="description_ar_scene">Beschreibung der AR-Szene</string>
+	<string name="dialog_title_save_ar_scene">AR-Szene speichern?</string>
+	<string name="dialog_arscene_error_title">Die AR-Szene benötigt einen Titel</string>
+	<string name="dialog_arscene_error_description">Die AR-Szene benötigt eine Beschreibung</string>
 </resources>

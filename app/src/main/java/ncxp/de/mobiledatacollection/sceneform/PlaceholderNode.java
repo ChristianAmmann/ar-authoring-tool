@@ -10,11 +10,8 @@ public class PlaceholderNode extends Node {
 		create(frameRenderable);
 	}
 
-	private void create(ModelRenderable podestRenderable) {
-		setRenderable(podestRenderable);
+	private void create(ModelRenderable frameRenderable) {
+		setRenderable(frameRenderable);
 		setLocalScale(new Vector3(0.3f, 0.3f, 0.4f));
 	}
-
-
-
 }

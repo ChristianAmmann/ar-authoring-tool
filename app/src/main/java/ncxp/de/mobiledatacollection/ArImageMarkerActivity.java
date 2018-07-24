@@ -9,13 +9,16 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -38,6 +41,7 @@ import com.google.ar.sceneform.ArSceneView;
 import com.google.ar.sceneform.FrameTime;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.rendering.ModelRenderable;
+import com.google.ar.sceneform.rendering.ViewRenderable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,6 +52,7 @@ import java.util.Map;
 
 import ncxp.de.mobiledatacollection.sceneform.AugmentedImageAnchor;
 import ncxp.de.mobiledatacollection.sceneform.CursorNode;
+import ncxp.de.mobiledatacollection.sceneform.DeleteNode;
 import ncxp.de.mobiledatacollection.sceneform.ObjectARImageNode;
 import ncxp.de.mobiledatacollection.sceneform.PlaceholderNode;
 import ncxp.de.mobiledatacollection.ui.arimagemarker.ArImageMarkerViewModel;
@@ -75,6 +80,7 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 	private ArImageMarkerViewModel viewModel;
 	private Node                   currentSelection;
 	private CursorNode             cursorNode;
+	private DeleteNode             deleteNode;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,8 +92,7 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		expandThumbnailButton = findViewById(R.id.expand_thumbnail_button);
 		saveSceneButton = findViewById(R.id.save_scene);
 		saveSceneButton.setOnClickListener(view -> {
-			viewModel.save(augmentedImageMap);
-			//TODO finish Activity
+			showSaveDialog();
 		});
 		obtainViewModel();
 		installRequested = false;
@@ -203,13 +208,8 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 				if (!augmentedImageMap.containsKey(augmentedImage.getName())) {
 					AugmentedImageAnchor node = new AugmentedImageAnchor();
 					node.setImage(augmentedImage);
-					PlaceholderNode placeholder = new PlaceholderNode(frameRenderable);
+					PlaceholderNode placeholder = createPlaceholder();
 					placeholder.setParent(node);
-					placeholder.setOnTapListener((hitTestResult, motionEvent) -> {
-						showBottomThumbnails();
-						currentSelection = placeholder;
-						cursorNode.setParent(placeholder);
-					});
 					arSceneView.getScene().addChild(node);
 					augmentedImageMap.put(augmentedImage.getName(), node);
 				} else {
@@ -219,9 +219,22 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		}
 	}
 
+	private PlaceholderNode createPlaceholder() {
+		PlaceholderNode placeholder = new PlaceholderNode(frameRenderable);
+		placeholder.setOnTapListener((hitTestResult, motionEvent) -> {
+			showBottomThumbnails();
+			currentSelection = placeholder;
+			cursorNode.setParent(placeholder);
+		});
+		return placeholder;
+	}
+
 	private void initPlacing() {
 		ModelRenderable.builder().setSource(this, R.raw.frame).build().thenAccept(renderable -> frameRenderable = renderable);
 		ModelRenderable.builder().setSource(this, R.raw.arrow).build().thenAccept(renderable -> cursorNode = new CursorNode(renderable));
+		ViewRenderable.builder().setView(this, R.layout.delete_view).build().thenAccept((renderable) -> {
+			deleteNode = new DeleteNode(renderable);
+		});
 	}
 
 	private void showBottomThumbnails() {
@@ -329,6 +342,15 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 			node.setOnTapListener((hitTestResult, motionEvent) -> {
 				currentSelection = node;
 				cursorNode.setParent(node);
+				deleteNode.setParent(node);
+				deleteNode.setOnTapListener((hitTestResult1, motionEvent1) -> {
+					AugmentedImageAnchor anchor = (AugmentedImageAnchor) node.getParent();
+					anchor.removeChild(node);
+					PlaceholderNode placeholder = createPlaceholder();
+					placeholder.setParent(anchor);
+					showSaveButton();
+					currentSelection = null;
+				});
 			});
 			augmentedImageMap.put(parent.getName(), node);
 			showSaveButton();
@@ -343,6 +365,40 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 	}
 
 	private void showSaveButton() {
-		saveSceneButton.setVisibility(View.VISIBLE);
+		if (augmentedImageMap.values().stream().anyMatch(node -> node instanceof ObjectARImageNode)) {
+			saveSceneButton.setVisibility(View.VISIBLE);
+		} else {
+			saveSceneButton.setVisibility(View.GONE);
+		}
+	}
+
+	private void showSaveDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = getLayoutInflater();
+		builder.setTitle(R.string.dialog_title_save_ar_scene);
+		View dialogView = inflater.inflate(R.layout.dialog_save_arscene, null);
+		TextInputEditText titleInput = dialogView.findViewById(R.id.arscene_title);
+		TextInputEditText descriptionInput = dialogView.findViewById(R.id.arscene_description);
+		builder.setView(dialogView).setPositiveButton(R.string.save, (dialog, which) -> {
+			boolean validInput = true;
+			validInput &= validateInput(titleInput, R.string.dialog_arscene_error_title);
+			validInput &= validateInput(descriptionInput, R.string.dialog_arscene_error_description);
+			if (validInput) {
+				String title = titleInput.getText().toString();
+				String description = descriptionInput.getText().toString();
+				//viewModel.save(title, description, );
+				finish();
+			}
+		});
+		builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
+		builder.create().show();
+	}
+
+	private boolean validateInput(TextInputEditText editText, int errorCode) {
+		if (editText.getText().toString().isEmpty()) {
+			editText.setError(getString(errorCode));
+			return false;
+		}
+		return true;
 	}
 }
