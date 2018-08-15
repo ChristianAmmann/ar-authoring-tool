@@ -4,11 +4,14 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(tableName = ARScene.TABLE_NAME)
-public class ARScene {
+public class ARScene implements Parcelable {
 
 	public static final String TABLE_NAME         = "ARScene";
 	public static final String COLUMN_ID          = "id";
@@ -18,22 +21,23 @@ public class ARScene {
 
 	@PrimaryKey(autoGenerate = true)
 	@ColumnInfo(name = COLUMN_ID)
-	private int    id;
+	private long                          id;
 	@ColumnInfo(name = COLUMN_NAME)
-	private String name;
+	private String                        name;
 	@ColumnInfo(name = COLUMN_DESCRIPTION)
-	private String description;
+	private String                        description;
 	@Ignore
-	Map<Integer, String> arTagImageMap;
+	private List<ArImageToObjectRelation> arImageObjects;
+
 
 	public ARScene() {
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -53,11 +57,54 @@ public class ARScene {
 		this.description = description;
 	}
 
-	public Map<Integer, String> getArTagImageMap() {
-		return arTagImageMap;
+	public List<ArImageToObjectRelation> getArImageObjects() {
+		return arImageObjects;
 	}
 
-	public void setArTagImageMap(Map<Integer, String> arTagImageMap) {
-		this.arTagImageMap = arTagImageMap;
+	public void setArImageObjects(List<ArImageToObjectRelation> arImageObjects) {
+		this.arImageObjects = arImageObjects;
 	}
+
+	protected ARScene(Parcel in) {
+		id = in.readLong();
+		name = in.readString();
+		description = in.readString();
+		if (in.readByte() == 0x01) {
+			arImageObjects = new ArrayList<>();
+			in.readList(arImageObjects, ArImageToObjectRelation.class.getClassLoader());
+		} else {
+			arImageObjects = null;
+		}
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeLong(id);
+		dest.writeString(name);
+		dest.writeString(description);
+		if (arImageObjects == null) {
+			dest.writeByte((byte) (0x00));
+		} else {
+			dest.writeByte((byte) (0x01));
+			dest.writeList(arImageObjects);
+		}
+	}
+
+	@SuppressWarnings("unused")
+	public static final Parcelable.Creator<ARScene> CREATOR = new Parcelable.Creator<ARScene>() {
+		@Override
+		public ARScene createFromParcel(Parcel in) {
+			return new ARScene(in);
+		}
+
+		@Override
+		public ARScene[] newArray(int size) {
+			return new ARScene[size];
+		}
+	};
 }

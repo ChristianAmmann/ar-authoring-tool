@@ -5,7 +5,14 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 
 public class ObjectARImageNode extends Node {
 
-	public ObjectARImageNode(ModelRenderable object) {
+	private String fileName;
+
+	public ObjectARImageNode(String fileName, ModelRenderable object) {
 		setRenderable(object);
+		this.fileName = fileName;
+	}
+
+	public String getFileName() {
+		return fileName;
 	}
 }

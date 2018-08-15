@@ -12,18 +12,15 @@
 		android:layout_height="wrap_content"
 		app:backgroundTint="@color/colorPrimary">
 
-		<android.support.design.widget.CollapsingToolbarLayout
+		<android.support.v7.widget.Toolbar
+			android:id="@+id/arscene_toolbar"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			app:layout_scrollFlags="scroll|exitUntilCollapsed">
+			android:layout_height="wrap_content"
+			android:theme="@style/ToolbarTheme"
+			app:navigationIcon="@drawable/arrow_left"
+			app:title="@string/my_arscenes"
+			app:titleTextColor="@android:color/white"/>
 
-			<android.support.v7.widget.Toolbar
-				android:id="@+id/arscene_toolbar"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:theme="@style/ToolbarTheme"
-				app:navigationIcon="@drawable/arrow_left"/>
-		</android.support.design.widget.CollapsingToolbarLayout>
 	</android.support.design.widget.AppBarLayout>
 
 	<FrameLayout

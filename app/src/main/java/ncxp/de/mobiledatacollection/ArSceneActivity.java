@@ -36,7 +36,6 @@ public class ArSceneActivity extends AppCompatActivity {
 		toolbar = findViewById(R.id.arscene_toolbar);
 		setSupportActionBar(toolbar);
 		toolbar.setNavigationOnClickListener(view -> this.finish());
-		toolbar.setTitle(getString(R.string.my_arscenes));
 		showFragment(savedInstanceState);
 	}
 
@@ -48,7 +47,7 @@ public class ArSceneActivity extends AppCompatActivity {
 
 	private static ArSceneViewModelFactory createFactory(FragmentActivity activity) {
 		StudyDatabase database = StudyDatabase.getInstance(activity);
-		ArSceneRepository arSceneRepository = new ArSceneRepository(database.arSceneDao());
+		ArSceneRepository arSceneRepository = new ArSceneRepository(database.arSceneDao(), database.arImageToObjectRelationDao());
 		return new ArSceneViewModelFactory(arSceneRepository);
 	}
 }

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ncxp.de.mobiledatacollection.ArActivity;
+import ncxp.de.mobiledatacollection.ArImageMarkerActivity;
 import ncxp.de.mobiledatacollection.ArSceneActivity;
 import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.model.data.ARScene;
@@ -77,7 +78,9 @@ public class ArSceneFragment extends Fragment implements ArSceneListener {
 	private boolean onPopupMenuItemClicked(MenuItem menuItem, ARScene arScene) {
 		switch (menuItem.getItemId()) {
 			case R.id.edit:
-				//TODO
+				Intent intent = new Intent(getActivity(), ArImageMarkerActivity.class);
+				intent.putExtra(ArImageMarkerActivity.ARSCENE_KEY, arScene);
+				startActivity(intent);
 				break;
 			case R.id.delete:
 				showDeleteDialog(arScene);
@@ -91,8 +94,8 @@ public class ArSceneFragment extends Fragment implements ArSceneListener {
 		builder.setMessage(R.string.dialog_delete_arscene_message);
 		builder.setTitle(R.string.dialog_delete_arscene_title);
 		builder.setPositiveButton(R.string.delete, (dialog, which) -> {
-			viewModel.deleteArScene(arScene);
 			arSceneAdapter.deleteItem(arScene);
+			viewModel.deleteArScene(arScene);
 		});
 		builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
 		builder.create().show();
@@ -115,4 +118,9 @@ public class ArSceneFragment extends Fragment implements ArSceneListener {
 		getActivity().startActivity(intent);
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		viewModel.init();
+	}
 }

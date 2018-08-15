@@ -36,7 +36,7 @@
       collision: {},
       file: "../../mobiledatacollection/app/sampledata/lion/Lion.obj",
       name: "Lion",
-      scale: 0.1,
+      scale: 0.05,
    },
    samplers: [
       {

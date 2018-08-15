@@ -36,7 +36,7 @@
       collision: {},
       file: "../../mobiledatacollection/app/sampledata/beagle/Mesh_Beagle.obj",
       name: "Mesh_Beagle",
-      scale: 0.2
+      scale: 0.1
    },
    samplers: [
       {

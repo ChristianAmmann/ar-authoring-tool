@@ -50,6 +50,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import ncxp.de.mobiledatacollection.model.StudyDatabase;
+import ncxp.de.mobiledatacollection.model.dao.ArImageToObjectRelationDao;
+import ncxp.de.mobiledatacollection.model.dao.ArSceneDao;
+import ncxp.de.mobiledatacollection.model.data.ARScene;
+import ncxp.de.mobiledatacollection.model.data.ArImageToObjectRelation;
+import ncxp.de.mobiledatacollection.model.repository.ArSceneRepository;
 import ncxp.de.mobiledatacollection.sceneform.AugmentedImageAnchor;
 import ncxp.de.mobiledatacollection.sceneform.CursorNode;
 import ncxp.de.mobiledatacollection.sceneform.DeleteNode;
@@ -64,12 +70,14 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 
 	private static final String TAG                    = ArImageMarkerActivity.class.getCanonicalName();
 	private static final int    CAMERA_PERMISSION_CODE = 1234;
+	public static final  String ARSCENE_KEY            = "arscene_key";
 	private static final String FILE_TYPE              = ".sfb";
 
 	private ModelRenderable        frameRenderable;
 	private ImageView              fitToScanView;
 	private ImageButton            expandThumbnailButton;
 	private ImageButton            saveSceneButton;
+	private ImageButton            backSceneButton;
 	private boolean                installRequested;
 	private Session                session;
 	private boolean                shouldConfigureSession = false;
@@ -91,9 +99,11 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		modelRecyclerView = findViewById(R.id.model_thumbnail_list);
 		expandThumbnailButton = findViewById(R.id.expand_thumbnail_button);
 		saveSceneButton = findViewById(R.id.save_scene);
-		saveSceneButton.setOnClickListener(view -> {
-			showSaveDialog();
-		});
+		saveSceneButton.setOnClickListener(view -> showSaveDialog());
+		backSceneButton = findViewById(R.id.back_arscene);
+		backSceneButton.setOnClickListener(view -> finish());
+		arSceneView.getPlaneRenderer().setVisible(false);
+
 		obtainViewModel();
 		installRequested = false;
 		initializeSceneView();
@@ -101,7 +111,14 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		setupAdapter();
 		viewModel.getThumbnails().observe(this, drawables -> thumbnailAdapter.replaceItems(drawables));
 		viewModel.init();
+		if (viewModel.getArScene() != null) {
+			setupAugmentedImageMap();
+		}
 		initBottomBar();
+	}
+
+	private void setupAugmentedImageMap() {
+
 	}
 
 	private void setupAdapter() {
@@ -110,24 +127,6 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		modelRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 		modelRecyclerView.setAdapter(thumbnailAdapter);
 	}
-
-	private void initBottomBar() {
-		expandThumbnailButton.setOnClickListener((view) -> {
-			int visibility = modelRecyclerView.getVisibility() == View.GONE ? View.VISIBLE : View.GONE;
-			CoordinatorLayout.LayoutParams paramsExpand = (CoordinatorLayout.LayoutParams) expandThumbnailButton.getLayoutParams();
-			if (visibility == View.GONE) {
-				paramsExpand.setAnchorId(R.id.surfaceview);
-				paramsExpand.anchorGravity = Gravity.BOTTOM | Gravity.CENTER;
-				expandThumbnailButton.setImageResource(R.drawable.chevron_up);
-			} else {
-				paramsExpand.setAnchorId(R.id.model_thumbnail_list);
-				paramsExpand.anchorGravity = Gravity.TOP | Gravity.CENTER;
-				expandThumbnailButton.setImageResource(R.drawable.chevron_down);
-			}
-			modelRecyclerView.setVisibility(visibility);
-		});
-	}
-
 
 	@Override
 	protected void onResume() {
@@ -205,36 +204,42 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		for (AugmentedImage augmentedImage : updatedAugmentedImages) {
 			if (augmentedImage.getTrackingState() == TrackingState.TRACKING) {
 				fitToScanView.setVisibility(View.GONE);
-				if (!augmentedImageMap.containsKey(augmentedImage.getName())) {
-					AugmentedImageAnchor node = new AugmentedImageAnchor();
-					node.setImage(augmentedImage);
-					PlaceholderNode placeholder = createPlaceholder();
-					placeholder.setParent(node);
-					arSceneView.getScene().addChild(node);
-					augmentedImageMap.put(augmentedImage.getName(), node);
-				} else {
-					//TODO maybe nothing
-				}
+				updateAugmentedImage(augmentedImage);
 			}
 		}
 	}
 
-	private PlaceholderNode createPlaceholder() {
+	private void updateAugmentedImage(AugmentedImage augmentedImage) {
+		if (!augmentedImageMap.containsKey(augmentedImage.getName())) {
+			//TODO ViewModel ARScene Edit. Check if for augmentedImage is a entry
+			AugmentedImageAnchor imageAnchor = new AugmentedImageAnchor();
+			imageAnchor.setImage(augmentedImage);
+			if (viewModel.containsArSceneObject(augmentedImage.getName())) {
+				ArImageToObjectRelation arSceneObjectFileName = viewModel.getArSceneObjectFileName(augmentedImage.getName());
+				createObjectARImageNode(imageAnchor, arSceneObjectFileName.getImageName());
+				showExpandThumbnailButton();
+			} else {
+				attachNewPlaceholder(imageAnchor);
+				augmentedImageMap.put(augmentedImage.getName(), imageAnchor);
+			}
+			arSceneView.getScene().addChild(imageAnchor);
+		}
+	}
+
+	private PlaceholderNode attachNewPlaceholder(Node parent) {
 		PlaceholderNode placeholder = new PlaceholderNode(frameRenderable);
 		placeholder.setOnTapListener((hitTestResult, motionEvent) -> {
 			showBottomThumbnails();
-			currentSelection = placeholder;
-			cursorNode.setParent(placeholder);
+			attachCursorNode(placeholder);
 		});
+		placeholder.setParent(parent);
 		return placeholder;
 	}
 
 	private void initPlacing() {
 		ModelRenderable.builder().setSource(this, R.raw.frame).build().thenAccept(renderable -> frameRenderable = renderable);
 		ModelRenderable.builder().setSource(this, R.raw.arrow).build().thenAccept(renderable -> cursorNode = new CursorNode(renderable));
-		ViewRenderable.builder().setView(this, R.layout.delete_view).build().thenAccept((renderable) -> {
-			deleteNode = new DeleteNode(renderable);
-		});
+		ViewRenderable.builder().setView(this, R.layout.delete_view).build().thenAccept((renderable) -> deleteNode = new DeleteNode(renderable));
 	}
 
 	private void showBottomThumbnails() {
@@ -244,6 +249,10 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		paramsExpand.setAnchorId(R.id.model_thumbnail_list);
 		paramsExpand.anchorGravity = Gravity.TOP | Gravity.CENTER;
 		expandThumbnailButton.setImageResource(R.drawable.chevron_down);
+	}
+
+	private void showExpandThumbnailButton() {
+		expandThumbnailButton.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -321,10 +330,16 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 
 	private void obtainViewModel() {
 		viewModel = ViewModelProviders.of(this, createFactory()).get(ArImageMarkerViewModel.class);
+		ARScene arScene = getIntent().getParcelableExtra(ARSCENE_KEY);
+		viewModel.setArScene(arScene);
 	}
 
 	private ArImageMarkerViewModelFactory createFactory() {
-		return new ArImageMarkerViewModelFactory(getApplication());
+		StudyDatabase database = StudyDatabase.getInstance(this);
+		ArSceneDao arSceneDao = database.arSceneDao();
+		ArImageToObjectRelationDao arImageToObjectRelationDao = database.arImageToObjectRelationDao();
+		ArSceneRepository arSceneRepository = new ArSceneRepository(arSceneDao, arImageToObjectRelationDao);
+		return new ArImageMarkerViewModelFactory(getApplication(), arSceneRepository);
 	}
 
 	@Override
@@ -332,36 +347,60 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		if (currentSelection == null) {
 			return;
 		}
+		replaceObjectAR(imageName, currentSelection);
+	}
+
+	private void createObjectARImageNode(Node parent, String imageName) {
 		String sjbFile = imageName.replace("png", "sfb");
 		ModelRenderable.builder().setSource(this, Uri.parse(sjbFile)).build().thenAccept(renderable -> {
-			AugmentedImageAnchor parent = (AugmentedImageAnchor) currentSelection.getParent();
-			parent.removeChild(currentSelection);
-			augmentedImageMap.remove(parent.getName());
-			ObjectARImageNode node = new ObjectARImageNode(renderable);
+			ObjectARImageNode node = new ObjectARImageNode(sjbFile, renderable);
 			node.setParent(parent);
 			node.setOnTapListener((hitTestResult, motionEvent) -> {
-				currentSelection = node;
-				cursorNode.setParent(node);
-				deleteNode.setParent(node);
-				deleteNode.setOnTapListener((hitTestResult1, motionEvent1) -> {
-					AugmentedImageAnchor anchor = (AugmentedImageAnchor) node.getParent();
-					anchor.removeChild(node);
-					PlaceholderNode placeholder = createPlaceholder();
-					placeholder.setParent(anchor);
-					showSaveButton();
-					currentSelection = null;
-				});
+				attachCursorNode(node);
+				attachDeleteNode(node);
 			});
-			augmentedImageMap.put(parent.getName(), node);
+			if (parent instanceof AugmentedImageAnchor) {
+				AugmentedImageAnchor augmentedImageAnchor = (AugmentedImageAnchor) parent;
+				augmentedImageMap.put(augmentedImageAnchor.getImage().getName(), node);
+			}
+			attachCursorNode(node);
 			showSaveButton();
-			currentSelection = node;
-			cursorNode.setParent(node);
 		}).exceptionally(throwable -> {
 			Toast toast = Toast.makeText(this, "Laden der SFB Datei nicht möglich. Heißen Bilddatei und 3D Modell-Datei gleich?", Toast.LENGTH_LONG);
 			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.show();
 			return null;
 		});
+	}
+
+	private void replaceObjectAR(String imageName, Node parent) {
+		Node anchor = parent;
+		if (parent != null) {
+			anchor = parent.getParent();
+			anchor.removeChild(parent);
+		}
+		createObjectARImageNode(anchor, imageName);
+	}
+
+
+	private void attachDeleteNode(Node node) {
+		deleteNode.setParent(node);
+		deleteNode.setOnTapListener((hitTestResult, motionEvent) -> {
+			AugmentedImageAnchor imageAnchor = (AugmentedImageAnchor) node.getParent();
+			imageAnchor.removeChild(node);
+			attachNewPlaceholder(imageAnchor);
+			showSaveButton();
+			attachCursorNode(null);
+		});
+	}
+
+	private void attachCursorNode(Node node) {
+		if (currentSelection == null || !currentSelection.equals(node)) {
+			currentSelection = node;
+			cursorNode.setParent(node);
+			attachDeleteNode(null);
+		}
+
 	}
 
 	private void showSaveButton() {
@@ -377,22 +416,35 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		LayoutInflater inflater = getLayoutInflater();
 		builder.setTitle(R.string.dialog_title_save_ar_scene);
 		View dialogView = inflater.inflate(R.layout.dialog_save_arscene, null);
-		TextInputEditText titleInput = dialogView.findViewById(R.id.arscene_title);
-		TextInputEditText descriptionInput = dialogView.findViewById(R.id.arscene_description);
+		TextInputEditText titleInput = dialogView.findViewById(R.id.arscene_title_edit);
+		TextInputEditText descriptionInput = dialogView.findViewById(R.id.arscene_description_edit);
 		builder.setView(dialogView).setPositiveButton(R.string.save, (dialog, which) -> {
-			boolean validInput = true;
-			validInput &= validateInput(titleInput, R.string.dialog_arscene_error_title);
+			boolean validInput = validateInput(titleInput, R.string.dialog_arscene_error_title);
 			validInput &= validateInput(descriptionInput, R.string.dialog_arscene_error_description);
 			if (validInput) {
 				String title = titleInput.getText().toString();
 				String description = descriptionInput.getText().toString();
-				//viewModel.save(title, description, );
+				if (viewModel.getArScene() != null) {
+					ARScene arScene = viewModel.getArScene();
+					arScene.setName(title);
+					arScene.setDescription(description);
+					viewModel.update(arScene, augmentedImageMap);
+				} else {
+					viewModel.save(title, description, augmentedImageMap);
+				}
 				finish();
 			}
+
 		});
 		builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
+		builder.setCancelable(false);
+		if (viewModel.getArScene() != null) {
+			titleInput.setText(viewModel.getArScene().getName());
+			descriptionInput.setText(viewModel.getArScene().getDescription());
+		}
 		builder.create().show();
 	}
+
 
 	private boolean validateInput(TextInputEditText editText, int errorCode) {
 		if (editText.getText().toString().isEmpty()) {
@@ -400,5 +452,22 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 			return false;
 		}
 		return true;
+	}
+
+	private void initBottomBar() {
+		expandThumbnailButton.setOnClickListener((view) -> {
+			int visibility = modelRecyclerView.getVisibility() == View.GONE ? View.VISIBLE : View.GONE;
+			CoordinatorLayout.LayoutParams paramsExpand = (CoordinatorLayout.LayoutParams) expandThumbnailButton.getLayoutParams();
+			if (visibility == View.GONE) {
+				paramsExpand.setAnchorId(R.id.surfaceview);
+				paramsExpand.anchorGravity = Gravity.BOTTOM | Gravity.CENTER;
+				expandThumbnailButton.setImageResource(R.drawable.chevron_up);
+			} else {
+				paramsExpand.setAnchorId(R.id.model_thumbnail_list);
+				paramsExpand.anchorGravity = Gravity.TOP | Gravity.CENTER;
+				expandThumbnailButton.setImageResource(R.drawable.chevron_down);
+			}
+			modelRecyclerView.setVisibility(visibility);
+		});
 	}
 }

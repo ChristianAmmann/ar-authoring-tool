@@ -18,7 +18,7 @@ public class ArSceneAdapter extends RecyclerView.Adapter<ArSceneViewHolder> {
 	private List<ARScene>   arScenes;
 	private ArSceneListener arSceneListener;
 
-	public ArSceneAdapter(List<ARScene> arScenes, ArSceneListener ArSceneListener) {
+	public ArSceneAdapter(List<ARScene> arScenes, ArSceneListener arSceneListener) {
 		this.arScenes = arScenes;
 		this.arSceneListener = arSceneListener;
 
@@ -27,15 +27,17 @@ public class ArSceneAdapter extends RecyclerView.Adapter<ArSceneViewHolder> {
 	@NonNull
 	@Override
 	public ArSceneViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_study, parent, false);
+		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_arscene, parent, false);
 		return new ArSceneViewHolder(view);
 	}
 
 	@Override
 	public void onBindViewHolder(@NonNull ArSceneViewHolder holder, int position) {
 		ARScene arScene = arScenes.get(position);
-		//TODO fill values
-
+		holder.getArSceneName().setText(arScene.getName());
+		holder.getArSceneDescription().setText(arScene.getDescription());
+		holder.getMoreButton().setOnClickListener(view -> arSceneListener.onPopupMenuClick(view, arScene));
+		holder.getLoadButton().setOnClickListener(view -> arSceneListener.onArSceneLoadClick(arScene));
 	}
 
 	@Override

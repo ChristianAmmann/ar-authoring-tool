@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import ncxp.de.mobiledatacollection.model.dao.ArImageToObjectRelationDao;
 import ncxp.de.mobiledatacollection.model.dao.ArSceneDao;
 import ncxp.de.mobiledatacollection.model.dao.DataDao;
 import ncxp.de.mobiledatacollection.model.dao.DeviceSensorDao;
@@ -15,6 +16,7 @@ import ncxp.de.mobiledatacollection.model.dao.StudyMeasurementJoinDao;
 import ncxp.de.mobiledatacollection.model.dao.SurveyDao;
 import ncxp.de.mobiledatacollection.model.dao.TestPersonDao;
 import ncxp.de.mobiledatacollection.model.data.ARScene;
+import ncxp.de.mobiledatacollection.model.data.ArImageToObjectRelation;
 import ncxp.de.mobiledatacollection.model.data.Data;
 import ncxp.de.mobiledatacollection.model.data.DeviceSensor;
 import ncxp.de.mobiledatacollection.model.data.Measurement;
@@ -32,8 +34,9 @@ import ncxp.de.mobiledatacollection.model.data.TestPerson;
 		Measurement.class,
 		Data.class,
 		ARScene.class,
+		ArImageToObjectRelation.class,
 		StudyDeviceSensorJoin.class,
-		StudyMeasurementJoin.class,}, version = 1, exportSchema = false)
+		StudyMeasurementJoin.class}, version = 1, exportSchema = false)
 public abstract class StudyDatabase extends RoomDatabase {
 
 	public static final String DATABASE_NAME = "studies.db";
@@ -57,6 +60,8 @@ public abstract class StudyDatabase extends RoomDatabase {
 	public abstract StudyMeasurementJoinDao studyMeasurementJoinDao();
 
 	public abstract MeasurementDao measurement();
+
+	public abstract ArImageToObjectRelationDao arImageToObjectRelationDao();
 
 	public static StudyDatabase getInstance(final Context context) {
 		if (instance == null) {

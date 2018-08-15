@@ -36,7 +36,7 @@
       collision: {},
       file: "../../mobiledatacollection/app/sampledata/cat/Mesh_Cat.obj",
       name: "Mesh_Cat",
-      scale: 0.0075,
+      scale: 0.00375,
    },
    samplers: [
       {

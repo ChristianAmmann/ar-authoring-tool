@@ -87,7 +87,7 @@
       collision: {},
       file: "../../mobiledatacollection/app/sampledata/wolf/Wolf_01.obj",
       name: "Wolf_01",
-      scale: 0.05,
+      scale: 0.025,
    },
    version: "0.51:1",
 }

@@ -30,7 +30,6 @@ public class ArSceneViewModel extends ViewModel {
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
 			List<ARScene> fetchedData = arSceneRepo.getArScenes();
-			//TODO get Mapping
 			arScenes.postValue(fetchedData);
 		});
 	}

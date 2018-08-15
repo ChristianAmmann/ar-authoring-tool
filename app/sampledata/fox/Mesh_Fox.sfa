@@ -36,7 +36,7 @@
       collision: {},
       file: "../../mobiledatacollection/app/sampledata/fox/Mesh_Fox.obj",
       name: "Mesh_Fox",
-      scale: 0.015,
+      scale: 0.0075,
    },
    samplers: [
       {
