@@ -1,17 +1,11 @@
 package ncxp.de.mobiledatacollection;
 
-import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,23 +19,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.AugmentedImage;
 import com.google.ar.core.AugmentedImageDatabase;
 import com.google.ar.core.Config;
 import com.google.ar.core.Frame;
 import com.google.ar.core.Session;
 import com.google.ar.core.TrackingState;
-import com.google.ar.core.exceptions.CameraNotAvailableException;
 import com.google.ar.core.exceptions.UnavailableApkTooOldException;
 import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException;
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
-import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
-import com.google.ar.sceneform.ArSceneView;
 import com.google.ar.sceneform.FrameTime;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.rendering.ViewRenderable;
+import com.google.ar.sceneform.ux.ArFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -72,19 +63,18 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 	private static final int    CAMERA_PERMISSION_CODE = 1234;
 	public static final  String ARSCENE_KEY            = "arscene_key";
 	private static final String FILE_TYPE              = ".sfb";
+	public static final  String AUGMENTED_IMAGE_DB     = "markers.imgdb";
 
+	private ArFragment             arFragment;
+	private Session                session;
 	private ModelRenderable        frameRenderable;
 	private ImageView              fitToScanView;
 	private ImageButton            expandThumbnailButton;
 	private ImageButton            saveSceneButton;
 	private ImageButton            backSceneButton;
-	private boolean                installRequested;
-	private Session                session;
-	private boolean                shouldConfigureSession = false;
-	private ArSceneView            arSceneView;
 	private RecyclerView           modelRecyclerView;
 	private ThumbnailAdapter       thumbnailAdapter;
-	private Map<String, Node>      augmentedImageMap      = new HashMap<>();
+	private Map<String, Node>      augmentedImageMap = new HashMap<>();
 	private ArImageMarkerViewModel viewModel;
 	private Node                   currentSelection;
 	private CursorNode             cursorNode;
@@ -94,7 +84,7 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_arimage_marker);
-		arSceneView = findViewById(R.id.surfaceview);
+		arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ar_marker_fragment);
 		fitToScanView = findViewById(R.id.image_view_fit_to_scan);
 		modelRecyclerView = findViewById(R.id.model_thumbnail_list);
 		expandThumbnailButton = findViewById(R.id.expand_thumbnail_button);
@@ -102,23 +92,17 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		saveSceneButton.setOnClickListener(view -> showSaveDialog());
 		backSceneButton = findViewById(R.id.back_arscene);
 		backSceneButton.setOnClickListener(view -> finish());
-		arSceneView.getPlaneRenderer().setVisible(false);
-
+		arFragment.getArSceneView().getPlaneRenderer().setVisible(false);
+		arFragment.getArSceneView().getScene().setOnUpdateListener(this::onUpdateFrame);
+		arFragment.getPlaneDiscoveryController().hide();
+		arFragment.getPlaneDiscoveryController().setInstructionView(null);
 		obtainViewModel();
-		installRequested = false;
-		initializeSceneView();
 		initPlacing();
 		setupAdapter();
 		viewModel.getThumbnails().observe(this, drawables -> thumbnailAdapter.replaceItems(drawables));
 		viewModel.init();
-		if (viewModel.getArScene() != null) {
-			setupAugmentedImageMap();
-		}
 		initBottomBar();
-	}
-
-	private void setupAugmentedImageMap() {
-
+		setupAugmentedImageDatabase();
 	}
 
 	private void setupAdapter() {
@@ -128,78 +112,8 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		modelRecyclerView.setAdapter(thumbnailAdapter);
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if (session == null) {
-			Exception exception = null;
-			String message = null;
-			try {
-				switch (ArCoreApk.getInstance().requestInstall(this, !installRequested)) {
-					case INSTALL_REQUESTED:
-						installRequested = true;
-						return;
-					case INSTALLED:
-						break;
-				}
-
-				// ARCore requires camera permissions to operate. If we did not yet obtain runtime
-				// permission on Android M and above, now is a good time to ask the user for it.
-				if (!hasCameraPermission()) {
-					requestCameraPermission();
-					return;
-				}
-
-				session = new Session(/* context = */ this);
-			} catch (UnavailableArcoreNotInstalledException | UnavailableUserDeclinedInstallationException e) {
-				message = "Please install ARCore";
-				exception = e;
-			} catch (UnavailableApkTooOldException e) {
-				message = "Please update ARCore";
-				exception = e;
-			} catch (UnavailableSdkTooOldException e) {
-				message = "Please update this app";
-				exception = e;
-			} catch (Exception e) {
-				message = "This device does not support AR";
-				exception = e;
-			}
-
-			if (message != null) {
-				Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-				Log.e(TAG, "Exception creating session", exception);
-				return;
-			}
-
-			shouldConfigureSession = true;
-		}
-
-		if (shouldConfigureSession) {
-			configureSession();
-			shouldConfigureSession = false;
-			arSceneView.setupSession(session);
-		}
-
-		// Note that order matters - see the note in onPause(), the reverse applies here.
-		try {
-			session.resume();
-			arSceneView.resume();
-		} catch (CameraNotAvailableException e) {
-			// In some cases (such as another camera app launching) the camera may be given to
-			// a different app instead. Handle this properly by showing a message and recreate the
-			// session at the next iteration.
-			Toast.makeText(this, "Camera not available. Please restart the app.", Toast.LENGTH_LONG).show();
-			session = null;
-			return;
-		}
-	}
-
-	private void initializeSceneView() {
-		arSceneView.getScene().setOnUpdateListener((this::onUpdateFrame));
-	}
-
 	private void onUpdateFrame(FrameTime frameTime) {
-		Frame frame = arSceneView.getArFrame();
+		Frame frame = arFragment.getArSceneView().getArFrame();
 		Collection<AugmentedImage> updatedAugmentedImages = frame.getUpdatedTrackables(AugmentedImage.class);
 		for (AugmentedImage augmentedImage : updatedAugmentedImages) {
 			if (augmentedImage.getTrackingState() == TrackingState.TRACKING) {
@@ -211,7 +125,6 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 
 	private void updateAugmentedImage(AugmentedImage augmentedImage) {
 		if (!augmentedImageMap.containsKey(augmentedImage.getName())) {
-			//TODO ViewModel ARScene Edit. Check if for augmentedImage is a entry
 			AugmentedImageAnchor imageAnchor = new AugmentedImageAnchor();
 			imageAnchor.setImage(augmentedImage);
 			if (viewModel.containsArSceneObject(augmentedImage.getName())) {
@@ -222,7 +135,7 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 				attachNewPlaceholder(imageAnchor);
 				augmentedImageMap.put(augmentedImage.getName(), imageAnchor);
 			}
-			arSceneView.getScene().addChild(imageAnchor);
+			arFragment.getArSceneView().getScene().addChild(imageAnchor);
 		}
 	}
 
@@ -255,36 +168,26 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		expandThumbnailButton.setVisibility(View.VISIBLE);
 	}
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		if (session != null) {
-			// Note that the order matters - GLSurfaceView is paused first so that it does not try
-			// to query the session. If Session is paused before GLSurfaceView, GLSurfaceView may
-			// still call session.update() and get a SessionPausedException.
-			arSceneView.pause();
-			session.pause();
+	private boolean setupAugmentedImageDatabase() {
+		session = arFragment.getArSceneView().getSession();
+		if (session == null) {
+			try {
+				arFragment.getArSceneView().setupSession(new Session(this));
+			} catch (UnavailableArcoreNotInstalledException | UnavailableSdkTooOldException | UnavailableApkTooOldException e) {
+				e.printStackTrace();
+			}
+			session = arFragment.getArSceneView().getSession();
 		}
-	}
-
-	private void configureSession() {
-		Config config = new Config(session);
-		if (!setupAugmentedImageDatabase(config)) {
-			Toast.makeText(this, "Could not setup augmented image database", Toast.LENGTH_LONG).show();
-		}
-		session.configure(config);
-	}
-
-	private boolean setupAugmentedImageDatabase(Config config) {
 		AugmentedImageDatabase augmentedImageDatabase;
-
-		try (InputStream is = getAssets().open("markers.imgdb")) {
+		try (InputStream is = getAssets().open(AUGMENTED_IMAGE_DB)) {
 			augmentedImageDatabase = AugmentedImageDatabase.deserialize(session, is);
 		} catch (IOException e) {
 			Log.e(TAG, "IO exception loading augmented image database.", e);
 			return false;
 		}
+		Config config = new Config(session);
 		config.setAugmentedImageDatabase(augmentedImageDatabase);
+		session.configure(config);
 		return true;
 	}
 
@@ -297,34 +200,6 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View
 						.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 			this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		}
-	}
-
-	private boolean shouldShowRequestPermissionRationale() {
-		return ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA);
-	}
-
-
-	private boolean hasCameraPermission() {
-		return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
-	}
-
-	private void requestCameraPermission() {
-		ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
-	}
-
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] results) {
-		if (hasCameraPermission()) {
-			Toast.makeText(this, "Camera permissions are needed to run this application", Toast.LENGTH_LONG).show();
-			if (!shouldShowRequestPermissionRationale()) {
-				// Permission denied with checking "Do not ask again".
-				Intent intent = new Intent();
-				intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-				intent.setData(Uri.fromParts("package", this.getPackageName(), null));
-				startActivity(intent);
-			}
-			finish();
 		}
 	}
 
@@ -459,7 +334,7 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 			int visibility = modelRecyclerView.getVisibility() == View.GONE ? View.VISIBLE : View.GONE;
 			CoordinatorLayout.LayoutParams paramsExpand = (CoordinatorLayout.LayoutParams) expandThumbnailButton.getLayoutParams();
 			if (visibility == View.GONE) {
-				paramsExpand.setAnchorId(R.id.surfaceview);
+				paramsExpand.setAnchorId(R.id.ar_marker_fragment);
 				paramsExpand.anchorGravity = Gravity.BOTTOM | Gravity.CENTER;
 				expandThumbnailButton.setImageResource(R.drawable.chevron_up);
 			} else {

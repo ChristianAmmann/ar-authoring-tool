@@ -5,8 +5,9 @@
 												 android:layout_width="match_parent"
 												 android:layout_height="match_parent">
 
-	<com.google.ar.sceneform.ArSceneView
-		android:id="@+id/surfaceview"
+	<fragment
+		android:id="@+id/ar_marker_fragment"
+		android:name="com.google.ar.sceneform.ux.ArFragment"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"/>
 
@@ -18,7 +19,7 @@
 		android:background="@null"
 		android:src="@drawable/content_save"
 		android:visibility="gone"
-		app:layout_anchor="@+id/surfaceview"
+		app:layout_anchor="@+id/ar_marker_fragment"
 		app:layout_anchorGravity="top|right"/>
 
 	<ImageButton
@@ -28,7 +29,7 @@
 		android:layout_margin="@dimen/back_arcene_margin"
 		android:background="@null"
 		android:src="@drawable/arrow_left"
-		app:layout_anchor="@+id/surfaceview"
+		app:layout_anchor="@+id/ar_marker_fragment"
 		app:layout_anchorGravity="top|left"/>
 
 	<ImageView
@@ -50,7 +51,7 @@
 		android:src="@drawable/chevron_up"
 		android:tint="@android:color/white"
 		android:visibility="gone"
-		app:layout_anchor="@+id/surfaceview"
+		app:layout_anchor="@+id/ar_marker_fragment"
 		app:layout_anchorGravity="bottom|center"/>
 
 	<android.support.v7.widget.RecyclerView
@@ -59,7 +60,7 @@
 		android:layout_height="wrap_content"
 		android:background="@color/light_black"
 		android:visibility="gone"
-		app:layout_anchor="@+id/surfaceview"
+		app:layout_anchor="@+id/ar_marker_fragment"
 		app:layout_anchorGravity="bottom|center"/>
 
 </android.support.design.widget.CoordinatorLayout>
