@@ -1,17 +1,29 @@
 package ncxp.de.mobiledatacollection.sceneform;
 
-import com.google.ar.sceneform.Node;
-import com.google.ar.sceneform.math.Vector3;
+import com.google.ar.sceneform.rendering.Material;
 import com.google.ar.sceneform.rendering.ModelRenderable;
+import com.google.ar.sceneform.Node;
 
 public class PlaceholderNode extends Node {
 
-	public PlaceholderNode(ModelRenderable frameRenderable) {
-		create(frameRenderable);
+	private Material        highlight;
+	private ModelRenderable frameRenderable;
+
+	public PlaceholderNode(ModelRenderable frameRenderable, Material highlight) {
+		this.highlight = highlight;
+		this.frameRenderable = frameRenderable;
+		setRenderable(frameRenderable);
+
 	}
 
-	private void create(ModelRenderable frameRenderable) {
-		setRenderable(frameRenderable);
-		setLocalScale(new Vector3(0.3f, 0.3f, 0.4f));
+	public void select() {
+		ModelRenderable modelRenderable = frameRenderable.makeCopy();
+		modelRenderable.setMaterial(highlight);
+		setRenderable(modelRenderable);
 	}
+
+	public void unselect() {
+		setRenderable(frameRenderable);
+	}
+
 }

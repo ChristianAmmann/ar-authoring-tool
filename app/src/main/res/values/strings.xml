@@ -194,4 +194,6 @@
 	<string name="dialog_title_save_ar_scene">AR-Szene speichern?</string>
 	<string name="dialog_arscene_error_title">Die AR-Szene benötigt einen Titel</string>
 	<string name="dialog_arscene_error_description">Die AR-Szene benötigt eine Beschreibung</string>
+	<string name="dialog_ar_objects_delete_all">AR-Objekte löschen?</string>
+	<string name="dialog_ar_objects_delete_all_message">Wollen Sie wirklich alle gesetzten Objekte löschen?</string>
 </resources>

@@ -35,6 +35,7 @@
       collision: {},
       file: "../../mobiledatacollection/app/sampledata/placeholder/model.obj",
       name: "model",
+      scale: 0.28,
    },
    version: "0.51:1",
 }

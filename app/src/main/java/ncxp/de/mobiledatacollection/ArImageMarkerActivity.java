@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.ar.core.AugmentedImage;
@@ -30,9 +31,15 @@ import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException;
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
 import com.google.ar.sceneform.FrameTime;
 import com.google.ar.sceneform.Node;
+import com.google.ar.sceneform.rendering.Color;
+import com.google.ar.sceneform.rendering.Material;
+import com.google.ar.sceneform.rendering.MaterialFactory;
 import com.google.ar.sceneform.rendering.ModelRenderable;
+import com.google.ar.sceneform.rendering.PlaneRenderer;
+import com.google.ar.sceneform.rendering.Texture;
 import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
+import com.google.ar.sceneform.ux.TransformationSystem;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import ncxp.de.mobiledatacollection.model.StudyDatabase;
 import ncxp.de.mobiledatacollection.model.dao.ArImageToObjectRelationDao;
@@ -48,7 +56,6 @@ import ncxp.de.mobiledatacollection.model.data.ARScene;
 import ncxp.de.mobiledatacollection.model.data.ArImageToObjectRelation;
 import ncxp.de.mobiledatacollection.model.repository.ArSceneRepository;
 import ncxp.de.mobiledatacollection.sceneform.AugmentedImageAnchor;
-import ncxp.de.mobiledatacollection.sceneform.CursorNode;
 import ncxp.de.mobiledatacollection.sceneform.DeleteNode;
 import ncxp.de.mobiledatacollection.sceneform.ObjectARImageNode;
 import ncxp.de.mobiledatacollection.sceneform.PlaceholderNode;
@@ -56,29 +63,28 @@ import ncxp.de.mobiledatacollection.ui.arimagemarker.ArImageMarkerViewModel;
 import ncxp.de.mobiledatacollection.ui.arimagemarker.ArImageMarkerViewModelFactory;
 import ncxp.de.mobiledatacollection.ui.arimagemarker.ThumbnailAdapter;
 import ncxp.de.mobiledatacollection.ui.arimagemarker.ThumbnailListener;
+import ncxp.de.mobiledatacollection.ui.arimagemarker.TrashDragListener;
 
 public class ArImageMarkerActivity extends AppCompatActivity implements ThumbnailListener {
 
-	private static final String TAG                    = ArImageMarkerActivity.class.getCanonicalName();
-	private static final int    CAMERA_PERMISSION_CODE = 1234;
-	public static final  String ARSCENE_KEY            = "arscene_key";
-	private static final String FILE_TYPE              = ".sfb";
-	public static final  String AUGMENTED_IMAGE_DB     = "markers.imgdb";
+	private static final String TAG                = ArImageMarkerActivity.class.getCanonicalName();
+	public static final  String ARSCENE_KEY        = "arscene_key";
+	private static final String FILE_TYPE          = ".sfb";
+	public static final  String AUGMENTED_IMAGE_DB = "markers.imgdb";
 
 	private ArFragment             arFragment;
-	private Session                session;
+	private TransformationSystem   transformationSystem;
 	private ModelRenderable        frameRenderable;
 	private ImageView              fitToScanView;
 	private ImageButton            expandThumbnailButton;
-	private ImageButton            saveSceneButton;
-	private ImageButton            backSceneButton;
+	private LinearLayout           actionButtonsContainer;
 	private RecyclerView           modelRecyclerView;
 	private ThumbnailAdapter       thumbnailAdapter;
 	private Map<String, Node>      augmentedImageMap = new HashMap<>();
 	private ArImageMarkerViewModel viewModel;
-	private Node                   currentSelection;
-	private CursorNode             cursorNode;
 	private DeleteNode             deleteNode;
+	private Material               highlight;
+	private Node                   currentSelectedNode;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,14 +94,15 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		fitToScanView = findViewById(R.id.image_view_fit_to_scan);
 		modelRecyclerView = findViewById(R.id.model_thumbnail_list);
 		expandThumbnailButton = findViewById(R.id.expand_thumbnail_button);
-		saveSceneButton = findViewById(R.id.save_scene);
+		ImageButton saveSceneButton = findViewById(R.id.save_scene);
 		saveSceneButton.setOnClickListener(view -> showSaveDialog());
-		backSceneButton = findViewById(R.id.back_arscene);
+		ImageButton deleteButton = findViewById(R.id.delete_object);
+		deleteButton.setOnClickListener(view -> showDeleteDialog());
+		deleteButton.setOnDragListener(new TrashDragListener(R.drawable.delete_empty, R.drawable.delete));
+		actionButtonsContainer = findViewById(R.id.action_container);
+		ImageButton backSceneButton = findViewById(R.id.back_arscene);
 		backSceneButton.setOnClickListener(view -> finish());
-		arFragment.getArSceneView().getPlaneRenderer().setVisible(false);
-		arFragment.getArSceneView().getScene().setOnUpdateListener(this::onUpdateFrame);
-		arFragment.getPlaneDiscoveryController().hide();
-		arFragment.getPlaneDiscoveryController().setInstructionView(null);
+		setupArFragment();
 		obtainViewModel();
 		initPlacing();
 		setupAdapter();
@@ -103,6 +110,22 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 		viewModel.init();
 		initBottomBar();
 		setupAugmentedImageDatabase();
+	}
+
+	private void setupArFragment() {
+		arFragment.getArSceneView().getScene().setOnUpdateListener(this::onUpdateFrame);
+		arFragment.getPlaneDiscoveryController().hide();
+		arFragment.getPlaneDiscoveryController().setInstructionView(null);
+		//TODO Outline shader
+		transformationSystem = arFragment.getTransformationSystem();
+		Texture.Sampler sampler = Texture.Sampler.builder()
+												 .setMinFilter(Texture.Sampler.MinFilter.LINEAR)
+												 .setMagFilter(Texture.Sampler.MagFilter.LINEAR)
+												 .setWrapMode(Texture.Sampler.WrapMode.REPEAT)
+												 .build();
+
+		CompletableFuture<Texture> hexagon = Texture.builder().setSource(this, R.drawable.hexagon).setSampler(sampler).build();
+		arFragment.getArSceneView().getPlaneRenderer().getMaterial().thenAcceptBoth(hexagon, (material, texture) -> material.setTexture(PlaneRenderer.MATERIAL_TEXTURE, texture));
 	}
 
 	private void setupAdapter() {
@@ -140,19 +163,29 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 	}
 
 	private PlaceholderNode attachNewPlaceholder(Node parent) {
-		PlaceholderNode placeholder = new PlaceholderNode(frameRenderable);
+		PlaceholderNode placeholder = new PlaceholderNode(frameRenderable, highlight);
 		placeholder.setOnTapListener((hitTestResult, motionEvent) -> {
 			showBottomThumbnails();
-			attachCursorNode(placeholder);
+			if (currentSelectedNode instanceof PlaceholderNode && !currentSelectedNode.equals(placeholder)) {
+				((PlaceholderNode) currentSelectedNode).unselect();
+			}
+			currentSelectedNode = placeholder;
+			placeholder.select();
+
 		});
 		placeholder.setParent(parent);
 		return placeholder;
 	}
 
 	private void initPlacing() {
-		ModelRenderable.builder().setSource(this, R.raw.frame).build().thenAccept(renderable -> frameRenderable = renderable);
-		ModelRenderable.builder().setSource(this, R.raw.arrow).build().thenAccept(renderable -> cursorNode = new CursorNode(renderable));
+		ModelRenderable.builder().setSource(this, R.raw.frame).build().thenAccept(renderable -> {
+			MaterialFactory.makeOpaqueWithColor(this, new Color(0, 1f, 0)).thenAccept(material -> {
+				highlight = material;
+				frameRenderable = renderable;
+			});
+		});
 		ViewRenderable.builder().setView(this, R.layout.delete_view).build().thenAccept((renderable) -> deleteNode = new DeleteNode(renderable));
+
 	}
 
 	private void showBottomThumbnails() {
@@ -169,7 +202,7 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 	}
 
 	private boolean setupAugmentedImageDatabase() {
-		session = arFragment.getArSceneView().getSession();
+		Session session = arFragment.getArSceneView().getSession();
 		if (session == null) {
 			try {
 				arFragment.getArSceneView().setupSession(new Session(this));
@@ -219,27 +252,27 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 
 	@Override
 	public void onThumbnailClicked(String imageName) {
-		if (currentSelection == null) {
-			return;
-		}
-		replaceObjectAR(imageName, currentSelection);
+		replaceObjectAR(imageName, currentSelectedNode);
 	}
 
 	private void createObjectARImageNode(Node parent, String imageName) {
 		String sjbFile = imageName.replace("png", "sfb");
 		ModelRenderable.builder().setSource(this, Uri.parse(sjbFile)).build().thenAccept(renderable -> {
-			ObjectARImageNode node = new ObjectARImageNode(sjbFile, renderable);
+			ObjectARImageNode node = new ObjectARImageNode(transformationSystem, sjbFile, renderable, highlight);
 			node.setParent(parent);
 			node.setOnTapListener((hitTestResult, motionEvent) -> {
-				attachCursorNode(node);
-				attachDeleteNode(node);
+				//TODO figure best deletion method
+				//attachDeleteNode(node);
+				node.select();
+				currentSelectedNode = node;
 			});
 			if (parent instanceof AugmentedImageAnchor) {
 				AugmentedImageAnchor augmentedImageAnchor = (AugmentedImageAnchor) parent;
 				augmentedImageMap.put(augmentedImageAnchor.getImage().getName(), node);
 			}
-			attachCursorNode(node);
-			showSaveButton();
+			node.select();
+			currentSelectedNode = node;
+			showActionButtons();
 		}).exceptionally(throwable -> {
 			Toast toast = Toast.makeText(this, "Laden der SFB Datei nicht möglich. Heißen Bilddatei und 3D Modell-Datei gleich?", Toast.LENGTH_LONG);
 			toast.setGravity(Gravity.CENTER, 0, 0);
@@ -249,10 +282,13 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 	}
 
 	private void replaceObjectAR(String imageName, Node parent) {
-		Node anchor = parent;
+		Node anchor;
 		if (parent != null) {
 			anchor = parent.getParent();
 			anchor.removeChild(parent);
+		} else {
+			anchor = currentSelectedNode.getParent();
+			anchor.removeChild(currentSelectedNode);
 		}
 		createObjectARImageNode(anchor, imageName);
 	}
@@ -264,25 +300,15 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 			AugmentedImageAnchor imageAnchor = (AugmentedImageAnchor) node.getParent();
 			imageAnchor.removeChild(node);
 			attachNewPlaceholder(imageAnchor);
-			showSaveButton();
-			attachCursorNode(null);
+			showActionButtons();
 		});
 	}
 
-	private void attachCursorNode(Node node) {
-		if (currentSelection == null || !currentSelection.equals(node)) {
-			currentSelection = node;
-			cursorNode.setParent(node);
-			attachDeleteNode(null);
-		}
-
-	}
-
-	private void showSaveButton() {
+	private void showActionButtons() {
 		if (augmentedImageMap.values().stream().anyMatch(node -> node instanceof ObjectARImageNode)) {
-			saveSceneButton.setVisibility(View.VISIBLE);
+			actionButtonsContainer.setVisibility(View.VISIBLE);
 		} else {
-			saveSceneButton.setVisibility(View.GONE);
+			actionButtonsContainer.setVisibility(View.GONE);
 		}
 	}
 
@@ -327,6 +353,21 @@ public class ArImageMarkerActivity extends AppCompatActivity implements Thumbnai
 			return false;
 		}
 		return true;
+	}
+
+
+	private void showDeleteDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.dialog_ar_objects_delete_all).setMessage(R.string.dialog_ar_objects_delete_all_message);
+		builder.setPositiveButton(R.string.delete, (dialog, which) -> {
+			augmentedImageMap.forEach((key, value) -> {
+				if (value.getParent() != null) {
+					arFragment.getArSceneView().getScene().removeChild(value.getParent());
+				}
+			});
+			augmentedImageMap = new HashMap<>();
+			showActionButtons();
+		}).setNegativeButton(R.string.cancel, null).setCancelable(false).show();
 	}
 
 	private void initBottomBar() {
