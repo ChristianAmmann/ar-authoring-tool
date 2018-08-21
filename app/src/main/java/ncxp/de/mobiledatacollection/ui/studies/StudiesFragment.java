@@ -96,7 +96,7 @@ public class StudiesFragment extends Fragment implements StudyListener {
 	@Override
 	public void onStudyStartClick(Study study) {
 		Intent intent = new Intent(getActivity(), ArSceneActivity.class);
-		//TODO Study intent.putExtra(ArSceneActivity.KEY_STUDY, study);
+		intent.putExtra(ArSceneActivity.KEY_STUDY, study);
 		getActivity().startActivity(intent);
 	}
 

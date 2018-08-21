@@ -41,12 +41,6 @@
 		<activity android:name=".SurveyActivity"/>
 		<activity android:name=".OnboardingSurveyActivity"/>
 		<activity
-			android:name=".ArActivity"
-			android:configChanges="orientation|screenSize"
-			android:exported="true"
-			android:screenOrientation="locked"
-			android:theme="@style/ARTheme"/>
-		<activity
 			android:name=".ArCrosshairsTestActivity"
 			android:configChanges="orientation|screenSize"
 			android:exported="true"
@@ -57,7 +51,8 @@
 			android:name=".ArImageMarkerActivity"
 			android:configChanges="orientation|screenSize"
 			android:exported="true"
-			android:screenOrientation="locked"/>
+			android:screenOrientation="locked"
+			android:theme="@style/ARTheme"/>
 
 		<service android:name=".datalogger.SensorBackgroundService"/>
 	</application>

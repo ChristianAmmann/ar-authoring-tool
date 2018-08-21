@@ -9,12 +9,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import ncxp.de.mobiledatacollection.model.data.ARScene;
+import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.repository.ArSceneRepository;
 
 public class ArSceneViewModel extends ViewModel {
 
-	private ArSceneRepository arSceneRepo;
-
+	private ArSceneRepository              arSceneRepo;
+	private Study                          study;
 	private MutableLiveData<List<ARScene>> arScenes;
 
 	public ArSceneViewModel(ArSceneRepository arSceneRepo) {
@@ -46,5 +47,13 @@ public class ArSceneViewModel extends ViewModel {
 			currentScenes.remove(arScene);
 			arScenes.postValue(currentScenes);
 		});
+	}
+
+	public Study getStudy() {
+		return study;
+	}
+
+	public void setStudy(Study study) {
+		this.study = study;
 	}
 }

@@ -11,73 +11,9 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"/>
 
-	<LinearLayout
-		android:id="@+id/action_container"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:visibility="gone"
-		app:layout_anchor="@+id/ar_marker_fragment"
-		app:layout_anchorGravity="top|right">
-
-		<ImageButton
-			android:id="@+id/save_scene"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_margin="@dimen/save_arcene_margin"
-			android:background="@null"
-			android:src="@drawable/content_save"/>
-
-		<ImageButton
-			android:id="@+id/delete_object"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_margin="@dimen/delete_object_margin"
-			android:background="@null"
-			android:src="@drawable/delete_sweep"/>
-
-	</LinearLayout>
-
-
-	<ImageButton
-		android:id="@+id/back_arscene"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_margin="@dimen/back_arcene_margin"
-		android:background="@null"
-		android:src="@drawable/arrow_left"
-		app:layout_anchor="@+id/ar_marker_fragment"
-		app:layout_anchorGravity="top|left"/>
-
-	<ImageView
-		android:id="@+id/image_view_fit_to_scan"
+	<FrameLayout
+		android:id="@+id/editor_container"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:layout_gravity="center"
-		android:layout_margin="@dimen/spacing_large"
-		android:scaleType="fitCenter"
-		android:src="@drawable/fit_to_scan"/>
-
-	<ImageButton
-		android:id="@+id/expand_thumbnail_button"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:background="@null"
-		android:contentDescription="@string/expand_bottom_toolbar"
-		android:paddingBottom="@dimen/spacing_extra_large"
-		android:src="@drawable/chevron_up"
-		android:tint="@android:color/white"
-		android:visibility="gone"
-		app:layout_anchor="@+id/ar_marker_fragment"
-		app:layout_anchorGravity="bottom|center"/>
-
-	<android.support.v7.widget.RecyclerView
-		android:id="@+id/model_thumbnail_list"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:background="@color/light_black"
-		android:visibility="gone"
-		app:layout_anchor="@+id/ar_marker_fragment"
-		app:layout_anchorGravity="bottom|center"/>
+		android:layout_height="match_parent"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string-array name="scale_array">
-		<item>Keine</item>
 		<item>Geste Pinch</item>
 		<item>3D-Widget</item>
+		<item>Keine</item>
 	</string-array>
 </resources>
