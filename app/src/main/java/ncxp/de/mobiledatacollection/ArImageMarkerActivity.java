@@ -165,9 +165,10 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 		if (!viewModel.containsAugmentedImage(augmentedImage)) {
 			AugmentedImageAnchor imageAnchor = new AugmentedImageAnchor();
 			imageAnchor.setImage(augmentedImage);
+
 			if (viewModel.containsArSceneObject(augmentedImage.getName())) {
-				ArImageToObjectRelation arSceneObjectFileName = viewModel.getArSceneObjectFileName(augmentedImage.getName());
-				createObjectARImageNode(imageAnchor, arSceneObjectFileName.getImageName());
+				ArImageToObjectRelation arImageToObjectRelation = viewModel.getArSceneObjectFileName(augmentedImage.getName());
+				createObjectARImageNode(imageAnchor, arImageToObjectRelation);
 			} else {
 				attachNewPlaceholder(imageAnchor);
 				viewModel.addARObject(augmentedImage.getName(), imageAnchor);
@@ -257,7 +258,36 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 		return new ArImageMarkerViewModelFactory(activity.getApplication(), arSceneRepository);
 	}
 
+	private void createObjectARImageNode(Node parent, ArImageToObjectRelation arImageToObjectRelation) {
+		String sjbFile = arImageToObjectRelation.getImageName().replace("png", "sfb");
+		ModelRenderable.builder().setSource(this, Uri.parse(sjbFile)).build().thenAccept(renderable -> {
+			ObjectARImageNode node = new ObjectARImageNode(transformationSystem, sjbFile, renderable, highlight);
+			node.setLocalRotation(arImageToObjectRelation.getRotation());
+			node.setLocalScale(arImageToObjectRelation.getScale());
+			node.setParent(parent);
+			node.setOnTapListener((hitTestResult, motionEvent) -> {
+				//TODO figure best deletion method
+				//attachDeleteNode(node);
+				node.select();
+				viewModel.setCurrentSelectedNode(node);
+			});
+			if (parent instanceof AugmentedImageAnchor) {
+				AugmentedImageAnchor augmentedImageAnchor = (AugmentedImageAnchor) parent;
+				viewModel.addARObject(augmentedImageAnchor.getImage().getName(), node);
+			}
+			node.select();
+			viewModel.setCurrentSelectedNode(node);
+
+		}).exceptionally(throwable -> {
+			Toast toast = Toast.makeText(this, "Laden der SFB Datei nicht möglich. Heißen Bilddatei und 3D Modell-Datei gleich?", Toast.LENGTH_LONG);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+			return null;
+		});
+	}
+
 	private void createObjectARImageNode(Node parent, String imageName) {
+		//TODO Refactor
 		String sjbFile = imageName.replace("png", "sfb");
 		ModelRenderable.builder().setSource(this, Uri.parse(sjbFile)).build().thenAccept(renderable -> {
 			ObjectARImageNode node = new ObjectARImageNode(transformationSystem, sjbFile, renderable, highlight);

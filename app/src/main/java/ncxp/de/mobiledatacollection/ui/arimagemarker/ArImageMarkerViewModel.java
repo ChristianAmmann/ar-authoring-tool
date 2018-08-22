@@ -14,6 +14,8 @@ import android.support.annotation.NonNull;
 
 import com.google.ar.core.AugmentedImage;
 import com.google.ar.sceneform.Node;
+import com.google.ar.sceneform.math.Quaternion;
+import com.google.ar.sceneform.math.Vector3;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -128,7 +130,11 @@ public class ArImageMarkerViewModel extends AndroidViewModel {
 															  .filter(x -> x.getValue() instanceof ObjectARImageNode)
 															  .collect(Collectors.toMap(Map.Entry::getKey, x -> (ObjectARImageNode) x.getValue()));
 		List<ArImageToObjectRelation> relations = new ArrayList<>();
-		map.entrySet().forEach(x -> relations.add(new ArImageToObjectRelation(x.getKey(), x.getValue().getFileName())));
+		map.entrySet().forEach(x -> {
+			Vector3 scale = x.getValue().getLocalScale();
+			Quaternion rotation = x.getValue().getLocalRotation();
+			relations.add(new ArImageToObjectRelation(x.getKey(), x.getValue().getFileName(), scale, rotation));
+		});
 		return relations;
 	}
 
