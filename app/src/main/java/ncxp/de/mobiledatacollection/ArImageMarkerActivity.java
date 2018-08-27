@@ -25,6 +25,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -71,12 +72,16 @@ import ncxp.de.mobiledatacollection.sceneform.AugmentedImageAnchor;
 import ncxp.de.mobiledatacollection.sceneform.DeleteNode;
 import ncxp.de.mobiledatacollection.sceneform.ObjectARImageNode;
 import ncxp.de.mobiledatacollection.sceneform.PlaceholderNode;
+import ncxp.de.mobiledatacollection.sceneform.RotateWidgetNode;
+import ncxp.de.mobiledatacollection.sceneform.ScaleWidgetNode;
 import ncxp.de.mobiledatacollection.ui.arimagemarker.ArEditFragment;
 import ncxp.de.mobiledatacollection.ui.arimagemarker.ArImageMarkerViewModel;
 import ncxp.de.mobiledatacollection.ui.arimagemarker.ArImageMarkerViewModelFactory;
 import ncxp.de.mobiledatacollection.ui.arimagemarker.ArInteractionListener;
 import ncxp.de.mobiledatacollection.ui.arimagemarker.ArStudyFragment;
 import ncxp.de.mobiledatacollection.ui.arimagemarker.EditorState;
+import ncxp.de.mobiledatacollection.ui.arimagemarker.RotationTechnique;
+import ncxp.de.mobiledatacollection.ui.arimagemarker.ScaleTechnique;
 
 import static ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModel.DIRECTORY;
 
@@ -98,6 +103,8 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 
 	private ArImageMarkerViewModel viewModel;
 	private DeleteNode             deleteNode;
+	private ScaleWidgetNode        scaleWidgetNode;
+	private RotateWidgetNode       rotateWidgetNode;
 	private Material               highlight;
 	private ImageView              crosshair;
 	private GestureDetector        trackableGestureDetector;
@@ -149,7 +156,7 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 			switch (technique) {
 				case CROSSHAIR:
 					crosshair.setVisibility(View.VISIBLE);
-					arFragment.getArSceneView().getScene().setOnPeekTouchListener(this::handleOnTouch);
+					arFragment.getArSceneView().getScene().setOnPeekTouchListener(((hitTestResult, motionEvent) -> trackableGestureDetector.onTouchEvent(motionEvent)));
 
 					trackableGestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
 						@Override
@@ -170,12 +177,12 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 					break;
 				case RAYCASTING:
 					crosshair.setVisibility(View.GONE);
+					arFragment.getArSceneView().getScene().setOnPeekTouchListener((hitTestResult, motionEvent) -> arFragment.onPeekTouch(hitTestResult, motionEvent));
 					trackableGestureDetector = null;
 					break;
 			}
 		});
 		viewModel.getRotationTechnique().observe(this, technique -> {
-			Log.d(TAG, technique.getName());
 			switch (technique) {
 				case TWO_FINGER:
 					break;
@@ -185,7 +192,6 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 
 		});
 		viewModel.getScaleTechnique().observe(this, technique -> {
-			Log.d(TAG, technique.getName());
 			switch (technique) {
 				case PINCH:
 					break;
@@ -194,12 +200,6 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 			}
 		});
 	}
-
-	private void handleOnTouch(HitTestResult hitTestResult, MotionEvent motionEvent) {
-		// First call ArFragment's listener to handle TransformableNodes
-		trackableGestureDetector.onTouchEvent(motionEvent);
-	}
-
 
 	private void showEditModeFragment() {
 		getSupportFragmentManager().beginTransaction().replace(R.id.editor_container, ArEditFragment.newInstance(), null).commit();
@@ -213,9 +213,7 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 		arFragment.getArSceneView().getScene().setOnUpdateListener(this::onUpdateFrame);
 		arFragment.getPlaneDiscoveryController().hide();
 		arFragment.getPlaneDiscoveryController().setInstructionView(null);
-		//TODO Outline shader
 		transformationSystem = arFragment.getTransformationSystem();
-
 		Texture.Sampler sampler = Texture.Sampler.builder()
 												 .setMinFilter(Texture.Sampler.MinFilter.LINEAR)
 												 .setMagFilter(Texture.Sampler.MagFilter.LINEAR)
@@ -277,7 +275,32 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 			});
 		});
 		ViewRenderable.builder().setView(this, R.layout.delete_view).build().thenAccept((renderable) -> deleteNode = new DeleteNode(renderable));
+		ViewRenderable.builder().setView(this, R.layout.rotation_widget_controls).build().thenAccept(viewRenderable -> {
+			rotateWidgetNode = new RotateWidgetNode(viewRenderable);
+			View widgetView = viewRenderable.getView();
+			ImageButton rotateRightButton = widgetView.findViewById(R.id.rotate_right);
+			ImageButton rotateLeftButton = widgetView.findViewById(R.id.rotate_left);
+			rotateRightButton.setOnClickListener(view -> {
+				//TODO rotate selected Node right
+			});
+			rotateLeftButton.setOnClickListener(view -> {
+				//TODO rotate selected Node Left
+			});
 
+		});
+		ViewRenderable.builder().setView(this, R.layout.scale_widget_controls).build().thenAccept(viewRenderable -> {
+			scaleWidgetNode = new ScaleWidgetNode(viewRenderable);
+			View widgetView = viewRenderable.getView();
+			ImageButton scaleUpButton = widgetView.findViewById(R.id.scale_up);
+			ImageButton scaleDownButton = widgetView.findViewById(R.id.scale_down);
+			scaleUpButton.setOnClickListener(view -> {
+				//TODO scale selected Node up
+			});
+			scaleDownButton.setOnClickListener(view -> {
+				//TODO scale selected node down
+			});
+
+		});
 	}
 
 	private boolean setupAugmentedImageDatabase() {
@@ -345,6 +368,12 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 				//TODO figure best deletion method
 				//attachDeleteNode(node);
 				node.select();
+				if (viewModel.getScaleTechnique().getValue().equals(ScaleTechnique.WIDGET_3D)) {
+					attachScaleWidget(node);
+				}
+				if (viewModel.getRotationTechnique().getValue().equals(RotationTechnique.WIDGET_3D)) {
+					attachRotateWidget(node);
+				}
 				viewModel.setCurrentSelectedNode(node);
 			});
 			if (parent instanceof AugmentedImageAnchor) {
@@ -360,6 +389,16 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 			toast.show();
 			return null;
 		});
+	}
+
+	private void attachRotateWidget(ObjectARImageNode node) {
+		rotateWidgetNode.setParent(node);
+		rotateWidgetNode.setLocalPosition(node.getDown());
+	}
+
+	private void attachScaleWidget(ObjectARImageNode node) {
+		scaleWidgetNode.setParent(node);
+		scaleWidgetNode.setLocalPosition(node.getRight());
 	}
 
 	private void createObjectARImageNode(Node parent, String imageName) {
