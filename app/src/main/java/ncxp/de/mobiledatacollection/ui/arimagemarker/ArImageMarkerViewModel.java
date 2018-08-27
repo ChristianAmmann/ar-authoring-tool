@@ -39,15 +39,18 @@ import ncxp.de.mobiledatacollection.sceneform.ObjectARImageNode;
 public class ArImageMarkerViewModel extends AndroidViewModel {
 	private static final String FILE_TYPE = ".png";
 
-	private MutableLiveData<List<Thumbnail>> modelsThumbnails;
-	private ArSceneRepository                arSceneRepository;
-	private ARScene                          arScene;
-	private Study                            study;
-	private SensorBackgroundService          sensorBackgroundService;
-	private boolean                          bound = false;
-	private Map<String, Node>                augmentedImageMap;
-	private MutableLiveData<Node>            currentSelectedNode;
-	private EditorState                      state;
+	private MutableLiveData<List<Thumbnail>>    modelsThumbnails;
+	private ArSceneRepository                   arSceneRepository;
+	private ARScene                             arScene;
+	private Study                               study;
+	private SensorBackgroundService             sensorBackgroundService;
+	private boolean                             bound = false;
+	private Map<String, Node>                   augmentedImageMap;
+	private MutableLiveData<Node>               currentSelectedNode;
+	private EditorState                         state;
+	private MutableLiveData<SelectionTechnique> selectionTechnique;
+	private MutableLiveData<RotationTechnique>  rotationTechnique;
+	private MutableLiveData<ScaleTechnique>     scaleTechnique;
 
 
 	public ArImageMarkerViewModel(@NonNull Application application, ArSceneRepository arSceneRepository) {
@@ -59,6 +62,12 @@ public class ArImageMarkerViewModel extends AndroidViewModel {
 		currentSelectedNode = new MutableLiveData<>();
 		Intent intent = new Intent(getApplication(), SensorBackgroundService.class);
 		getApplication().bindService(intent, connection, Context.BIND_AUTO_CREATE);
+		selectionTechnique = new MutableLiveData<>();
+		selectionTechnique.postValue(SelectionTechnique.RAYCASTING);
+		rotationTechnique = new MutableLiveData<>();
+		rotationTechnique.postValue(RotationTechnique.TWO_FINGER);
+		scaleTechnique = new MutableLiveData<>();
+		scaleTechnique.postValue(ScaleTechnique.PINCH);
 	}
 
 	public LiveData<List<Thumbnail>> getThumbnails() {
@@ -90,7 +99,7 @@ public class ArImageMarkerViewModel extends AndroidViewModel {
 	}
 
 	private Drawable getDrawable(String file) {
-		InputStream inputStream = null;
+		InputStream inputStream;
 		Drawable drawable = null;
 		try {
 			inputStream = this.getApplication().getAssets().open(file);
@@ -238,5 +247,35 @@ public class ArImageMarkerViewModel extends AndroidViewModel {
 
 	public void setState(EditorState state) {
 		this.state = state;
+	}
+
+	public void setSelectionTechnique(SelectionTechnique selectionTechnique) {
+		this.selectionTechnique.postValue(selectionTechnique);
+	}
+
+	public void setRotationTechnique(RotationTechnique rotationTechnique) {
+		this.rotationTechnique.postValue(rotationTechnique);
+	}
+
+	public void setScaleTechnique(ScaleTechnique scaleTechnique) {
+		this.scaleTechnique.postValue(scaleTechnique);
+	}
+
+	public MutableLiveData<SelectionTechnique> getSelectionTechnique() {
+		return selectionTechnique;
+	}
+
+	public MutableLiveData<RotationTechnique> getRotationTechnique() {
+		return rotationTechnique;
+	}
+
+	public MutableLiveData<ScaleTechnique> getScaleTechnique() {
+		return scaleTechnique;
+	}
+
+	public void resetInteractionTechnique() {
+		this.selectionTechnique.postValue(SelectionTechnique.RAYCASTING);
+		this.scaleTechnique.postValue(ScaleTechnique.PINCH);
+		this.rotationTechnique.postValue(RotationTechnique.TWO_FINGER);
 	}
 }

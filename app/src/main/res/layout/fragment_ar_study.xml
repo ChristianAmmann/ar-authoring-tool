@@ -18,17 +18,17 @@
 			android:id="@+id/edit_modus"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_margin="@dimen/settings_padding"
 			android:background="@null"
+			android:padding="@dimen/settings_padding"
 			android:src="@drawable/pencil"/>
 
 		<ImageButton
 			android:id="@+id/ar_settings_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_margin="@dimen/settings_padding"
 			android:background="@null"
 			android:contentDescription="@string/settings"
+			android:padding="@dimen/settings_padding"
 			android:src="@drawable/settings"/>
 
 	</LinearLayout>
@@ -42,7 +42,7 @@
 		android:layout_centerHorizontal="true"
 		android:background="@null"
 		android:contentDescription="@string/expand_bottom_toolbar"
-		android:paddingBottom="@dimen/spacing_extra_large"
+		android:padding="@dimen/spacing_extra_large"
 		android:src="@drawable/chevron_up"
 		android:tint="@android:color/white"/>
 
@@ -50,8 +50,8 @@
 		android:id="@+id/back"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_margin="@dimen/back_arcene_margin"
 		android:background="@null"
+		android:padding="@dimen/back_arcene_margin"
 		android:src="@drawable/arrow_left"/>
 
 

@@ -122,11 +122,13 @@ public class ArStudyFragment extends Fragment {
 		Spinner selectionSpinner = dialogView.findViewById(R.id.spinner_selection);
 		Spinner rotationSpinner = dialogView.findViewById(R.id.spinner_rotation);
 		Spinner scaleSpinner = dialogView.findViewById(R.id.spinner_scale);
-
+		scaleSpinner.setSelection(viewModel.getScaleTechnique().getValue().getPosition());
+		rotationSpinner.setSelection(viewModel.getRotationTechnique().getValue().getPosition());
+		selectionSpinner.setSelection(viewModel.getSelectionTechnique().getValue().getPosition());
 		builder.setView(dialogView).setPositiveButton(R.string.apply, ((dialog, which) -> {
-			/*currentSelectionTechnique = selectionSpinner.getSelectedItem().toString();
-			currentRotationTechnique = rotationSpinner.getSelectedItem().toString();
-			currentSelectionTechnique = scaleSpinner.getSelectedItem().toString();*/
+			viewModel.setSelectionTechnique(SelectionTechnique.getTechnique(selectionSpinner.getSelectedItemPosition()));
+			viewModel.setRotationTechnique(RotationTechnique.getTechnique(rotationSpinner.getSelectedItemPosition()));
+			viewModel.setScaleTechnique(ScaleTechnique.getTechnique(scaleSpinner.getSelectedItemPosition()));
 
 		})).setNegativeButton(R.string.cancel, ((dialog, which) -> dialog.dismiss()));
 		builder.create().show();
@@ -202,9 +204,7 @@ public class ArStudyFragment extends Fragment {
 	private void showAddSubjectDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		builder.setTitle(R.string.add_subject).setMessage(getString(R.string.add_subject_hint, viewModel.getStudy().getName())).setPositiveButton(R.string.add, (dialog, which)
-				-> {
-			showStudyStartDialog();
-		}).setNegativeButton(R.string.cancel, null).create().show();
+				-> showStudyStartDialog()).setNegativeButton(R.string.cancel, null).create().show();
 	}
 
 	private void onAddSubjectClicked(View view) {

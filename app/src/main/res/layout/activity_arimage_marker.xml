@@ -16,4 +16,14 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"/>
 
+	<ImageView
+		android:id="@+id/crosshair"
+		android:layout_width="36dp"
+		android:layout_height="36dp"
+		android:layout_gravity="center"
+		android:contentDescription="@string/crosshairs"
+		android:scaleType="fitXY"
+		android:src="@drawable/crosshairs"
+		android:visibility="gone"/>
+
 </android.support.design.widget.CoordinatorLayout>

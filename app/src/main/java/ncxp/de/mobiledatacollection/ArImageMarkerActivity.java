@@ -10,6 +10,7 @@ import android.media.MediaRecorder;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
+import android.opengl.Matrix;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -19,9 +20,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.ar.core.AugmentedImage;
@@ -33,8 +37,12 @@ import com.google.ar.core.TrackingState;
 import com.google.ar.core.exceptions.UnavailableApkTooOldException;
 import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException;
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
+import com.google.ar.sceneform.Camera;
 import com.google.ar.sceneform.FrameTime;
+import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.Node;
+import com.google.ar.sceneform.collision.Ray;
+import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.Color;
 import com.google.ar.sceneform.rendering.Material;
 import com.google.ar.sceneform.rendering.MaterialFactory;
@@ -78,7 +86,8 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 	public static final  String ARSCENE_KEY                      = "arscene_key";
 	public static final  String KEY_STUDY                        = "study_key";
 	public static final  String KEY_EDITOR_STATE                 = "editor_state_key";
-	private static final String FILE_TYPE                        = ".sfb";
+	private static final String FILE_TYPE_SFB                    = "sfb";
+	private static final String FILE_TYPE_PNG                    = "png";
 	public static final  String AUGMENTED_IMAGE_DB               = "markers.imgdb";
 	private static final int    PERMISSION_CODE_SCREEN_CAPTURING = 4123;
 
@@ -90,41 +99,107 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 	private ArImageMarkerViewModel viewModel;
 	private DeleteNode             deleteNode;
 	private Material               highlight;
+	private ImageView              crosshair;
+	private GestureDetector        trackableGestureDetector;
 
 	private MediaProjection         mMediaProjection;
 	private MediaProjectionCallback mMediaProjectionCallback;
-	private Study                   study;
 
 	private MediaRecorder          mMediaRecorder;
 	private int                    mScreenDensity;
 	private MediaProjectionManager mProjectionManager;
-
-	private float displayCenterY;
-	private float displayCenterX;
+	DisplayMetrics metrics;
+	private float  displayCenterY;
+	private float  displayCenterX;
+	private Camera camera;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_arimage_marker);
 		arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ar_marker_fragment);
-		DisplayMetrics metrics = new DisplayMetrics();
+		metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		mScreenDensity = metrics.densityDpi;
+		displayCenterX = metrics.widthPixels / 2;
+		displayCenterY = metrics.heightPixels / 2;
 		mProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 		//TODO
 		//initRecorder();
+		crosshair = findViewById(R.id.crosshair);
 		setupArFragment();
+		camera = arFragment.getArSceneView().getScene().getCamera();
 		viewModel = obtainViewModel(this);
 		initPlacing();
 		setupAugmentedImageDatabase();
-
+		setupInteractionTechnique();
 		if (viewModel.getState().equals(EditorState.EDIT_MODE)) {
+			viewModel.resetInteractionTechnique();
 			showEditModeFragment();
 		} else {
 			showStudyModeFragment();
 		}
 
 	}
+
+	private void setupInteractionTechnique() {
+		//TODO Refactor
+		viewModel.getSelectionTechnique().observe(this, technique -> {
+			// TODO remove selectNode not working
+			switch (technique) {
+				case CROSSHAIR:
+					crosshair.setVisibility(View.VISIBLE);
+					arFragment.getArSceneView().getScene().setOnPeekTouchListener(this::handleOnTouch);
+
+					trackableGestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+						@Override
+						public boolean onSingleTapUp(MotionEvent e) {
+
+							HitTestResult hitTestResult = arFragment.getArSceneView()
+																	.getScene()
+																	.hitTest(projectRay(displayCenterX,
+																						displayCenterY,
+																						metrics.widthPixels,
+																						metrics.heightPixels,
+																						camera.getProjectionMatrix().data,
+																						camera.getViewMatrix().data));
+
+							return true;
+						}
+					});
+					break;
+				case RAYCASTING:
+					crosshair.setVisibility(View.GONE);
+					trackableGestureDetector = null;
+					break;
+			}
+		});
+		viewModel.getRotationTechnique().observe(this, technique -> {
+			Log.d(TAG, technique.getName());
+			switch (technique) {
+				case TWO_FINGER:
+					break;
+				case WIDGET_3D:
+					break;
+			}
+
+		});
+		viewModel.getScaleTechnique().observe(this, technique -> {
+			Log.d(TAG, technique.getName());
+			switch (technique) {
+				case PINCH:
+					break;
+				case WIDGET_3D:
+					break;
+			}
+		});
+	}
+
+	private void handleOnTouch(HitTestResult hitTestResult, MotionEvent motionEvent) {
+		// First call ArFragment's listener to handle TransformableNodes
+		trackableGestureDetector.onTouchEvent(motionEvent);
+	}
+
 
 	private void showEditModeFragment() {
 		getSupportFragmentManager().beginTransaction().replace(R.id.editor_container, ArEditFragment.newInstance(), null).commit();
@@ -140,6 +215,7 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 		arFragment.getPlaneDiscoveryController().setInstructionView(null);
 		//TODO Outline shader
 		transformationSystem = arFragment.getTransformationSystem();
+
 		Texture.Sampler sampler = Texture.Sampler.builder()
 												 .setMinFilter(Texture.Sampler.MinFilter.LINEAR)
 												 .setMagFilter(Texture.Sampler.MagFilter.LINEAR)
@@ -259,7 +335,7 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 	}
 
 	private void createObjectARImageNode(Node parent, ArImageToObjectRelation arImageToObjectRelation) {
-		String sjbFile = arImageToObjectRelation.getImageName().replace("png", "sfb");
+		String sjbFile = arImageToObjectRelation.getImageName().replace(FILE_TYPE_PNG, FILE_TYPE_SFB);
 		ModelRenderable.builder().setSource(this, Uri.parse(sjbFile)).build().thenAccept(renderable -> {
 			ObjectARImageNode node = new ObjectARImageNode(transformationSystem, sjbFile, renderable, highlight);
 			node.setLocalRotation(arImageToObjectRelation.getRotation());
@@ -287,7 +363,7 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 	}
 
 	private void createObjectARImageNode(Node parent, String imageName) {
-		//TODO Refactor
+		//TODO Refactor Redundant code
 		String sjbFile = imageName.replace("png", "sfb");
 		ModelRenderable.builder().setSource(this, Uri.parse(sjbFile)).build().thenAccept(renderable -> {
 			ObjectARImageNode node = new ObjectARImageNode(transformationSystem, sjbFile, renderable, highlight);
@@ -420,7 +496,7 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 		if (!exportDir.exists()) {
 			exportDir.mkdirs();
 		}
-		File studyDir = new File(Environment.getExternalStorageDirectory() + "/" + DIRECTORY, study.getName());
+		File studyDir = new File(Environment.getExternalStorageDirectory() + "/" + DIRECTORY, viewModel.getStudy().getName());
 		if (!studyDir.exists()) {
 			studyDir.mkdirs();
 		}
@@ -468,4 +544,35 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 	}
 
 	*/
+
+	public static Vector3 GetWorldCoords(float tapX, float tapY, float screenWidth, float screenHeight, float[] projectionMatrix, float[] viewMatrix) {
+		Ray touchRay = projectRay(tapX, tapY, screenWidth, screenHeight, projectionMatrix, viewMatrix);
+		return touchRay.getOrigin();
+	}
+
+	public static Ray projectRay(float tapX, float tapY, float screenWidth, float screenHeight, float[] projectionMatrix, float[] viewMatrix) {
+		float[] viewProjMtx = new float[16];
+		Matrix.multiplyMM(viewProjMtx, 0, projectionMatrix, 0, viewMatrix, 0);
+		return screenPointToRay(tapX, tapY, screenWidth, screenHeight, viewProjMtx);
+	}
+
+	public static Ray screenPointToRay(float tapX, float tapY, float screenWidth, float screenHeight, float[] viewProjMtx) {
+		tapY = screenHeight - tapY;
+		float x = tapX * 2.0F / screenWidth - 1.0F;
+		float y = tapY * 2.0F / screenHeight - 1.0F;
+		float[] farScreenPoint = new float[]{x, y, 1.0F, 1.0F};
+		float[] nearScreenPoint = new float[]{x, y, -1.0F, 1.0F};
+		float[] nearPlanePoint = new float[4];
+		float[] farPlanePoint = new float[4];
+		float[] invertedProjectionMatrix = new float[16];
+		Matrix.setIdentityM(invertedProjectionMatrix, 0);
+		Matrix.invertM(invertedProjectionMatrix, 0, viewProjMtx, 0);
+		Matrix.multiplyMV(nearPlanePoint, 0, invertedProjectionMatrix, 0, nearScreenPoint, 0);
+		Matrix.multiplyMV(farPlanePoint, 0, invertedProjectionMatrix, 0, farScreenPoint, 0);
+		Vector3 direction = new Vector3(farPlanePoint[0] / farPlanePoint[3], farPlanePoint[1] / farPlanePoint[3], farPlanePoint[2] / farPlanePoint[3]);
+		Vector3 origin = new Vector3(new Vector3(nearPlanePoint[0] / nearPlanePoint[3], nearPlanePoint[1] / nearPlanePoint[3], nearPlanePoint[2] / nearPlanePoint[3]));
+		direction = new Vector3(direction.x - origin.x, direction.y - origin.y, direction.z - origin.z);
+		direction.normalized();
+		return new Ray(origin, direction);
+	}
 }

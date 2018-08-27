@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string-array name="rotation_array">
-		<item>Geste Swipe</item>
+		<item>Geste Two Finger</item>
 		<item>3D-Widget</item>
-		<item>Keine</item>
 	</string-array>
 </resources>
