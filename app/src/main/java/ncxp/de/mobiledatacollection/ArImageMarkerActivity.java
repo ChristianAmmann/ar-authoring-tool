@@ -43,6 +43,7 @@ import com.google.ar.sceneform.FrameTime;
 import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.collision.Ray;
+import com.google.ar.sceneform.math.Quaternion;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.Color;
 import com.google.ar.sceneform.rendering.Material;
@@ -280,12 +281,9 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 			View widgetView = viewRenderable.getView();
 			ImageButton rotateRightButton = widgetView.findViewById(R.id.rotate_right);
 			ImageButton rotateLeftButton = widgetView.findViewById(R.id.rotate_left);
-			rotateRightButton.setOnClickListener(view -> {
-				//TODO rotate selected Node right
-			});
-			rotateLeftButton.setOnClickListener(view -> {
-				//TODO rotate selected Node Left
-			});
+			// TODO rotateRightButton.setOnDragListener();
+			rotateRightButton.setOnClickListener(view -> rotateNode(viewModel.getCurrentSelectedNode().getValue(), 15f));
+			rotateLeftButton.setOnClickListener(view -> rotateNode(viewModel.getCurrentSelectedNode().getValue(), -15f));
 
 		});
 		ViewRenderable.builder().setView(this, R.layout.scale_widget_controls).build().thenAccept(viewRenderable -> {
@@ -295,12 +293,23 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 			ImageButton scaleDownButton = widgetView.findViewById(R.id.scale_down);
 			scaleUpButton.setOnClickListener(view -> {
 				//TODO scale selected Node up
+
 			});
 			scaleDownButton.setOnClickListener(view -> {
 				//TODO scale selected node down
 			});
 
 		});
+	}
+
+	private void rotateNode(Node node, float degrees) {
+		if (node != null) {
+			Vector3 axis = new Vector3(1, 1, 0);
+			Quaternion currentRotation = node.getWorldRotation();
+			Quaternion addRotation = Quaternion.axisAngle(axis, degrees);
+			Quaternion newRotation = Quaternion.multiply(currentRotation, addRotation);
+			node.setLocalRotation(newRotation);
+		}
 	}
 
 	private boolean setupAugmentedImageDatabase() {
@@ -393,12 +402,12 @@ public class ArImageMarkerActivity extends AppCompatActivity implements ArIntera
 
 	private void attachRotateWidget(ObjectARImageNode node) {
 		rotateWidgetNode.setParent(node);
-		rotateWidgetNode.setLocalPosition(node.getDown());
+		rotateWidgetNode.setLocalPosition(node.getUp().scaled(0.2f));
 	}
 
 	private void attachScaleWidget(ObjectARImageNode node) {
 		scaleWidgetNode.setParent(node);
-		scaleWidgetNode.setLocalPosition(node.getRight());
+		scaleWidgetNode.setLocalPosition(node.getRight().scaled(0.35f));
 	}
 
 	private void createObjectARImageNode(Node parent, String imageName) {
