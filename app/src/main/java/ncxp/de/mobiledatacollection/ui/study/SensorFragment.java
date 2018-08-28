@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.StudyActivity;
 import ncxp.de.mobiledatacollection.ui.study.adapter.SensorAdapter;
-import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModel;
+import ncxp.de.mobiledatacollection.viewmodel.StudyViewModel;
 
 public class SensorFragment extends Fragment {
 

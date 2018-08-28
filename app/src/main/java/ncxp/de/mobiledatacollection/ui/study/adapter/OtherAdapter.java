@@ -15,7 +15,7 @@ import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.ui.study.viewholder.ConfigViewHolder;
 import ncxp.de.mobiledatacollection.ui.study.viewholder.SectionViewHolder;
 import ncxp.de.mobiledatacollection.ui.study.viewholder.SensorSettingsViewHolder;
-import ncxp.de.mobiledatacollection.ui.study.viewmodel.OptionOthersListener;
+import ncxp.de.mobiledatacollection.ui.study.OptionOthersListener;
 
 public class OtherAdapter extends RecyclerView.Adapter {
 

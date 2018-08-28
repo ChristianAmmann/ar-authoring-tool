@@ -11,10 +11,10 @@ import android.support.v7.widget.Toolbar;
 import ncxp.de.mobiledatacollection.model.StudyDatabase;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.repository.ArSceneRepository;
-import ncxp.de.mobiledatacollection.ui.arimagemarker.EditorState;
+import ncxp.de.mobiledatacollection.ui.areditor.util.EditorState;
 import ncxp.de.mobiledatacollection.ui.arscene.ArSceneFragment;
-import ncxp.de.mobiledatacollection.ui.arscene.viewmodel.ArSceneViewModel;
-import ncxp.de.mobiledatacollection.ui.arscene.viewmodel.ArSceneViewModelFactory;
+import ncxp.de.mobiledatacollection.viewmodel.ArSceneViewModel;
+import ncxp.de.mobiledatacollection.viewmodel.factory.ArSceneViewModelFactory;
 
 public class ArSceneActivity extends AppCompatActivity {
 
@@ -38,9 +38,9 @@ public class ArSceneActivity extends AppCompatActivity {
 		viewModel = ArSceneActivity.obtainViewModel(this);
 		fab = findViewById(R.id.fab_add_arscene);
 		fab.setOnClickListener(view -> {
-			Intent intent = new Intent(this, ArImageMarkerActivity.class);
-			intent.putExtra(ArImageMarkerActivity.KEY_STUDY, viewModel.getStudy());
-			intent.putExtra(ArImageMarkerActivity.KEY_EDITOR_STATE, EditorState.EDIT_MODE);
+			Intent intent = new Intent(this, ArEditorActivity.class);
+			intent.putExtra(ArEditorActivity.KEY_STUDY, viewModel.getStudy());
+			intent.putExtra(ArEditorActivity.KEY_EDITOR_STATE, EditorState.EDIT_MODE);
 			startActivity(intent);
 		});
 		toolbar = findViewById(R.id.arscene_toolbar);

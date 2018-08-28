@@ -18,8 +18,8 @@ import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
 import ncxp.de.mobiledatacollection.model.repository.TestPersonRepository;
 import ncxp.de.mobiledatacollection.ui.studies.StudiesFragment;
-import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModel;
-import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModelFactory;
+import ncxp.de.mobiledatacollection.viewmodel.StudiesViewModel;
+import ncxp.de.mobiledatacollection.viewmodel.factory.StudiesViewModelFactory;
 
 public class StudiesActivity extends AppCompatActivity {
 

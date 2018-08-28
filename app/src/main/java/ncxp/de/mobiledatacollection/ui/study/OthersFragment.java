@@ -23,8 +23,7 @@ import ncxp.de.mobiledatacollection.ui.study.adapter.OptionItem;
 import ncxp.de.mobiledatacollection.ui.study.adapter.OptionType;
 import ncxp.de.mobiledatacollection.ui.study.adapter.OtherAdapter;
 import ncxp.de.mobiledatacollection.ui.study.adapter.SensorSettings;
-import ncxp.de.mobiledatacollection.ui.study.viewmodel.OptionOthersListener;
-import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModel;
+import ncxp.de.mobiledatacollection.viewmodel.StudyViewModel;
 
 public class OthersFragment extends Fragment implements OptionOthersListener {
 

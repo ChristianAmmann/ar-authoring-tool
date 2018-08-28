@@ -42,7 +42,7 @@
 		<activity android:name=".OnboardingSurveyActivity"/>
 		<activity android:name=".ArSceneActivity"/>
 		<activity
-			android:name=".ArImageMarkerActivity"
+			android:name=".ArEditorActivity"
 			android:configChanges="orientation|screenSize"
 			android:exported="true"
 			android:screenOrientation="locked"

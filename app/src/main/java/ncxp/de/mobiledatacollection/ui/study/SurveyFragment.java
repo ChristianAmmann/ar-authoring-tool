@@ -31,7 +31,7 @@ import ncxp.de.mobiledatacollection.StudyActivity;
 import ncxp.de.mobiledatacollection.SurveyTestActivity;
 import ncxp.de.mobiledatacollection.model.data.Survey;
 import ncxp.de.mobiledatacollection.ui.study.adapter.SurveyAdapter;
-import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModel;
+import ncxp.de.mobiledatacollection.viewmodel.StudyViewModel;
 
 public class SurveyFragment extends Fragment implements OptionSurveyListener {
 
