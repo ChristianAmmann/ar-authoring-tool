@@ -49,13 +49,14 @@ public class ArEditorViewModel extends AndroidViewModel {
 	private ARScene                             arScene;
 	private Study                               study;
 	private SensorBackgroundService             sensorBackgroundService;
-	private boolean                             bound = false;
+	private boolean                             bound                = false;
 	private Map<String, Node>                   augmentedImageMap;
 	private MutableLiveData<Node>               currentSelectedNode;
 	private EditorState                         state;
 	private MutableLiveData<SelectionTechnique> selectionTechnique;
 	private MutableLiveData<RotationTechnique>  rotationTechnique;
 	private MutableLiveData<ScaleTechnique>     scaleTechnique;
+	private boolean                             comingFromStudyModus = false;
 
 
 	public ArEditorViewModel(@NonNull Application application, ArSceneRepository arSceneRepository) {
@@ -282,5 +283,13 @@ public class ArEditorViewModel extends AndroidViewModel {
 		this.selectionTechnique.postValue(SelectionTechnique.RAYCASTING);
 		this.scaleTechnique.postValue(ScaleTechnique.PINCH);
 		this.rotationTechnique.postValue(RotationTechnique.TWO_FINGER);
+	}
+
+	public boolean isComingFromStudyModus() {
+		return comingFromStudyModus;
+	}
+
+	public void setComingFromStudyModus(boolean comingFromStudyModus) {
+		this.comingFromStudyModus = comingFromStudyModus;
 	}
 }

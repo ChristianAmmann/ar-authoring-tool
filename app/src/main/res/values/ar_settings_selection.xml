@@ -3,6 +3,6 @@
 	<string-array name="selection_array">
 		<item>Raycasting</item>
 		<item>Fadenkreuz</item>
-		<item>HOMER-S</item>
+		<item>Keine</item>
 	</string-array>
 </resources>

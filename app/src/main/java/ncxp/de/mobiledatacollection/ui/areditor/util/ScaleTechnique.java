@@ -2,7 +2,8 @@ package ncxp.de.mobiledatacollection.ui.areditor.util;
 
 public enum ScaleTechnique {
 	PINCH(0, "Geste Pinch"),
-	WIDGET_3D(1, "3D-Widget");
+	WIDGET_3D(1, "3D-Widget"),
+	NONE(2, "Keine");
 
 	private int    position;
 	private String name;

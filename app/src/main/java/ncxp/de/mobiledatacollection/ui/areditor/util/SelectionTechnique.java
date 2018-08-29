@@ -3,7 +3,7 @@ package ncxp.de.mobiledatacollection.ui.areditor.util;
 public enum SelectionTechnique {
 	RAYCASTING(0, "Raycasting"),
 	CROSSHAIR(1, "Fadenkreuz"),
-	HOMER_S(2, "HOMER-S");
+	NONE(2, "Keine");
 
 	private int    position;
 	private String name;

@@ -31,20 +31,19 @@ import ncxp.de.mobiledatacollection.viewmodel.ArEditorViewModel;
 
 public class ArStudyFragment extends Fragment {
 
-	private ArEditorViewModel viewModel;
-	private ImageButton       settingsButton;
-	private ImageButton       expandBottomToolbarButton;
-	private ImageButton       testModusButton;
-	private ImageButton       addSubjectButton;
-	private ImageButton       cancelButton;
-	private ImageButton       playAndPauseButton;
-	private ImageButton       finishButton;
-	private ImageView         timeIcon;
-	private LinearLayout      bottomToolbar;
-	private TestPersonState   state = TestPersonState.STOPPED;
-	private TextView          studyStatusView;
-	private Chronometer            chronometer;
-	private ArInteractionListener  arInteractionListener;
+	private ArEditorViewModel     viewModel;
+	private ImageButton           settingsButton;
+	private ImageButton           expandBottomToolbarButton;
+	private ImageButton           addSubjectButton;
+	private ImageButton           cancelButton;
+	private ImageButton           playAndPauseButton;
+	private ImageButton           finishButton;
+	private ImageView             timeIcon;
+	private LinearLayout          bottomToolbar;
+	private TestPersonState       state = TestPersonState.STOPPED;
+	private TextView              studyStatusView;
+	private Chronometer           chronometer;
+	private ArInteractionListener arInteractionListener;
 
 	public static ArStudyFragment newInstance() {
 		return new ArStudyFragment();
@@ -74,7 +73,6 @@ public class ArStudyFragment extends Fragment {
 		playAndPauseButton = view.findViewById(R.id.play_and_pause);
 		finishButton = view.findViewById(R.id.finish);
 		cancelButton = view.findViewById(R.id.cancel);
-		testModusButton = view.findViewById(R.id.test_modus);
 		timeIcon = view.findViewById(R.id.timer_icon);
 		studyStatusView = view.findViewById(R.id.study_status);
 		ImageButton editButton = view.findViewById(R.id.edit_modus);
@@ -178,18 +176,12 @@ public class ArStudyFragment extends Fragment {
 		//startActivity(intent);
 	}
 
-	private void onTestModusClicked(View view) {
-
-	}
-
 	private void showDirectorModus() {
-		testModusButton.setVisibility(View.VISIBLE);
 		addSubjectButton.setVisibility(View.VISIBLE);
 		settingsButton.setVisibility(View.VISIBLE);
 	}
 
 	private void hideDirectorModus() {
-		testModusButton.setVisibility(View.GONE);
 		addSubjectButton.setVisibility(View.GONE);
 		settingsButton.setVisibility(View.GONE);
 	}
@@ -208,8 +200,12 @@ public class ArStudyFragment extends Fragment {
 
 	private void showAddSubjectDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-		builder.setTitle(R.string.add_subject).setMessage(getString(R.string.add_subject_hint, viewModel.getStudy().getName())).setPositiveButton(R.string.add, (dialog, which)
-				-> showStudyStartDialog()).setNegativeButton(R.string.cancel, null).create().show();
+		builder.setTitle(R.string.add_subject)
+			   .setMessage(getString(R.string.add_subject_hint, viewModel.getStudy().getName()))
+			   .setPositiveButton(R.string.add, (dialog, which) -> showStudyStartDialog())
+			   .setNegativeButton(R.string.cancel, null)
+			   .create()
+			   .show();
 	}
 
 	private void onAddSubjectClicked(View view) {
