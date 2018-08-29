@@ -1,0 +1,49 @@
+{
+   materials: [
+      {
+         name: "None",
+         parameters: [
+            {
+               baseColor: "PUSHILIN_bush",
+            },
+            {
+               baseColorTint: [
+                  0.80000000000000004,
+                  0.80000000000000004,
+                  0.80000000000000004,
+                  1,
+               ],
+            },
+            {
+               metallic: 1,
+            },
+            {
+               roughness: 1,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/obj_material.sfm",
+      },
+   ],
+   model: {
+      attributes: [
+         "Position",
+         "TexCoord",
+         "Orientation",
+      ],
+      collision: {},
+      file: "../../mobiledatacollection/app/sampledata/tree/PUSHILIN_bush.obj",
+      name: "PUSHILIN_bush",
+      scale: 0.76629899999999995,
+   },
+   samplers: [
+      {
+         file: "../../mobiledatacollection/app/sampledata/tree/PUSHILIN_bush.png",
+         name: "PUSHILIN_bush",
+         pipeline_name: "PUSHILIN_bush.png",
+      },
+   ],
+   version: "0.51:1",
+}
