@@ -104,3 +104,93 @@ sceneform.asset('../../mobiledatacollection/app/sampledata/placeholder/model.obj
         'default',
         '../../mobiledatacollection/app/sampledata/placeholder/model.sfa',
         '../../mobiledatacollection/app/src/main/res/raw/frame')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/bicycle/Bike_1355.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/bicycle/Bike_1355.sfa',
+        '../../mobiledatacollection/app/src/main/assets/bicycle')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/brownrock/PUSHILIN_rock.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/brownrock/PUSHILIN_rock.sfa',
+        'src/main/assets/brownrock')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/bulldozer/Bulldozer_1375.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/bulldozer/Bulldozer_1375.sfa',
+        'src/main/assets/bulldozer')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/bush/Mesh_RoseBush.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/bush/Mesh_RoseBush.sfa',
+        'src/main/assets/bush')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/campfire/1224 Campfire.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/campfire/1224 Campfire.sfa',
+        'src/main/assets/campfire')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/car/1377 Car.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/car/1377 Car.sfa',
+        'src/main/assets/car')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/fence/SM_PicketFence_02.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/fence/SM_PicketFence_02.sfa',
+        'src/main/assets/fence')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/grayrock/rock_02.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/grayrock/rock_02.sfa',
+        'src/main/assets/grayrock')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/log/PUSHILIN_log.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/log/PUSHILIN_log.sfa',
+        'src/main/assets/log')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/mountain/Mountain_01.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/mountain/Mountain_01.sfa',
+        'src/main/assets/mountain')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/pinetree/PineTree.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/pinetree/PineTree.sfa',
+        'src/main/assets/pinetree')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/rails/Rails.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/rails/Rails.sfa',
+        'src/main/assets/rails')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/tree/PUSHILIN_bush.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/tree/PUSHILIN_bush.sfa',
+        'src/main/assets/tree')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/tree1/tree01.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/tree1/tree01.sfa',
+        'src/main/assets/tree1')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/treestump/TreeStump_423.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/treestump/TreeStump_423.sfa',
+        'src/main/assets/treestump')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/truck/Jeep.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/truck/Jeep.sfa',
+        'src/main/assets/truck')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/well/SM_Well_02.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/well/SM_Well_02.sfa',
+        'src/main/assets/well')
+
+sceneform.asset('../../mobiledatacollection/app/sampledata/woods/Woods_01.obj',
+        'default',
+        '../../mobiledatacollection/app/sampledata/woods/Woods_01.sfa',
+        'src/main/assets/woods')

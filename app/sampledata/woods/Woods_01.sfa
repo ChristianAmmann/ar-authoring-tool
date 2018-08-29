@@ -1,0 +1,67 @@
+{
+   materials: [
+      {
+         name: "4CAF50",
+         parameters: [
+            {
+               baseColor: null,
+            },
+            {
+               baseColorTint: [
+                  0.298039,
+                  0.68627499999999997,
+                  0.313726,
+                  1,
+               ],
+            },
+            {
+               metallic: 0,
+            },
+            {
+               roughness: 1,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/obj_material.sfm",
+      },
+      {
+         name: "795548",
+         parameters: [
+            {
+               baseColor: null,
+            },
+            {
+               baseColorTint: [
+                  0.47450999999999999,
+                  0.33333299999999999,
+                  0.28235300000000002,
+                  1,
+               ],
+            },
+            {
+               metallic: 0,
+            },
+            {
+               roughness: 1,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/obj_material.sfm",
+      },
+   ],
+   model: {
+      attributes: [
+         "Position",
+         "Orientation",
+      ],
+      collision: {},
+      file: "../../mobiledatacollection/app/sampledata/woods/Woods_01.obj",
+      name: "Woods_01",
+      scale: 0.093132000000000006,
+   },
+   version: "0.51:1",
+}
