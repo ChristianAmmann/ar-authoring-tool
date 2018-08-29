@@ -34,8 +34,8 @@ import ncxp.de.mobiledatacollection.ui.study.OthersFragment;
 import ncxp.de.mobiledatacollection.ui.study.SensorFragment;
 import ncxp.de.mobiledatacollection.ui.study.SurveyFragment;
 import ncxp.de.mobiledatacollection.ui.study.adapter.ViewPagerAdapter;
-import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModel;
-import ncxp.de.mobiledatacollection.ui.study.viewmodel.StudyViewModelFactory;
+import ncxp.de.mobiledatacollection.viewmodel.StudyViewModel;
+import ncxp.de.mobiledatacollection.viewmodel.factory.StudyViewModelFactory;
 
 public class StudyActivity extends AppCompatActivity {
 

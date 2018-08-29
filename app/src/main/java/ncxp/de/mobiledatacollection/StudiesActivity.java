@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import ncxp.de.mobiledatacollection.model.StudyDatabase;
 import ncxp.de.mobiledatacollection.model.repository.DataRepository;
@@ -19,8 +18,8 @@ import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
 import ncxp.de.mobiledatacollection.model.repository.TestPersonRepository;
 import ncxp.de.mobiledatacollection.ui.studies.StudiesFragment;
-import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModel;
-import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModelFactory;
+import ncxp.de.mobiledatacollection.viewmodel.StudiesViewModel;
+import ncxp.de.mobiledatacollection.viewmodel.factory.StudiesViewModelFactory;
 
 public class StudiesActivity extends AppCompatActivity {
 
@@ -46,13 +45,7 @@ public class StudiesActivity extends AppCompatActivity {
 		toolbar = findViewById(R.id.action_bar);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
-		toolbar.setNavigationOnClickListener(this::showArActivity);
 		showFragment(savedInstanceState);
-	}
-
-	private void showArActivity(View view) {
-		Intent intent = new Intent(this, ArActivity.class);
-		startActivity(intent);
 	}
 
 	private void showFragment(Bundle savedInstanceState) {

@@ -29,9 +29,8 @@ import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.StudiesActivity;
 import ncxp.de.mobiledatacollection.StudyActivity;
 import ncxp.de.mobiledatacollection.model.data.Study;
-import ncxp.de.mobiledatacollection.ui.studies.adapter.StudiesAdapter;
-import ncxp.de.mobiledatacollection.ui.studies.viewmodel.StudiesViewModel;
-import ncxp.de.mobiledatacollection.ui.studies.viewmodel.ToastMessage;
+import ncxp.de.mobiledatacollection.viewmodel.StudiesViewModel;
+import ncxp.de.mobiledatacollection.viewmodel.util.ToastMessage;
 
 public class StudiesFragment extends Fragment implements StudyListener {
 
@@ -96,7 +95,7 @@ public class StudiesFragment extends Fragment implements StudyListener {
 	@Override
 	public void onStudyStartClick(Study study) {
 		Intent intent = new Intent(getActivity(), ArSceneActivity.class);
-		//TODO Study intent.putExtra(ArSceneActivity.KEY_STUDY, study);
+		intent.putExtra(ArSceneActivity.KEY_STUDY, study);
 		getActivity().startActivity(intent);
 	}
 

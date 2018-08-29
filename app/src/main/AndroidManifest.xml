@@ -40,24 +40,13 @@
 		<activity android:name=".SurveyTestActivity"/>
 		<activity android:name=".SurveyActivity"/>
 		<activity android:name=".OnboardingSurveyActivity"/>
+		<activity android:name=".ArSceneActivity"/>
 		<activity
-			android:name=".ArActivity"
+			android:name=".ArEditorActivity"
 			android:configChanges="orientation|screenSize"
 			android:exported="true"
 			android:screenOrientation="locked"
 			android:theme="@style/ARTheme"/>
-		<activity
-			android:name=".ArCrosshairsTestActivity"
-			android:configChanges="orientation|screenSize"
-			android:exported="true"
-			android:screenOrientation="locked"
-			android:theme="@style/Theme.AppCompat.NoActionBar"/>
-		<activity android:name=".ArSceneActivity"/>
-		<activity
-			android:name=".ArImageMarkerActivity"
-			android:configChanges="orientation|screenSize"
-			android:exported="true"
-			android:screenOrientation="locked"/>
 
 		<service android:name=".datalogger.SensorBackgroundService"/>
 	</application>

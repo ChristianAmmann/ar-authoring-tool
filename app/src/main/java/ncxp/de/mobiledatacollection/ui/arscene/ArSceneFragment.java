@@ -19,13 +19,12 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import ncxp.de.mobiledatacollection.ArActivity;
-import ncxp.de.mobiledatacollection.ArImageMarkerActivity;
+import ncxp.de.mobiledatacollection.ArEditorActivity;
 import ncxp.de.mobiledatacollection.ArSceneActivity;
 import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.model.data.ARScene;
-import ncxp.de.mobiledatacollection.ui.arscene.adapter.ArSceneAdapter;
-import ncxp.de.mobiledatacollection.ui.arscene.viewmodel.ArSceneViewModel;
+import ncxp.de.mobiledatacollection.ui.areditor.util.EditorState;
+import ncxp.de.mobiledatacollection.viewmodel.ArSceneViewModel;
 
 public class ArSceneFragment extends Fragment implements ArSceneListener {
 
@@ -78,8 +77,10 @@ public class ArSceneFragment extends Fragment implements ArSceneListener {
 	private boolean onPopupMenuItemClicked(MenuItem menuItem, ARScene arScene) {
 		switch (menuItem.getItemId()) {
 			case R.id.edit:
-				Intent intent = new Intent(getActivity(), ArImageMarkerActivity.class);
-				intent.putExtra(ArImageMarkerActivity.ARSCENE_KEY, arScene);
+				Intent intent = new Intent(getActivity(), ArEditorActivity.class);
+				intent.putExtra(ArEditorActivity.ARSCENE_KEY, arScene);
+				intent.putExtra(ArEditorActivity.KEY_STUDY, viewModel.getStudy());
+				intent.putExtra(ArEditorActivity.KEY_EDITOR_STATE, EditorState.EDIT_MODE);
 				startActivity(intent);
 				break;
 			case R.id.delete:
@@ -112,9 +113,10 @@ public class ArSceneFragment extends Fragment implements ArSceneListener {
 
 	@Override
 	public void onArSceneLoadClick(ARScene arScene) {
-		//TODO
-		Intent intent = new Intent(getActivity(), ArActivity.class);
-		//intent.putExtra(ArActivity.KEY_STUDY, study);
+		Intent intent = new Intent(getActivity(), ArEditorActivity.class);
+		intent.putExtra(ArEditorActivity.ARSCENE_KEY, arScene);
+		intent.putExtra(ArEditorActivity.KEY_STUDY, viewModel.getStudy());
+		intent.putExtra(ArEditorActivity.KEY_EDITOR_STATE, EditorState.STUDY_MODE);
 		getActivity().startActivity(intent);
 	}
 

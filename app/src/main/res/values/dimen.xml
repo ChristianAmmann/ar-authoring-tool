@@ -35,7 +35,7 @@
 	<dimen name="fab_padding">10dp</dimen>
 	<dimen name="placeholder_spacing">24dp</dimen>
 
-	<dimen name="settings_padding">10dp</dimen>
+	<dimen name="settings_padding">15dp</dimen>
 	<dimen name="save_arcene_margin">15dp</dimen>
 	<dimen name="back_arcene_margin">15dp</dimen>
 	<dimen name="delete_object_margin">15dp</dimen>
