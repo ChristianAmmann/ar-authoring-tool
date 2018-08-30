@@ -29,17 +29,21 @@
 		android:name="com.google.ar.core"
 		android:value="required"/>
 
-		<activity android:name=".StudiesActivity">
+		<activity android:name=".MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
+		<activity android:name=".StudiesActivity"/>
 		<activity android:name=".StudyActivity"/>
 		<activity android:name=".SurveyTestActivity"/>
 		<activity android:name=".SurveyActivity"/>
 		<activity android:name=".OnboardingSurveyActivity"/>
+		<activity android:name=".OnboardingAppActivity"/>
+		<activity android:name=".OnboardingArEditorActivity"/>
+		<activity android:name=".AboutActivity"/>
 		<activity android:name=".ArSceneActivity"/>
 		<activity
 			android:name=".ArEditorActivity"

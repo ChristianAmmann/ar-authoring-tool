@@ -1,5 +1,7 @@
 package ncxp.de.mobiledatacollection;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,12 +16,13 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import ncxp.de.mobiledatacollection.ui.onboarding.survey.OnboardingPlatformIdSurveyFragment;
-import ncxp.de.mobiledatacollection.ui.onboarding.survey.OnboardingImportSurveyFragment;
-import ncxp.de.mobiledatacollection.ui.onboarding.survey.OnboardingJavascriptSurveyFragment;
+import ncxp.de.mobiledatacollection.ui.onboarding.app.OnboardingAboutFragment;
+import ncxp.de.mobiledatacollection.ui.onboarding.app.OnboardingArSceneFragment;
+import ncxp.de.mobiledatacollection.ui.onboarding.app.OnboardingPermissionFragment;
+import ncxp.de.mobiledatacollection.ui.onboarding.app.OnboardingStudyFragment;
 import ncxp.de.mobiledatacollection.ui.study.adapter.ViewPagerAdapter;
 
-public class OnboardingSurveyActivity extends AppCompatActivity {
+public class OnboardingAppActivity extends AppCompatActivity {
 
 	private ViewPagerAdapter viewPagerAdapter;
 	private ViewPager        viewPager;
@@ -33,12 +36,16 @@ public class OnboardingSurveyActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_onboarding_survey);
 		viewPager = findViewById(R.id.pager);
 		continueButton = findViewById(R.id.continue_button);
-
-		continueButton.setOnClickListener((view) -> finish());
+		continueButton.setOnClickListener((view) -> {
+			SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.ONBOARDING_KEY, MODE_PRIVATE);
+			sharedPreferences.edit().putBoolean(MainActivity.ONBOARDING_COMPLETED, true).apply();
+			Intent intent = new Intent(this, StudiesActivity.class);
+			startActivity(intent);
+			finish();
+		});
 		dotsLayout = findViewById(R.id.dots);
 		setupViewPagerAdapter();
 		addDots();
-
 	}
 
 	private void setupViewPagerAdapter() {
@@ -107,9 +114,10 @@ public class OnboardingSurveyActivity extends AppCompatActivity {
 
 	private List<Fragment> getFragments() {
 		List<Fragment> fragments = new ArrayList<>();
-		fragments.add(OnboardingImportSurveyFragment.newInstance());
-		fragments.add(OnboardingPlatformIdSurveyFragment.newInstance());
-		fragments.add(OnboardingJavascriptSurveyFragment.newInstance());
+		fragments.add(OnboardingAboutFragment.newInstance());
+		fragments.add(OnboardingPermissionFragment.newInstance());
+		fragments.add(OnboardingStudyFragment.newInstance());
+		fragments.add(OnboardingArSceneFragment.newInstance());
 		return fragments;
 	}
 }

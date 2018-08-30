@@ -76,8 +76,13 @@ public class StudiesActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.help:
+				Intent intentOnboarding = new Intent(this, OnboardingAppActivity.class);
+				startActivity(intentOnboarding);
+				finish();
 				break;
 			case R.id.impressum:
+				Intent intentAbout = new Intent(this, AboutActivity.class);
+				startActivity(intentAbout);
 				break;
 		}
 		return true;

@@ -196,4 +196,21 @@
 	<string name="dialog_arscene_error_description">Die AR-Szene benötigt eine Beschreibung</string>
 	<string name="dialog_ar_objects_delete_all">AR-Objekte löschen?</string>
 	<string name="dialog_ar_objects_delete_all_message">Wollen Sie wirklich alle gesetzten Objekte löschen?</string>
+	<string name="about_title">Impressum</string>
+	<string name="impressum_description">Für die ARApp der Forschungsgruppe TECO liegen Copyright und alle weiteren Rechte bei der Forschungsgruppe TECO , welche dem Lehrstuhl für
+		Pervasive Computing Systems am Karlsruher Institut für Technologie, Vincenz-Prießnitz-Straße 1, 76131 Karlsruhe, Deutschland, angegliedert ist. Weiterverbreitung, auch in Auszügen, für pädagogische, wissenschaftliche oder private Zwecke ist unter Angabe der Quelle gestattet (sofern nicht anders an der entsprechenden Stelle ausdrücklich angegeben). Eine Verwendung im gewerblichen Bereich bedarf der Genehmigung durch der Forschungsgruppe TECO. Ansprechpartner ist Prof. Dr. Michael Beigl (Inhaber des Lehrstuhls Pervasive Computing Systems)</string>
+	<string name="copyright">Copyright</string>
+	<string name="areditor">AR-Editor</string>
+	<string name="onboarding_app_about_description">TODO: Beschreibung der App</string>
+	<string name="arscene">Erstellung von AR-Szenarien</string>
+	<string name="onboarding_arscene_description">TODO: Beschreibung der Erstellung der AR-Szenarien</string>
+	<string name="permissions">Berechtigungen</string>
+	<string name="onboarding_permissions_description">TODO: Beschreibung der Erstellung der AR-Szenarien</string>
+	<string name="onboarding_study_title">Verwaltung von Studien</string>
+	<string name="onboarding_study_description">TODO: Beschreibung der Studienverwaltung</string>
+	<string name="onboarding_areditor_surface">AR-Umgebung scannen</string>
+	<string name="onboarding_areditor_surface_description">TODO: Beschreibung</string>
+	<string name="onboarding_areditor_image">Objekte platzieren mit QR-Codes</string>
+	<string name="onboarding_areditor_image_description">TODO: Beschreibung</string>
+	<string name="onboarding_areditor_interaction">Interaktion mit AR-Objekten</string>
 </resources>

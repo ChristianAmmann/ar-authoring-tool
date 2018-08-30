@@ -14,12 +14,12 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import ncxp.de.mobiledatacollection.ui.onboarding.survey.OnboardingPlatformIdSurveyFragment;
-import ncxp.de.mobiledatacollection.ui.onboarding.survey.OnboardingImportSurveyFragment;
-import ncxp.de.mobiledatacollection.ui.onboarding.survey.OnboardingJavascriptSurveyFragment;
+import ncxp.de.mobiledatacollection.ui.onboarding.areditor.OnboardingArEditorImageFragment;
+import ncxp.de.mobiledatacollection.ui.onboarding.areditor.OnboardingArEditorInteractionFragment;
+import ncxp.de.mobiledatacollection.ui.onboarding.areditor.OnboardingArEditorSurfaceFragment;
 import ncxp.de.mobiledatacollection.ui.study.adapter.ViewPagerAdapter;
 
-public class OnboardingSurveyActivity extends AppCompatActivity {
+public class OnboardingArEditorActivity extends AppCompatActivity {
 
 	private ViewPagerAdapter viewPagerAdapter;
 	private ViewPager        viewPager;
@@ -107,9 +107,9 @@ public class OnboardingSurveyActivity extends AppCompatActivity {
 
 	private List<Fragment> getFragments() {
 		List<Fragment> fragments = new ArrayList<>();
-		fragments.add(OnboardingImportSurveyFragment.newInstance());
-		fragments.add(OnboardingPlatformIdSurveyFragment.newInstance());
-		fragments.add(OnboardingJavascriptSurveyFragment.newInstance());
+		fragments.add(OnboardingArEditorSurfaceFragment.newInstance());
+		fragments.add(OnboardingArEditorImageFragment.newInstance());
+		fragments.add(OnboardingArEditorInteractionFragment.newInstance());
 		return fragments;
 	}
 }
