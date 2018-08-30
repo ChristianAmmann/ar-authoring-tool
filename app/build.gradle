@@ -125,16 +125,6 @@ sceneform.asset('../../mobiledatacollection/app/sampledata/bush/Mesh_RoseBush.ob
         '../../mobiledatacollection/app/sampledata/bush/Mesh_RoseBush.sfa',
         'src/main/assets/bush')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/campfire/1224 Campfire.obj',
-        'default',
-        '../../mobiledatacollection/app/sampledata/campfire/1224 Campfire.sfa',
-        'src/main/assets/campfire')
-
-sceneform.asset('../../mobiledatacollection/app/sampledata/car/1377 Car.obj',
-        'default',
-        '../../mobiledatacollection/app/sampledata/car/1377 Car.sfa',
-        'src/main/assets/car')
-
 sceneform.asset('../../mobiledatacollection/app/sampledata/fence/SM_PicketFence_02.obj',
         'default',
         '../../mobiledatacollection/app/sampledata/fence/SM_PicketFence_02.sfa',
@@ -159,11 +149,6 @@ sceneform.asset('../../mobiledatacollection/app/sampledata/pinetree/PineTree.obj
         'default',
         '../../mobiledatacollection/app/sampledata/pinetree/PineTree.sfa',
         'src/main/assets/pinetree')
-
-sceneform.asset('../../mobiledatacollection/app/sampledata/rails/Rails.obj',
-        'default',
-        '../../mobiledatacollection/app/sampledata/rails/Rails.sfa',
-        'src/main/assets/rails')
 
 sceneform.asset('../../mobiledatacollection/app/sampledata/tree/PUSHILIN_bush.obj',
         'default',
