@@ -15,7 +15,7 @@
                ],
             },
             {
-               metallic: 1,
+               metallic: 0,
             },
             {
                roughness: 0.408248,
@@ -41,7 +41,7 @@
                ],
             },
             {
-               metallic: 1,
+               metallic: 0,
             },
             {
                roughness: 0.408248,
@@ -67,7 +67,7 @@
                ],
             },
             {
-               metallic: 1,
+               metallic: 0,
             },
             {
                roughness: 0.408248,
@@ -93,7 +93,7 @@
                ],
             },
             {
-               metallic: 1,
+               metallic: 0,
             },
             {
                roughness: 0.408248,
@@ -119,7 +119,7 @@
                ],
             },
             {
-               metallic: 1,
+               metallic: 0,
             },
             {
                roughness: 0.408248,
@@ -145,7 +145,7 @@
                ],
             },
             {
-               metallic: 1,
+               metallic: 0,
             },
             {
                roughness: 0.408248,
@@ -197,7 +197,7 @@
                ],
             },
             {
-               metallic: 1,
+               metallic: 0,
             },
             {
                roughness: 0.242536,
@@ -223,7 +223,7 @@
                ],
             },
             {
-               metallic: 1,
+               metallic: 0,
             },
             {
                roughness: 0.242536,
@@ -249,7 +249,7 @@
                ],
             },
             {
-               metallic: 1,
+               metallic: 0,
             },
             {
                roughness: 0.408248,
@@ -275,7 +275,7 @@
                ],
             },
             {
-               metallic: 1,
+               metallic: 0,
             },
             {
                roughness: 0.408248,
@@ -301,7 +301,7 @@
                ],
             },
             {
-               metallic: 1,
+               metallic: 0,
             },
             {
                roughness: 0.408248,
@@ -322,7 +322,7 @@
       collision: {},
       file: "../../mobiledatacollection/app/sampledata/bicycle/Bike_1355.obj",
       name: "Bike_1355",
-      scale: 0.052263999999999998,
+      scale: 0.0032263999999999998,
    },
    version: "0.51:1",
 }
