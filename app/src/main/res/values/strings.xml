@@ -168,7 +168,6 @@
 	<string name="task_completion_time_description">Die benötigte Zeit eines Probanden um die Studie zu absolvieren</string>
 	<string name="touch_events">Anzahl der Touch-Eingaben</string>
 	<string name="touch_events_description">Benötigte Anzahl der Touch-Eingaben um die Studie zu absolvieren</string>
-
 	<string name="survey_javascript">&lt;script type=\"text/javascript\"&gt;Android.finishedSurvey();&lt;/script&gt;</string>
 	<string name="copy_code">Code kopieren</string>
 	<string name="open_sosci_survey">SoSci Survey öffnen</string>
@@ -213,4 +212,8 @@
 	<string name="onboarding_areditor_image">Objekte platzieren mit QR-Codes</string>
 	<string name="onboarding_areditor_image_description">TODO: Beschreibung</string>
 	<string name="onboarding_areditor_interaction">Interaktion mit AR-Objekten</string>
+	<string name="dont_show_again">Nicht mehr anzeigen</string>
+	<string name="camera_permission">Berechtigung für Kamera</string>
+	<string name="microfon_permission">Berechtigung für Mikrofon</string>
+	<string name="storage_permission">Berechtigung für externer Speicher</string>
 </resources>

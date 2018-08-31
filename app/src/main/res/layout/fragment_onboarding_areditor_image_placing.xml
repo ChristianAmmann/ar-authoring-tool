@@ -37,22 +37,22 @@
 
 			<ImageView
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
+				android:layout_height="200dp"
 				android:src="@drawable/scan_instruction_1"/>
 
 			<ImageView
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
+				android:layout_height="200dp"
 				android:src="@drawable/scan_instruction_2"/>
 
 			<ImageView
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
+				android:layout_height="200dp"
 				android:src="@drawable/scan_instruction_3"/>
 
 			<ImageView
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
+				android:layout_height="200dp"
 				android:src="@drawable/scan_instruction_4"/>
 
 		</LinearLayout>

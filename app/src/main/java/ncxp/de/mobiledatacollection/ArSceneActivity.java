@@ -2,6 +2,7 @@ package ncxp.de.mobiledatacollection;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import ncxp.de.mobiledatacollection.model.StudyDatabase;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.repository.ArSceneRepository;
+import ncxp.de.mobiledatacollection.ui.areditor.util.EditorState;
 import ncxp.de.mobiledatacollection.ui.arscene.ArSceneFragment;
 import ncxp.de.mobiledatacollection.viewmodel.ArSceneViewModel;
 import ncxp.de.mobiledatacollection.viewmodel.factory.ArSceneViewModelFactory;
@@ -37,13 +39,17 @@ public class ArSceneActivity extends AppCompatActivity {
 		viewModel = ArSceneActivity.obtainViewModel(this);
 		fab = findViewById(R.id.fab_add_arscene);
 		fab.setOnClickListener(view -> {
-			Intent intent = new Intent(this, OnboardingArEditorActivity.class);
-			startActivity(intent);
-			/* TODO send to OnboardingAREditor and from Onboarding to ArEditor
-			Intent intent = new Intent(this, ArEditorActivity.class);
-			intent.putExtra(ArEditorActivity.KEY_STUDY, viewModel.getStudy());
-			intent.putExtra(ArEditorActivity.KEY_EDITOR_STATE, EditorState.EDIT_MODE);
-			startActivity(intent);*/
+			if (showOnboarding()) {
+				Intent intent = new Intent(this, OnboardingArEditorActivity.class);
+				intent.putExtra(ArEditorActivity.KEY_STUDY, viewModel.getStudy());
+				intent.putExtra(ArEditorActivity.KEY_EDITOR_STATE, EditorState.EDIT_MODE);
+				startActivity(intent);
+			} else {
+				Intent intent = new Intent(this, ArEditorActivity.class);
+				intent.putExtra(ArEditorActivity.KEY_STUDY, viewModel.getStudy());
+				intent.putExtra(ArEditorActivity.KEY_EDITOR_STATE, EditorState.EDIT_MODE);
+				startActivity(intent);
+			}
 		});
 		toolbar = findViewById(R.id.arscene_toolbar);
 		setSupportActionBar(toolbar);
@@ -55,6 +61,11 @@ public class ArSceneActivity extends AppCompatActivity {
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction().add(R.id.container, ArSceneFragment.newInstance(), null).commit();
 		}
+	}
+
+	private boolean showOnboarding() {
+		SharedPreferences sharedPreferences = getSharedPreferences(OnboardingArEditorActivity.SHOW_AGAIN_PREFERENCE, MODE_PRIVATE);
+		return !sharedPreferences.getBoolean(OnboardingArEditorActivity.SHOW_AGAIN_KEY, false);
 	}
 
 	private static ArSceneViewModelFactory createFactory(FragmentActivity activity) {

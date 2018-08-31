@@ -27,16 +27,42 @@
 			android:gravity="center"
 			android:orientation="horizontal"/>
 
-		<Button
-			android:id="@+id/continue_button"
-			android:layout_width="wrap_content"
+		<LinearLayout
+			android:id="@+id/onboarding_action_container"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_alignParentEnd="true"
-			android:layout_centerVertical="true"
-			android:layout_toStartOf="@id/dots"
-			android:background="?attr/selectableItemBackground"
-			android:text="@string/done"
-			android:textColor="@android:color/white"
-			android:visibility="gone"/>
+			android:layout_below="@id/dots"
+			android:orientation="horizontal"
+			android:visibility="gone">
+
+			<CheckBox
+				android:id="@+id/dont_show_again_checkbox"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:buttonTint="@android:color/white"/>
+
+			<TextView
+				android:id="@+id/dont_show_again_text"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/dont_show_again"
+				android:textColor="@android:color/white"/>
+
+			<View
+				android:layout_width="0dp"
+				android:layout_height="0dp"
+				android:layout_weight="1"/>
+
+
+			<Button
+				android:id="@+id/continue_button"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:background="?attr/selectableItemBackground"
+				android:text="@string/done"
+				android:textColor="@android:color/white"/>
+
+		</LinearLayout>
 	</RelativeLayout>
 </LinearLayout>
+

@@ -38,6 +38,8 @@ public class ArStudyFragment extends Fragment {
 	private ImageButton           cancelButton;
 	private ImageButton           playAndPauseButton;
 	private ImageButton           finishButton;
+	private ImageButton           editButton;
+	private ImageButton           backButton;
 	private ImageView             timeIcon;
 	private LinearLayout          bottomToolbar;
 	private TestPersonState       state = TestPersonState.STOPPED;
@@ -75,14 +77,14 @@ public class ArStudyFragment extends Fragment {
 		cancelButton = view.findViewById(R.id.cancel);
 		timeIcon = view.findViewById(R.id.timer_icon);
 		studyStatusView = view.findViewById(R.id.study_status);
-		ImageButton editButton = view.findViewById(R.id.edit_modus);
+		editButton = view.findViewById(R.id.edit_modus);
 		editButton.setOnClickListener(clickedView -> {
 			viewModel.setState(EditorState.EDIT_MODE);
 			arInteractionListener.onEditorStateChanged();
 		});
 		chronometer = view.findViewById(R.id.time_view);
 		chronometer.setOnChronometerTickListener(chronometerChanged -> chronometer = chronometerChanged);
-		ImageButton backButton = view.findViewById(R.id.back);
+		backButton = view.findViewById(R.id.back);
 		backButton.setOnClickListener(clickedView -> getActivity().finish());
 		settingsButton.setOnClickListener(clickedView -> showArSettingDialog());
 		addSubjectButton.setOnClickListener(this::onAddSubjectClicked);
@@ -162,6 +164,7 @@ public class ArStudyFragment extends Fragment {
 			hideSubjectModus();
 			showDirectorModus();
 			startSurveyActivity();
+			updateState(TestPersonState.FINISHED);
 		}).setNegativeButton(R.string.cancel, (dialog, which) -> {
 			viewModel.startSensorService();
 			updateState(currentState);
@@ -177,11 +180,17 @@ public class ArStudyFragment extends Fragment {
 	}
 
 	private void showDirectorModus() {
+		backButton.setVisibility(View.VISIBLE);
+		editButton.setVisibility(View.VISIBLE);
+		settingsButton.setVisibility(View.VISIBLE);
 		addSubjectButton.setVisibility(View.VISIBLE);
 		settingsButton.setVisibility(View.VISIBLE);
 	}
 
 	private void hideDirectorModus() {
+		backButton.setVisibility(View.GONE);
+		editButton.setVisibility(View.GONE);
+		settingsButton.setVisibility(View.GONE);
 		addSubjectButton.setVisibility(View.GONE);
 		settingsButton.setVisibility(View.GONE);
 	}

@@ -70,20 +70,20 @@ import ncxp.de.mobiledatacollection.model.data.ARScene;
 import ncxp.de.mobiledatacollection.model.data.ArImageToObjectRelation;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.repository.ArSceneRepository;
-import ncxp.de.mobiledatacollection.sceneform.ImageAnchor;
-import ncxp.de.mobiledatacollection.sceneform.DeleteWidgetNode;
 import ncxp.de.mobiledatacollection.sceneform.ArNode;
+import ncxp.de.mobiledatacollection.sceneform.DeleteWidgetNode;
+import ncxp.de.mobiledatacollection.sceneform.ImageAnchor;
 import ncxp.de.mobiledatacollection.sceneform.PlacementNode;
 import ncxp.de.mobiledatacollection.sceneform.RotateWidgetNode;
 import ncxp.de.mobiledatacollection.sceneform.ScaleWidgetNode;
 import ncxp.de.mobiledatacollection.ui.areditor.ArEditFragment;
-import ncxp.de.mobiledatacollection.viewmodel.ArEditorViewModel;
-import ncxp.de.mobiledatacollection.viewmodel.factory.ArEditorViewModelFactory;
 import ncxp.de.mobiledatacollection.ui.areditor.ArInteractionListener;
 import ncxp.de.mobiledatacollection.ui.areditor.ArStudyFragment;
 import ncxp.de.mobiledatacollection.ui.areditor.util.EditorState;
 import ncxp.de.mobiledatacollection.ui.areditor.util.RotationTechnique;
 import ncxp.de.mobiledatacollection.ui.areditor.util.ScaleTechnique;
+import ncxp.de.mobiledatacollection.viewmodel.ArEditorViewModel;
+import ncxp.de.mobiledatacollection.viewmodel.factory.ArEditorViewModelFactory;
 
 import static ncxp.de.mobiledatacollection.viewmodel.StudiesViewModel.DIRECTORY;
 
@@ -97,8 +97,8 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	private static final String FILE_TYPE_PNG                    = "png";
 	public static final  String AUGMENTED_IMAGE_DB               = "markers.imgdb";
 	private static final int    PERMISSION_CODE_SCREEN_CAPTURING = 4123;
-	private static final float  MAX_SCALE                        = 3f;
-	private static final float  MIN_SCALE                        = 0.5f;
+	private static final float  MAX_SCALE                        = 4f;
+	private static final float  MIN_SCALE                        = 0.1f;
 
 	private ArFragment           arFragment;
 	private TransformationSystem transformationSystem;
@@ -141,7 +141,10 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		setupArFragment();
 		camera = arFragment.getArSceneView().getScene().getCamera();
 		viewModel = obtainViewModel(this);
-		initPlacing();
+		initPlacingFrame();
+		initDeleteWidgetNode();
+		initRotateWidgetNode();
+		initScaleWidgetNode();
 		setupAugmentedImageDatabase();
 		setupInteractionTechnique();
 		if (viewModel.getState().equals(EditorState.EDIT_MODE)) {
@@ -154,17 +157,15 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	}
 
 	private void setupInteractionTechnique() {
-		//TODO Refactor
+		//TODO Refactor!!!
 		viewModel.getSelectionTechnique().observe(this, technique -> {
-			// TODO remove selectNode not working
+			transformationSystem.getSelectionVisualizer().removeSelectionVisual(transformationSystem.getSelectedNode());
 			switch (technique) {
 				case CROSSHAIR:
 					crosshair.setVisibility(View.VISIBLE);
-					arFragment.getArSceneView().getScene().setOnPeekTouchListener(((hitTestResult, motionEvent) -> trackableGestureDetector.onTouchEvent(motionEvent)));
-
 					trackableGestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
 						@Override
-						public boolean onSingleTapUp(MotionEvent e) {
+						public boolean onSingleTapUp(MotionEvent motionEvent) {
 
 							HitTestResult hitTestResult = arFragment.getArSceneView()
 																	.getScene()
@@ -174,10 +175,17 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 																						metrics.heightPixels,
 																						camera.getProjectionMatrix().data,
 																						camera.getViewMatrix().data));
-
+							if (hitTestResult.getNode() != null) {
+								ArNode node = (ArNode) hitTestResult.getNode();
+								transformationSystem.getSelectionVisualizer().applySelectionVisual(node);
+								node.select();
+							} else {
+								transformationSystem.getSelectionVisualizer().removeSelectionVisual(transformationSystem.getSelectedNode());
+							}
 							return true;
 						}
 					});
+					arFragment.getArSceneView().getScene().setOnPeekTouchListener(((hitTestResult, motionEvent) -> trackableGestureDetector.onTouchEvent(motionEvent)));
 					break;
 				case RAYCASTING:
 					crosshair.setVisibility(View.GONE);
@@ -206,7 +214,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 							 .forEach(node -> ((ArNode) node).getRotationController().setEnabled(false));
 					break;
 			}
-
+			removeRotationWidget();
 		});
 		viewModel.getScaleTechnique().observe(this, technique -> {
 			switch (technique) {
@@ -225,7 +233,22 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 							 .forEach(node -> ((ArNode) node).getScaleController().setEnabled(false));
 					break;
 			}
+			removeScaleWidget();
 		});
+	}
+
+	private void removeScaleWidget() {
+		if (scaleWidgetNode != null && scaleWidgetNode.getParent() != null) {
+			Node parent = scaleWidgetNode.getParent();
+			parent.removeChild(scaleWidgetNode);
+		}
+	}
+
+	private void removeRotationWidget() {
+		if (rotateWidgetNode != null && rotateWidgetNode.getParent() != null) {
+			Node parent = rotateWidgetNode.getParent();
+			parent.removeChild(rotateWidgetNode);
+		}
 	}
 
 	private void showEditModeFragment() {
@@ -296,15 +319,22 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		return placeholder;
 	}
 
-	@SuppressLint("ClickableViewAccessibility")
-	private void initPlacing() {
+
+	private void initPlacingFrame() {
 		ModelRenderable.builder().setSource(this, R.raw.frame).build().thenAccept(renderable -> {
 			MaterialFactory.makeOpaqueWithColor(this, new Color(0, 1f, 0)).thenAccept(material -> {
 				highlight = material;
 				frameRenderable = renderable;
 			});
 		});
+	}
+
+	private void initDeleteWidgetNode() {
 		ViewRenderable.builder().setView(this, R.layout.delete_view).build().thenAccept((renderable) -> deleteWidgetNode = new DeleteWidgetNode(renderable));
+	}
+
+	@SuppressLint("ClickableViewAccessibility")
+	private void initRotateWidgetNode() {
 		ViewRenderable.builder().setView(this, R.layout.rotation_widget_controls).build().thenAccept(viewRenderable -> {
 			rotateWidgetNode = new RotateWidgetNode(viewRenderable);
 			View widgetView = viewRenderable.getView();
@@ -313,6 +343,10 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 			rotateRightButton.setOnTouchListener((view, motionEvent) -> rotateNode(viewModel.getCurrentSelectedNode().getValue(), 2f));
 			rotateLeftButton.setOnTouchListener((view, motionEvent) -> rotateNode(viewModel.getCurrentSelectedNode().getValue(), -2f));
 		});
+	}
+
+	@SuppressLint("ClickableViewAccessibility")
+	private void initScaleWidgetNode() {
 		ViewRenderable.builder().setView(this, R.layout.scale_widget_controls).build().thenAccept(viewRenderable -> {
 			scaleWidgetNode = new ScaleWidgetNode(viewRenderable);
 			View widgetView = viewRenderable.getView();
@@ -350,7 +384,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		return false;
 	}
 
-	private boolean setupAugmentedImageDatabase() {
+	private void setupAugmentedImageDatabase() {
 		Session session = arFragment.getArSceneView().getSession();
 		if (session == null) {
 			try {
@@ -365,13 +399,12 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 			augmentedImageDatabase = AugmentedImageDatabase.deserialize(session, is);
 		} catch (IOException e) {
 			Log.e(TAG, "IO exception loading augmented image database.", e);
-			return false;
+			return;
 		}
 		Config config = new Config(session);
 		config.setAugmentedImageDatabase(augmentedImageDatabase);
 		config.setUpdateMode(Config.UpdateMode.LATEST_CAMERA_IMAGE);
 		session.configure(config);
-		return true;
 	}
 
 	@Override

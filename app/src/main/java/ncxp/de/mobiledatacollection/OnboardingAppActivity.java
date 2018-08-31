@@ -33,7 +33,7 @@ public class OnboardingAppActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_onboarding_survey);
+		setContentView(R.layout.activity_onboarding_app);
 		viewPager = findViewById(R.id.pager);
 		continueButton = findViewById(R.id.continue_button);
 		continueButton.setOnClickListener((view) -> {
