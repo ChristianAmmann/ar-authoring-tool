@@ -10,8 +10,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-import ncxp.de.mobiledatacollection.datalogger.SensorDataManager;
-import ncxp.de.mobiledatacollection.datalogger.SensorGroup;
+import ncxp.de.mobiledatacollection.sensorlogger.SensorDataManager;
+import ncxp.de.mobiledatacollection.sensorlogger.SensorGroup;
 import ncxp.de.mobiledatacollection.model.data.DeviceSensor;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.data.StudyDeviceSensorJoin;

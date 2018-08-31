@@ -28,7 +28,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-import ncxp.de.mobiledatacollection.datalogger.SensorBackgroundService;
+import ncxp.de.mobiledatacollection.sensorlogger.SensorBackgroundService;
 import ncxp.de.mobiledatacollection.model.data.ARScene;
 import ncxp.de.mobiledatacollection.model.data.ArImageToObjectRelation;
 import ncxp.de.mobiledatacollection.model.data.Study;

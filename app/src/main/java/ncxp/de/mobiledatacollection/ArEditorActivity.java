@@ -3,13 +3,7 @@ package ncxp.de.mobiledatacollection;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.hardware.display.DisplayManager;
-import android.hardware.display.VirtualDisplay;
-import android.media.MediaRecorder;
-import android.media.projection.MediaProjection;
-import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.opengl.Matrix;
 import android.os.Bundle;
@@ -113,12 +107,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	private ImageView         crosshair;
 	private GestureDetector   trackableGestureDetector;
 
-	private MediaProjection         mMediaProjection;
-	private MediaProjectionCallback mMediaProjectionCallback;
-
-	private MediaRecorder          mMediaRecorder;
-	private int                    mScreenDensity;
-	private MediaProjectionManager mProjectionManager;
+	private int mScreenDensity;
 	DisplayMetrics metrics;
 	private float  displayCenterY;
 	private float  displayCenterX;
@@ -134,9 +123,6 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		mScreenDensity = metrics.densityDpi;
 		displayCenterX = metrics.widthPixels / 2;
 		displayCenterY = metrics.heightPixels / 2;
-		mProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-		//TODO
-		//initRecorder();
 		crosshair = findViewById(R.id.crosshair);
 		setupArFragment();
 		camera = arFragment.getArSceneView().getScene().getCamera();
@@ -566,45 +552,6 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		}
 	}
 
-	private class MediaProjectionCallback extends MediaProjection.Callback {
-		@Override
-		public void onStop() {
-			mMediaRecorder.stop();
-			mMediaRecorder.reset();
-			mMediaProjection = null;
-		}
-
-	}
-
-	private void prepareRecorder() {
-		try {
-			mMediaRecorder.prepare();
-		} catch (IllegalStateException | IOException e) {
-			e.printStackTrace();
-			finish();
-		}
-	}
-
-	private void initRecorder() {
-		if (!isAudioRecordingGranted()) {
-			return;
-		}
-
-		if (mMediaRecorder == null) {
-			mMediaRecorder = new MediaRecorder();
-			mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-			mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
-			mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-			mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-			mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-			mMediaRecorder.setVideoEncodingBitRate(512 * 1000);
-			mMediaRecorder.setVideoFrameRate(30);
-			mMediaRecorder.setVideoSize(getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
-			mMediaRecorder.setOutputFile(getFilePath());
-			prepareRecorder();
-		}
-	}
-
 	private boolean isAudioRecordingGranted() {
 		if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
 			requestReccordAudioPermission();
@@ -632,17 +579,6 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		return studyDir.getPath() + File.separator + videoName;
 	}
 
-	private VirtualDisplay createVirtualDisplay() {
-		return mMediaProjection.createVirtualDisplay("MainActivity",
-													 this.getResources().getDisplayMetrics().widthPixels,
-													 this.getResources().getDisplayMetrics().heightPixels,
-													 mScreenDensity,
-													 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-													 mMediaRecorder.getSurface(),
-													 null,
-													 null);
-	}
-
 	/*
 	private void onSingleTap(MotionEvent motionEvent) {
 		Frame frame = arFragment.getArSceneView().getArFrame();
@@ -665,17 +601,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 			}
 		}
 	}
-
-	private MotionEvent getMotionEventCenter(MotionEvent event) {
-		return MotionEvent.obtain(event.getDownTime(), event.getEventTime(), event.getAction(), displayCenterX, displayCenterY, event.getMetaState());
-	}
-
 	*/
-
-	public static Vector3 GetWorldCoords(float tapX, float tapY, float screenWidth, float screenHeight, float[] projectionMatrix, float[] viewMatrix) {
-		Ray touchRay = projectRay(tapX, tapY, screenWidth, screenHeight, projectionMatrix, viewMatrix);
-		return touchRay.getOrigin();
-	}
 
 	public static Ray projectRay(float tapX, float tapY, float screenWidth, float screenHeight, float[] projectionMatrix, float[] viewMatrix) {
 		float[] viewProjMtx = new float[16];

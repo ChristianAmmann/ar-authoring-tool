@@ -52,7 +52,7 @@
 			android:screenOrientation="locked"
 			android:theme="@style/ARTheme"/>
 
-		<service android:name=".datalogger.SensorBackgroundService"/>
+		<service android:name=".sensorlogger.SensorBackgroundService"/>
 	</application>
 
 </manifest>

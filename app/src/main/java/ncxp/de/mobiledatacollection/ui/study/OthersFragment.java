@@ -18,7 +18,7 @@ import java.util.List;
 
 import ncxp.de.mobiledatacollection.R;
 import ncxp.de.mobiledatacollection.StudyActivity;
-import ncxp.de.mobiledatacollection.datalogger.SettingGroup;
+import ncxp.de.mobiledatacollection.sensorlogger.SettingGroup;
 import ncxp.de.mobiledatacollection.ui.study.adapter.OptionItem;
 import ncxp.de.mobiledatacollection.ui.study.adapter.OptionType;
 import ncxp.de.mobiledatacollection.ui.study.adapter.OtherAdapter;

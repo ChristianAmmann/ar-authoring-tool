@@ -1,4 +1,4 @@
-package ncxp.de.mobiledatacollection.datalogger;
+package ncxp.de.mobiledatacollection.sensorlogger;
 
 import android.content.Context;
 import android.hardware.Sensor;

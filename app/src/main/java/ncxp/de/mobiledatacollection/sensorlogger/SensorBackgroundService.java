@@ -1,4 +1,4 @@
-package ncxp.de.mobiledatacollection.datalogger;
+package ncxp.de.mobiledatacollection.sensorlogger;
 
 import android.app.Service;
 import android.content.Context;
@@ -105,18 +105,6 @@ public class SensorBackgroundService extends Service implements SensorEventListe
 
 	private void stopCollecting() {
 		sensorManager.unregisterListener(this);
-	}
-
-	private void initializeScreenCapture() {
-
-	}
-
-	private void startScreenCapture() {
-
-	}
-
-	private void stopScreenCapture() {
-
 	}
 
 	private void createTestperson() {

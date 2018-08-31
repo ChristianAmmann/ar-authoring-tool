@@ -3,7 +3,7 @@ package ncxp.de.mobiledatacollection.viewmodel.factory;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-import ncxp.de.mobiledatacollection.datalogger.SensorDataManager;
+import ncxp.de.mobiledatacollection.sensorlogger.SensorDataManager;
 import ncxp.de.mobiledatacollection.model.repository.DeviceSensorRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyDeviceSensorJoinRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;

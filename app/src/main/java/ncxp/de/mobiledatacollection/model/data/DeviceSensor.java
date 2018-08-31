@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 
-import ncxp.de.mobiledatacollection.datalogger.SensorType;
+import ncxp.de.mobiledatacollection.sensorlogger.SensorType;
 
 @Entity(tableName = DeviceSensor.TABLE_NAME)
 public class DeviceSensor implements Serializable {
