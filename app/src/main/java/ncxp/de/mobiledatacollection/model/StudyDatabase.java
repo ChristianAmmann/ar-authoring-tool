@@ -9,20 +9,16 @@ import ncxp.de.mobiledatacollection.model.dao.ArImageToObjectRelationDao;
 import ncxp.de.mobiledatacollection.model.dao.ArSceneDao;
 import ncxp.de.mobiledatacollection.model.dao.DataDao;
 import ncxp.de.mobiledatacollection.model.dao.DeviceSensorDao;
-import ncxp.de.mobiledatacollection.model.dao.MeasurementDao;
 import ncxp.de.mobiledatacollection.model.dao.StudyDao;
 import ncxp.de.mobiledatacollection.model.dao.StudyDeviceSensorJoinDao;
-import ncxp.de.mobiledatacollection.model.dao.StudyMeasurementJoinDao;
 import ncxp.de.mobiledatacollection.model.dao.SurveyDao;
 import ncxp.de.mobiledatacollection.model.dao.TestPersonDao;
 import ncxp.de.mobiledatacollection.model.data.ARScene;
 import ncxp.de.mobiledatacollection.model.data.ArImageToObjectRelation;
 import ncxp.de.mobiledatacollection.model.data.Data;
 import ncxp.de.mobiledatacollection.model.data.DeviceSensor;
-import ncxp.de.mobiledatacollection.model.data.Measurement;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.data.StudyDeviceSensorJoin;
-import ncxp.de.mobiledatacollection.model.data.StudyMeasurementJoin;
 import ncxp.de.mobiledatacollection.model.data.Survey;
 import ncxp.de.mobiledatacollection.model.data.TestPerson;
 
@@ -31,12 +27,10 @@ import ncxp.de.mobiledatacollection.model.data.TestPerson;
 		Survey.class,
 		TestPerson.class,
 		DeviceSensor.class,
-		Measurement.class,
 		Data.class,
 		ARScene.class,
 		ArImageToObjectRelation.class,
-		StudyDeviceSensorJoin.class,
-		StudyMeasurementJoin.class}, version = 1, exportSchema = false)
+		StudyDeviceSensorJoin.class}, version = 1, exportSchema = false)
 public abstract class StudyDatabase extends RoomDatabase {
 
 	public static final String DATABASE_NAME = "studies.db";
@@ -56,10 +50,6 @@ public abstract class StudyDatabase extends RoomDatabase {
 	public abstract ArSceneDao arSceneDao();
 
 	public abstract StudyDeviceSensorJoinDao studyDeviceSensorJoinDao();
-
-	public abstract StudyMeasurementJoinDao studyMeasurementJoinDao();
-
-	public abstract MeasurementDao measurement();
 
 	public abstract ArImageToObjectRelationDao arImageToObjectRelationDao();
 

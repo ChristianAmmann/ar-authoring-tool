@@ -13,15 +13,11 @@ import java.util.stream.Collectors;
 import ncxp.de.mobiledatacollection.datalogger.SensorDataManager;
 import ncxp.de.mobiledatacollection.datalogger.SensorGroup;
 import ncxp.de.mobiledatacollection.model.data.DeviceSensor;
-import ncxp.de.mobiledatacollection.model.data.Measurement;
 import ncxp.de.mobiledatacollection.model.data.Study;
 import ncxp.de.mobiledatacollection.model.data.StudyDeviceSensorJoin;
-import ncxp.de.mobiledatacollection.model.data.StudyMeasurementJoin;
 import ncxp.de.mobiledatacollection.model.data.Survey;
 import ncxp.de.mobiledatacollection.model.repository.DeviceSensorRepository;
-import ncxp.de.mobiledatacollection.model.repository.MeasurementRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyDeviceSensorJoinRepository;
-import ncxp.de.mobiledatacollection.model.repository.StudyMeasurementJoinRepository;
 import ncxp.de.mobiledatacollection.model.repository.StudyRepository;
 import ncxp.de.mobiledatacollection.model.repository.SurveyRepository;
 import ncxp.de.mobiledatacollection.ui.study.adapter.SensorSettings;
@@ -32,35 +28,29 @@ public class StudyViewModel extends ViewModel {
 	private SurveyRepository                surveyRepo;
 	private DeviceSensorRepository          deviceRepo;
 	private StudyDeviceSensorJoinRepository studyDeviceSensorJoinRepo;
-	private MeasurementRepository           measurementRepo;
-	private StudyMeasurementJoinRepository  studyMeasurementJoinRepo;
 	private SensorDataManager               sensorDataManager;
 
 	private Study                               study;
 	private MutableLiveData<List<Survey>>       surveys;
 	private MutableLiveData<List<DeviceSensor>> sensors;
-	private MutableLiveData<List<Measurement>>  measurements;
 	private SensorSettings                      settings;
 	private boolean                             isCapturingScreen;
 	private boolean                             isCapturingAudio;
+	private boolean                             isTaskCompletionTimeActive;
+	private boolean                             isAmountOfTouchEventsActive;
 
 	public StudyViewModel(StudyRepository studyRepo,
 						  SurveyRepository surveyRepo,
 						  DeviceSensorRepository deviceRepo,
 						  SensorDataManager sensorDataManager,
-						  StudyDeviceSensorJoinRepository studyDeviceSensorJoinRepo,
-						  MeasurementRepository measurementRepo,
-						  StudyMeasurementJoinRepository studyMeasurementJoinRepo) {
+						  StudyDeviceSensorJoinRepository studyDeviceSensorJoinRepo) {
 		this.studyRepo = studyRepo;
 		this.surveyRepo = surveyRepo;
 		this.deviceRepo = deviceRepo;
 		this.sensorDataManager = sensorDataManager;
 		this.studyDeviceSensorJoinRepo = studyDeviceSensorJoinRepo;
-		this.studyMeasurementJoinRepo = studyMeasurementJoinRepo;
-		this.measurementRepo = measurementRepo;
 		this.sensors = new MutableLiveData<>();
 		this.surveys = new MutableLiveData<>();
-		this.measurements = new MutableLiveData<>();
 	}
 
 
@@ -68,6 +58,8 @@ public class StudyViewModel extends ViewModel {
 		this.study = study;
 		this.isCapturingAudio = study.isCapturingAudio();
 		this.isCapturingScreen = study.isCapturingScreen();
+		this.isAmountOfTouchEventsActive = study.getAmountOfTouchEventsActive();
+		this.isTaskCompletionTimeActive = study.getTaskCompletionTimeActive();
 	}
 
 	public Study getStudy() {
@@ -81,7 +73,6 @@ public class StudyViewModel extends ViewModel {
 			settings.setSensorMeasuringDistance(study.getSamplingRate());
 			loadSurveys();
 			loadActiveSensors();
-			loadMeasurements();
 		} else {
 			settings = new SensorSettings();
 			initAvailableDeviceSensor(null);
@@ -127,37 +118,6 @@ public class StudyViewModel extends ViewModel {
 		sensors.postValue(availableDeviceSensors);
 	}
 
-	public LiveData<List<Measurement>> getMeasurements() {
-		return measurements;
-	}
-
-	private void loadMeasurements() {
-		ExecutorService executorService = Executors.newFixedThreadPool(2);
-		executorService.submit(() -> {
-			List<Measurement> savedMeasurements = studyMeasurementJoinRepo.getMeasurementsForStudy(study);
-			measurements.postValue(savedMeasurements);
-		});
-	}
-
-	public void createMeasurement(String name) {
-		Measurement measurement = new Measurement();
-		measurement.setName(name);
-		List<Measurement> newMeasurements = new ArrayList<>();
-		if (measurements.getValue() != null) {
-			newMeasurements = measurements.getValue();
-		}
-		newMeasurements.add(measurement);
-		measurements.postValue(newMeasurements);
-	}
-
-	public void removeMeasurement(String name) {
-		Measurement measurement = new Measurement();
-		measurement.setName(name);
-		if (measurements.getValue() != null) {
-			measurements.getValue().remove(measurement);
-		}
-	}
-
 	public void createSurvey(String name, String description, String projectDirectory, String identifier) {
 		Survey survey = new Survey();
 		survey.setName(name);
@@ -188,7 +148,6 @@ public class StudyViewModel extends ViewModel {
 			long studyId = saveStudy(study);
 			saveActiveDeviceSensors(studyId);
 			saveSurveys(studyId);
-			saveMeasurements(studyId);
 		});
 	}
 
@@ -200,7 +159,6 @@ public class StudyViewModel extends ViewModel {
 			updateStudy(updateStudy);
 			saveActiveDeviceSensors(updateStudy.getId());
 			saveSurveys(updateStudy.getId());
-			saveMeasurements(updateStudy.getId());
 		});
 	}
 
@@ -223,14 +181,6 @@ public class StudyViewModel extends ViewModel {
 	private void saveSurveys(long studyId) {
 		surveys.getValue().forEach(survey -> survey.setStudyId(studyId));
 		surveyRepo.saveSurveys(surveys.getValue());
-	}
-
-	private void saveMeasurements(long studyId) {
-		measurements.getValue().forEach(measurement -> {
-			long measurementId = measurementRepo.saveMeasurement(measurement);
-			StudyMeasurementJoin join = new StudyMeasurementJoin(studyId, measurementId);
-			studyMeasurementJoinRepo.saveStudyMeasurementJoin(join);
-		});
 	}
 
 	public List<Object> getSectionedDeviceSensors(List<DeviceSensor> deviceSensors) {
@@ -269,10 +219,19 @@ public class StudyViewModel extends ViewModel {
 		return isCapturingAudio;
 	}
 
-	public boolean isMeasurementActive(String name) {
-		if (measurements.getValue() != null) {
-			return measurements.getValue().stream().anyMatch(measurement -> measurement.getName().equals(name));
-		}
-		return false;
+	public void setTaskCompletionTime(boolean active) {
+		this.isTaskCompletionTimeActive = active;
+	}
+
+	public boolean isTaskCompletionTimeActive() {
+		return isTaskCompletionTimeActive;
+	}
+
+	public boolean isAmountOfTouchEventsActive() {
+		return isAmountOfTouchEventsActive;
+	}
+
+	public void setAmountOfTouchEvents(boolean active) {
+		this.isAmountOfTouchEventsActive = active;
 	}
 }
