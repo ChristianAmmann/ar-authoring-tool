@@ -71,14 +71,6 @@ public class OthersFragment extends Fragment implements OptionOthersListener {
 		} else {
 			sectionedOptions.add(new SensorSettings());
 		}
-
-		sectionedOptions.add(SettingGroup.VIDEO_AUDIO.getGroupId());
-		OptionItem videoItem = new OptionItem(getString(R.string.screen_capturing), getString(R.string.screen_capturing_description), OptionType.VIDEO);
-		OptionItem audioItem = new OptionItem(getString(R.string.audio_capturing), getString(R.string.audio_capturing_description), OptionType.AUDIO);
-		videoItem.setActive(viewModel.isCapturingScreen());
-		audioItem.setActive(viewModel.isCapturingAudio());
-		sectionedOptions.add(videoItem);
-		sectionedOptions.add(audioItem);
 		sectionedOptions.add(SettingGroup.OTHERS.getGroupId());
 		OptionItem taskCompletionTime = new OptionItem(getString(R.string.task_completion_time),
 													   getString(R.string.task_completion_time_description),
@@ -120,12 +112,6 @@ public class OthersFragment extends Fragment implements OptionOthersListener {
 	@Override
 	public void onOptionItemClicked(OptionItem item) {
 		switch (item.getType()) {
-			case VIDEO:
-				viewModel.setCapturingScreen(item.isActive());
-				break;
-			case AUDIO:
-				viewModel.setCapturingAudio(item.isActive());
-				break;
 			case TASK_COMPLETION_TIME:
 				viewModel.setTaskCompletionTime(item.isActive());
 				break;

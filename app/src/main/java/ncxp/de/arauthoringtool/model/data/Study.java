@@ -20,8 +20,6 @@ public class Study implements Parcelable {
 	public static final String COLUMN_DESCRIPTION            = "description";
 	public static final String COLUMN_SENSOR_ACCURACY        = "accuracy";
 	public static final String COLUMN_SAMPLING_RATE          = "sampling_rate";
-	public static final String COLUMN_SCREEN_CAPTURING       = "screen_capturing";
-	public static final String COLUMN_AUDIO_CAPTURING        = "audio_capturing";
 	public static final String COLUMN_TASK_COMPLETION_TIME   = "task_completion_time";
 	public static final String COLUMN_AMOUNT_OF_TOUCH_EVENTS = "amount_touch_events";
 
@@ -38,10 +36,6 @@ public class Study implements Parcelable {
 	//in s
 	@ColumnInfo(name = COLUMN_SAMPLING_RATE)
 	private Double             samplingRate                = 1.0;
-	@ColumnInfo(name = COLUMN_SCREEN_CAPTURING)
-	private Boolean            isCapturingScreen           = false;
-	@ColumnInfo(name = COLUMN_AUDIO_CAPTURING)
-	private Boolean            isCapturingAudio            = false;
 	@ColumnInfo(name = COLUMN_TASK_COMPLETION_TIME)
 	private Boolean            isTaskCompletionTimeActive  = false;
 	@ColumnInfo(name = COLUMN_AMOUNT_OF_TOUCH_EVENTS)
@@ -94,22 +88,6 @@ public class Study implements Parcelable {
 		this.samplingRate = samplingRate;
 	}
 
-	public Boolean isCapturingScreen() {
-		return isCapturingScreen;
-	}
-
-	public void setCapturingScreen(Boolean capturingScreen) {
-		isCapturingScreen = capturingScreen;
-	}
-
-	public Boolean isCapturingAudio() {
-		return isCapturingAudio;
-	}
-
-	public void setCapturingAudio(Boolean capturingAudio) {
-		isCapturingAudio = capturingAudio;
-	}
-
 	public List<DeviceSensor> getSensors() {
 		return sensors;
 	}
@@ -143,11 +121,18 @@ public class Study implements Parcelable {
 	}
 
 	public static String[] getCSVHeader() {
-		return new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_SENSOR_ACCURACY, COLUMN_SAMPLING_RATE, COLUMN_SCREEN_CAPTURING, COLUMN_AUDIO_CAPTURING};
+		return new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_SENSOR_ACCURACY, COLUMN_SAMPLING_RATE, COLUMN_TASK_COMPLETION_TIME, COLUMN_AMOUNT_OF_TOUCH_EVENTS};
 	}
 
 	public String[] getCsvValues() {
-		return new String[]{id.toString(), name, description, accuracy.toString(), samplingRate.toString(), isCapturingScreen.toString(), isCapturingAudio.toString()};
+		return new String[]{
+				id.toString(),
+				name,
+				description,
+				accuracy.toString(),
+				samplingRate.toString(),
+				isTaskCompletionTimeActive.toString(),
+				isAmountOfTouchEventsActive.toString()};
 	}
 
 	protected Study(Parcel in) {
@@ -156,10 +141,6 @@ public class Study implements Parcelable {
 		description = in.readString();
 		accuracy = in.readByte() == 0x00 ? null : in.readInt();
 		samplingRate = in.readByte() == 0x00 ? null : in.readDouble();
-		byte isCapturingScreenVal = in.readByte();
-		isCapturingScreen = isCapturingScreenVal == 0x02 ? null : isCapturingScreenVal != 0x00;
-		byte isCapturingAudioVal = in.readByte();
-		isCapturingAudio = isCapturingAudioVal == 0x02 ? null : isCapturingAudioVal != 0x00;
 		byte isTaskCompletionTimeActiveVal = in.readByte();
 		isTaskCompletionTimeActive = isTaskCompletionTimeActiveVal == 0x02 ? null : isTaskCompletionTimeActiveVal != 0x00;
 		byte isAmountOfTouchEventsActiveVal = in.readByte();
@@ -204,16 +185,6 @@ public class Study implements Parcelable {
 		} else {
 			dest.writeByte((byte) (0x01));
 			dest.writeDouble(samplingRate);
-		}
-		if (isCapturingScreen == null) {
-			dest.writeByte((byte) (0x02));
-		} else {
-			dest.writeByte((byte) (isCapturingScreen ? 0x01 : 0x00));
-		}
-		if (isCapturingAudio == null) {
-			dest.writeByte((byte) (0x02));
-		} else {
-			dest.writeByte((byte) (isCapturingAudio ? 0x01 : 0x00));
 		}
 		if (isTaskCompletionTimeActive == null) {
 			dest.writeByte((byte) (0x02));

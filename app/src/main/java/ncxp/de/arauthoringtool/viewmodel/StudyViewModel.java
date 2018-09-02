@@ -34,8 +34,6 @@ public class StudyViewModel extends ViewModel {
 	private MutableLiveData<List<Survey>>       surveys;
 	private MutableLiveData<List<DeviceSensor>> sensors;
 	private SensorSettings                      settings;
-	private boolean                             isCapturingScreen;
-	private boolean                             isCapturingAudio;
 	private boolean                             isTaskCompletionTimeActive;
 	private boolean                             isAmountOfTouchEventsActive;
 
@@ -56,8 +54,6 @@ public class StudyViewModel extends ViewModel {
 
 	public void setStudy(Study study) {
 		this.study = study;
-		this.isCapturingAudio = study.isCapturingAudio();
-		this.isCapturingScreen = study.isCapturingScreen();
 		this.isAmountOfTouchEventsActive = study.getAmountOfTouchEventsActive();
 		this.isTaskCompletionTimeActive = study.getTaskCompletionTimeActive();
 	}
@@ -141,8 +137,6 @@ public class StudyViewModel extends ViewModel {
 			study.setDescription(description);
 			study.setAccuracy(settings.getSensorAccuracy());
 			study.setSamplingRate(settings.getSensorMeasuringDistance());
-			study.setCapturingScreen(isCapturingScreen);
-			study.setCapturingAudio(isCapturingAudio);
 			study.setSamplingRate(settings.getSensorMeasuringDistance());
 			study.setAccuracy(settings.getSensorAccuracy());
 			long studyId = saveStudy(study);
@@ -154,8 +148,8 @@ public class StudyViewModel extends ViewModel {
 	public void update(Study updateStudy) {
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
-			study.setCapturingAudio(isCapturingAudio);
-			study.setCapturingScreen(isCapturingScreen);
+			study.setAmountOfTouchEventsActive(isAmountOfTouchEventsActive);
+			study.setTaskCompletionTimeActive(isTaskCompletionTimeActive);
 			updateStudy(updateStudy);
 			saveActiveDeviceSensors(updateStudy.getId());
 			saveSurveys(updateStudy.getId());
@@ -195,28 +189,12 @@ public class StudyViewModel extends ViewModel {
 		return sectionedDeviceSensors;
 	}
 
-	public void setCapturingScreen(boolean capturingScreen) {
-		isCapturingScreen = capturingScreen;
-	}
-
-	public void setCapturingAudio(boolean capturingAudio) {
-		isCapturingAudio = capturingAudio;
-	}
-
 	public void setSensorSettings(SensorSettings settings) {
 		this.settings = settings;
 	}
 
 	public SensorSettings getSensorSettings() {
 		return settings;
-	}
-
-	public boolean isCapturingScreen() {
-		return isCapturingScreen;
-	}
-
-	public boolean isCapturingAudio() {
-		return isCapturingAudio;
 	}
 
 	public void setTaskCompletionTime(boolean active) {
