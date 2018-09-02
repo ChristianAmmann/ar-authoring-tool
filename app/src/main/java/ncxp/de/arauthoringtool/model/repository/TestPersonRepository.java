@@ -21,6 +21,10 @@ public class TestPersonRepository {
 		return testPersonDao.selectTestPersonFromStudy(study.getId());
 	}
 
+	public int getAmountOfTestPersons(Study study) {
+		return testPersonDao.getAmountOfTestPersons(study.getId());
+	}
+
 	public void removeTestPerson(TestPerson testPerson) {
 		testPersonDao.deleteById(testPerson.getId());
 	}

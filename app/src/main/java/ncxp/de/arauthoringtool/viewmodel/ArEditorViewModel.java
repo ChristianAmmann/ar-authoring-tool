@@ -28,6 +28,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
+import ncxp.de.arauthoringtool.model.data.TestPerson;
+import ncxp.de.arauthoringtool.model.repository.TestPersonRepository;
 import ncxp.de.arauthoringtool.sensorlogger.SensorBackgroundService;
 import ncxp.de.arauthoringtool.model.data.ARScene;
 import ncxp.de.arauthoringtool.model.data.ArImageToObjectRelation;
@@ -46,6 +48,7 @@ public class ArEditorViewModel extends AndroidViewModel {
 
 	private MutableLiveData<List<Thumbnail>>    modelsThumbnails;
 	private ArSceneRepository                   arSceneRepository;
+	private TestPersonRepository                testPersonRepository;
 	private ARScene                             arScene;
 	private Study                               study;
 	private SensorBackgroundService             sensorBackgroundService;
@@ -59,9 +62,10 @@ public class ArEditorViewModel extends AndroidViewModel {
 	private boolean                             comingFromStudyModus = false;
 
 
-	public ArEditorViewModel(@NonNull Application application, ArSceneRepository arSceneRepository) {
+	public ArEditorViewModel(@NonNull Application application, ArSceneRepository arSceneRepository, TestPersonRepository testPersonRepository) {
 		super(application);
 		this.arSceneRepository = arSceneRepository;
+		this.testPersonRepository = testPersonRepository;
 		this.modelsThumbnails = new MutableLiveData<>();
 		augmentedImageMap = new HashMap<>();
 		modelsThumbnails.postValue(new ArrayList<>());
@@ -198,9 +202,20 @@ public class ArEditorViewModel extends AndroidViewModel {
 	public void startSensorService() {
 		if (study != null) {
 			sensorBackgroundService.initialize(study);
-
 		}
 		sensorBackgroundService.start();
+	}
+
+	public void createTestpersonAndStartService() {
+		ExecutorService executorService = Executors.newFixedThreadPool(2);
+		executorService.submit(() -> {
+			TestPerson person = new TestPerson();
+			person.setStudyId(study.getId());
+			long id = testPersonRepository.saveTestPerson(person);
+			person.setId(id);
+			study.setCurrentSubject(person);
+			startSensorService();
+		});
 	}
 
 	public void stopSensorService() {

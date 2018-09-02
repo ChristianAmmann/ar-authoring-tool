@@ -120,7 +120,7 @@ public class StudyViewModel extends ViewModel {
 		survey.setDescription(description);
 		survey.setProjectDirectory(projectDirectory);
 		survey.setIdentifier(identifier);
-		List<Survey> newSurveys = new ArrayList<>();
+		List<Survey> newSurveys = surveys.getValue();
 		newSurveys.add(survey);
 		surveys.postValue(newSurveys);
 	}

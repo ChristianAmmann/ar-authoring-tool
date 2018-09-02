@@ -82,6 +82,8 @@ public class StudiesViewModel extends AndroidViewModel {
 				study.setSensors(deviceSensorsForStudy);
 				List<Survey> surveys = surveyRepo.getSurveysFromStudy(study);
 				study.setSurveys(surveys);
+				int amountOfSubjects = testPersonRepo.getAmountOfTestPersons(study);
+				study.setAmountOfSubjects(amountOfSubjects);
 			});
 			studies.postValue(fetchedData);
 		});

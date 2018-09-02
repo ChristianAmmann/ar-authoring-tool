@@ -115,7 +115,7 @@
 	<string name="group_others_video_audio">Video &amp; Audio</string>
 	<string name="group_others_miscellaneous">Weitere Optionen</string>
 
-	<string name="sosci_survey_url">https://www.soscisurvey.de/%1$s/?q=%2$s</string>
+	<string name="sosci_survey_url">https://www.soscisurvey.de/%1$s/?q=%2$s&amp;r=%3$s</string>
 	<string name="snackbar_hint_sosci_survey">Durch das Testen des Fragenbogens werden Sie auf SoSci Survey als Proband/Besucher gezählt.</string>
 	<string name="snackbar_error_sosci_survey">Sollte ihren Fragenbogen nicht korrekt angezeigt werden, passen Sie die Einstellung der Umfrage an.</string>
 	<string name="snackbar_proband_error_sosci_survey">Ups… Leider kann der Fragebogen nicht auf gerufen werden. Der Studienleiter soll die Einstellungen anpassen.</string>
@@ -208,4 +208,5 @@
 	<string name="camera_permission">Berechtigung für Kamera</string>
 	<string name="microfon_permission">Berechtigung für Mikrofon</string>
 	<string name="storage_permission">Berechtigung für externer Speicher</string>
+	<string name="amount_of_subjects">Proband(en) teilgenommen</string>
 </resources>

@@ -60,7 +60,7 @@ public class SurveyActivity extends AppCompatActivity {
 			toolbar.setTitleTextColor(Color.WHITE);
 			if (study != null && !study.getSurveys().isEmpty()) {
 				currentSurvey = study.getSurveys().get(0);
-				toolbar.setTitle(currentSurvey.getName());
+				toolbar.setTitle(R.string.survey);
 			}
 		}
 		setSupportActionBar(toolbar);
@@ -96,14 +96,20 @@ public class SurveyActivity extends AppCompatActivity {
 				handler.proceed();
 			}
 		});
+		webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+		configureJavascript();
+		loadUrl(currentSurvey);
+
+	}
+
+	private void configureJavascript() {
 		WebSettings webSettings = webView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
 		webView.addJavascriptInterface(this, "Android");
-		loadUrl(currentSurvey);
 	}
 
 	private void initHintSnackbar() {
-		snackbarHint = Snackbar.make(coordinatorLayout, R.string.snackbar_proband_error_sosci_survey, Snackbar.LENGTH_INDEFINITE);
+		snackbarHint = Snackbar.make(coordinatorLayout, R.string.snackbar_error_sosci_survey, Snackbar.LENGTH_INDEFINITE);
 		showHintSnackbar = true;
 		snackbarHint.setAction(R.string.ok, (view) -> {
 			snackbarHint.dismiss();
@@ -111,14 +117,19 @@ public class SurveyActivity extends AppCompatActivity {
 		});
 	}
 
-
 	@JavascriptInterface
-	private void finishedSurvey() {
-
+	public void finishedSurvey() {
+		int position = study.getSurveys().indexOf(currentSurvey);
+		if (study.getSurveys().size() > position + 1 && study.getSurveys().get(position + 1) != null) {
+			currentSurvey = study.getSurveys().get(position + 1);
+			updateView(currentSurvey);
+		} else {
+			finish();
+		}
 	}
 
 	private void initErrorSnackbar() {
-		snackbarError = Snackbar.make(coordinatorLayout, R.string.snackbar_error_sosci_survey, Snackbar.LENGTH_INDEFINITE);
+		snackbarError = Snackbar.make(coordinatorLayout, R.string.snackbar_proband_error_sosci_survey, Snackbar.LENGTH_INDEFINITE);
 		View snackbarView = snackbarError.getView();
 		TextView snackTextView = snackbarView.findViewById(R.id.snackbar_text);
 		snackTextView.setMaxLines(3);
@@ -243,14 +254,13 @@ public class SurveyActivity extends AppCompatActivity {
 	}
 
 	private void updateView(Survey survey) {
-		getSupportActionBar().setTitle(survey.getName());
 		loadUrl(survey);
 	}
 
 	private void loadUrl(Survey survey) {
-
-		String url = getString(R.string.sosci_survey_url, survey.getProjectDirectory(), survey.getIdentifier());
-		webView.loadUrl(url);
-		progressBar.setIndeterminate(true);
+		runOnUiThread(() -> {
+			String url = getString(R.string.sosci_survey_url, survey.getProjectDirectory(), survey.getIdentifier(), study.getCurrentSubject().getId().toString());
+			webView.loadUrl(url);
+		});
 	}
 }

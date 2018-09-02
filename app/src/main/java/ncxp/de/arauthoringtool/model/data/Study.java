@@ -44,6 +44,10 @@ public class Study implements Parcelable {
 	private List<DeviceSensor> sensors;
 	@Ignore
 	private List<Survey>       surveys;
+	@Ignore
+	private TestPerson         currentSubject;
+	@Ignore
+	private int                amountOfSubjects;
 
 	public Study() {
 	}
@@ -120,20 +124,31 @@ public class Study implements Parcelable {
 		isAmountOfTouchEventsActive = amountOfTouchEventsActive;
 	}
 
+	public TestPerson getCurrentSubject() {
+		return currentSubject;
+	}
+
+	public void setCurrentSubject(TestPerson currentSubject) {
+		this.currentSubject = currentSubject;
+	}
+
+	public int getAmountOfSubjects() {
+		return amountOfSubjects;
+	}
+
+	public void setAmountOfSubjects(int amountOfSubjects) {
+		this.amountOfSubjects = amountOfSubjects;
+	}
+
 	public static String[] getCSVHeader() {
 		return new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_SENSOR_ACCURACY, COLUMN_SAMPLING_RATE, COLUMN_TASK_COMPLETION_TIME, COLUMN_AMOUNT_OF_TOUCH_EVENTS};
 	}
 
 	public String[] getCsvValues() {
 		return new String[]{
-				id.toString(),
-				name,
-				description,
-				accuracy.toString(),
-				samplingRate.toString(),
-				isTaskCompletionTimeActive.toString(),
-				isAmountOfTouchEventsActive.toString()};
+				id.toString(), name, description, accuracy.toString(), samplingRate.toString(), isTaskCompletionTimeActive.toString(), isAmountOfTouchEventsActive.toString()};
 	}
+
 
 	protected Study(Parcel in) {
 		id = in.readByte() == 0x00 ? null : in.readLong();
@@ -157,6 +172,8 @@ public class Study implements Parcelable {
 		} else {
 			surveys = null;
 		}
+		currentSubject = (TestPerson) in.readValue(TestPerson.class.getClassLoader());
+		amountOfSubjects = in.readInt();
 	}
 
 	@Override
@@ -208,6 +225,8 @@ public class Study implements Parcelable {
 			dest.writeByte((byte) (0x01));
 			dest.writeList(surveys);
 		}
+		dest.writeValue(currentSubject);
+		dest.writeInt(amountOfSubjects);
 	}
 
 	@SuppressWarnings("unused")

@@ -37,8 +37,10 @@ public class StudiesAdapter extends RecyclerView.Adapter<StudyViewHolder> {
 	public void onBindViewHolder(@NonNull StudyViewHolder holder, int position) {
 		Study study = studies.get(position);
 		holder.getStudyNameView().setText(study.getName());
-		//TODO Right text
-		holder.getAmountOfTestPersonView().setText("0 Probanden teilgenommen");
+		holder.getAmountOfTestPersonView().setText(R.string.amount_of_subjects);
+		CharSequence subjectText = holder.getAmountOfTestPersonView().getText();
+		String amountOfSubjects = study.getAmountOfSubjects() + " " + subjectText;
+		holder.getAmountOfTestPersonView().setText(amountOfSubjects);
 		holder.getMoreButton().setOnClickListener(view -> studyListener.onPopupMenuClick(view, study));
 		holder.getDescriptionView().setText(study.getDescription());
 		holder.getStartButton().setOnClickListener((view) -> studyListener.onStudyStartClick(study));

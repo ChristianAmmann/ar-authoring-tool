@@ -60,10 +60,12 @@ import java.util.concurrent.CompletableFuture;
 import ncxp.de.arauthoringtool.model.StudyDatabase;
 import ncxp.de.arauthoringtool.model.dao.ArImageToObjectRelationDao;
 import ncxp.de.arauthoringtool.model.dao.ArSceneDao;
+import ncxp.de.arauthoringtool.model.dao.TestPersonDao;
 import ncxp.de.arauthoringtool.model.data.ARScene;
 import ncxp.de.arauthoringtool.model.data.ArImageToObjectRelation;
 import ncxp.de.arauthoringtool.model.data.Study;
 import ncxp.de.arauthoringtool.model.repository.ArSceneRepository;
+import ncxp.de.arauthoringtool.model.repository.TestPersonRepository;
 import ncxp.de.arauthoringtool.sceneform.ArNode;
 import ncxp.de.arauthoringtool.sceneform.DeleteWidgetNode;
 import ncxp.de.arauthoringtool.sceneform.ImageAnchor;
@@ -421,7 +423,9 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		ArSceneDao arSceneDao = database.arSceneDao();
 		ArImageToObjectRelationDao arImageToObjectRelationDao = database.arImageToObjectRelationDao();
 		ArSceneRepository arSceneRepository = new ArSceneRepository(arSceneDao, arImageToObjectRelationDao);
-		return new ArEditorViewModelFactory(activity.getApplication(), arSceneRepository);
+		TestPersonDao testPersonDao = database.testPerson();
+		TestPersonRepository testPersonRepository = new TestPersonRepository(testPersonDao);
+		return new ArEditorViewModelFactory(activity.getApplication(), arSceneRepository, testPersonRepository);
 	}
 
 	private void createObjectARImageNode(Node parent, ArImageToObjectRelation arImageToObjectRelation) {

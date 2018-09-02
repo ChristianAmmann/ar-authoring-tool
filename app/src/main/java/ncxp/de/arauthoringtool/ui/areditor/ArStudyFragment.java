@@ -154,7 +154,7 @@ public class ArStudyFragment extends Fragment {
 			chronometer.setBase(SystemClock.elapsedRealtime());
 			chronometer.start();
 			updateState(TestPersonState.RUNNING);
-			viewModel.startSensorService();
+			viewModel.createTestpersonAndStartService();
 		}).setNegativeButton(R.string.cancel, null).create().show();
 	}
 
@@ -163,7 +163,7 @@ public class ArStudyFragment extends Fragment {
 		builder.setTitle(R.string.finish_study).setMessage(R.string.finish_study_hint).setPositiveButton(R.string.done, (dialog, which) -> {
 			hideSubjectModus();
 			showDirectorModus();
-			startSurveyActivity();
+			showSurveys();
 			updateState(TestPersonState.FINISHED);
 		}).setNegativeButton(R.string.cancel, (dialog, which) -> {
 			viewModel.startSensorService();
@@ -172,11 +172,12 @@ public class ArStudyFragment extends Fragment {
 		}).create().show();
 	}
 
-	private void startSurveyActivity() {
-		Intent intent = new Intent(getActivity(), SurveyActivity.class);
-		//TODO
-		//intent.putExtra(SurveyActivity.PREF_KEY_STUDY_SURVEYS, study);
-		//startActivity(intent);
+	private void showSurveys() {
+		if (viewModel.getStudy().getSurveys() != null && !viewModel.getStudy().getSurveys().isEmpty()) {
+			Intent intent = new Intent(getActivity(), SurveyActivity.class);
+			intent.putExtra(SurveyActivity.PREF_KEY_STUDY_SURVEYS, viewModel.getStudy());
+			startActivity(intent);
+		}
 	}
 
 	private void showDirectorModus() {

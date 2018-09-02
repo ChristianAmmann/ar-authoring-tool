@@ -1,14 +1,11 @@
 package ncxp.de.arauthoringtool.sensorlogger;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.projection.MediaProjection;
-import android.media.projection.MediaProjectionManager;
 import android.os.Binder;
 import android.os.IBinder;
 
@@ -27,16 +24,14 @@ import ncxp.de.arauthoringtool.model.repository.TestPersonRepository;
 
 public class SensorBackgroundService extends Service implements SensorEventListener {
 
-	private static final String                 TAG    = SensorBackgroundService.class.getSimpleName();
-	private final        IBinder                binder = new SensorBackgroundBinder();
-	private              long                   sensorTimeReference;
-	private              SensorManager          sensorManager;
-	private              MediaProjection        mediaProjection;
-	private              MediaProjectionManager mediaProjectionManager;
-	private              Study                  study;
-	private              TestPerson             person;
-	private              DataRepository         dataRepository;
-	private              TestPersonRepository   testPersonRepository;
+	private static final String               TAG    = SensorBackgroundService.class.getSimpleName();
+	private final        IBinder              binder = new SensorBackgroundBinder();
+	private              long                 sensorTimeReference;
+	private              SensorManager        sensorManager;
+	private              Study                study;
+	private              TestPerson           person;
+	private              DataRepository       dataRepository;
+	private              TestPersonRepository testPersonRepository;
 
 	@Override
 	public void onCreate() {
@@ -47,8 +42,6 @@ public class SensorBackgroundService extends Service implements SensorEventListe
 		dataRepository = new DataRepository(dataDao);
 		testPersonRepository = new TestPersonRepository(personDao);
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		mediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-
 	}
 
 
@@ -107,20 +100,9 @@ public class SensorBackgroundService extends Service implements SensorEventListe
 		sensorManager.unregisterListener(this);
 	}
 
-	private void createTestperson() {
-		ExecutorService executorService = Executors.newFixedThreadPool(2);
-		executorService.submit(() -> {
-			person = new TestPerson();
-			person.setStudyId(study.getId());
-			long id = testPersonRepository.saveTestPerson(person);
-			person.setId(id);
-
-		});
-	}
-
 	public void initialize(Study study) {
 		this.study = study;
-		createTestperson();
+		this.person = study.getCurrentSubject();
 		sensorTimeReference = 0L;
 	}
 

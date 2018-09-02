@@ -22,4 +22,7 @@ public interface TestPersonDao {
 
 	@Query("DELETE FROM " + TestPerson.TABLE_NAME + " WHERE " + TestPerson.COLUMN_ID + "= :id")
 	int deleteById(long id);
+
+	@Query("SELECT count(*) FROM " + TestPerson.TABLE_NAME + " WHERE " + TestPerson.COLUMN_STUDY_ID + "= :id")
+	int getAmountOfTestPersons(long id);
 }
