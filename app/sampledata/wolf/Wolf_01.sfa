@@ -85,9 +85,9 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/wolf/Wolf_01.obj",
+      file: "sampledata/wolf/Wolf_01.obj",
       name: "Wolf_01",
-      scale: 0.025,
+      scale: 0.026341300000000001,
    },
    version: "0.51:1",
 }
