@@ -1,5 +1,5 @@
 <resources>
-	<string name="app_name">MobileDataCollection</string>
+	<string name="app_name">AR Authoring Tool</string>
 	<string name="impressum">Impressum</string>
 	<string name="help">Hilfe</string>
 	<string name="search">Suche</string>
@@ -12,9 +12,9 @@
 	<string name="delete">Löschen</string>
 	<string name="share_study">Datenerhebung als Datei teilen</string>
 	<string name="no_study_placeholder">Keine Studien vorhanden</string>
-	<string name="no_study_hint">Mit \"+\" können Sie Studien erstellen. Ihre erstellten Studien werden hier angezeigt</string>
+	<string name="no_study_hint">Mit \"+\" können Sie Studien erstellen. Ihre erstellten Studien werden hier angezeigt.</string>
 	<string name="no_arscene_placeholder">Keine AR-Szenen vorhanden</string>
-	<string name="no_arcene_hint">Mit \"+\" können Sie AR-Szenen erstellen. Ihre erstellten AR-Szenen werden hier angezeigt</string>
+	<string name="no_arcene_hint">Mit \"+\" können Sie AR-Szenen erstellen. Ihre erstellten AR-Szenen werden hier angezeigt.</string>
 	<string name="sensors">Sensoren</string>
 	<string name="survey">Fragebögen</string>
 	<string name="others">Weitere</string>
@@ -35,8 +35,7 @@
 	<string name="dialog_delete_arscene_message">Durch das Löschen wird die Zuordnung von QR-Codes und den virtuellen Objekten gelöscht.</string>
 
 	<string name="dialog_survey_delete_title">Fragebogen entfernen?</string>
-	<string name="dialog_survey_delete_message">Durch das Entfernen wird der Fragebogen nicht mehr eingebunden. Die Daten des Fragebogens finden Sie auf der
-		Fragebogen-Plattform.</string>
+	<string name="dialog_survey_delete_message">Durch das Entfernen wird der Fragebogen nicht mehr eingebunden. Die Daten des Fragebogens finden Sie auf SosciSurvey.</string>
 	<string name="dialog_survey_remove">Entfernen</string>
 	<string name="settings">Einstellungen</string>
 	<string name="manage_study">Studien verwalten</string>
@@ -63,8 +62,8 @@
 	<string name="settings_sensor_accuracy">Genauigkeit der Sensoren</string>
 	<string name="settings_sensor_accuracy_description">Genauigkeit von Gering zu Hoch. Dabei werden nur Sensorwerte mit der gewählten Genauigkeit gespeichert.</string>
 	<string name="settings_sensor_timeinterval_title">Messabstände</string>
-	<string name="settings_sensor_timeinterval_description">Der Wert gibt an nach wievielen Sekunden Sensordaten abgefragt werden</string>
-	<string name="study_status_idle">idle</string>
+	<string name="settings_sensor_timeinterval_description">Sensorwerte werden nach dem angegebenen Messabstände aufgezeichnet</string>
+	<string name="study_status_idle">Standby</string>
 	<string name="study_status_running">Läuft</string>
 	<string name="study_status_stopped">Pausiert</string>
 	<string name="init_time_text">00:00.00</string>
@@ -78,45 +77,38 @@
 	<string name="group_other_sensor">Weitere Sensoren</string>
 
 	<string name="accelerometer">Beschleunigung</string>
-	<string name="accelerometer_description">Acceleration force along the x/y/z axis (including gravity).\nUnit of measure: m/s^2</string>
-	<string name="accelerometer_uncalibrated">Beschleunigung Unkalibriert</string>
-	<string name="accelerometer_uncalibrated_description">Measured acceleration along the x/y/z axis without any bias compensation and with estimated bias compensation.\nUnit of
-		measure: m/s^2</string>
+	<string name="accelerometer_description">Beschleunigungskraft entlang der x / y / z-Achse (einschließlich der Schwerkraft).\nMesseinheit: m/s^2</string>
 	<string name="gravity">Gravitation</string>
-	<string name="gravity_description">Force of gravity along the x/y/z axis.\nUnit of measure: m/s^2</string>
+	<string name="gravity_description">Schwerkraft entlang der x / y / z-Achse.\nMesseinheit: m/s^2</string>
 	<string name="gyroscope">Gyroskop</string>
-	<string name="gyroscope_description">Rate of rotation around the x/y/z axis.\nUnit of measure: rad/s</string>
-	<string name="gyroscope_uncalibrated">Gyroskop Unkalibriert</string>
-	<string name="gyroscope_uncalibrated_description">Rate of rotation (without drift compensation) around the x/y/z axis and estimated drift around the x/y/z axis..\nUnit of
-		measure: rad/s</string>
+	<string name="gyroscope_description">Drehrate um die x / y / z-Achse.\nMesseinheit: rad/s</string>
 	<string name="linear_accelerometer">Lineare Beschleunigung</string>
-	<string name="linear_accelerometer_description">Acceleration force along the x/y/z axis (excluding gravity).\nUnit of measure: m/s^2</string>
+	<string name="linear_accelerometer_description">Beschleunigungskraft entlang der x / y / z-Achse (ohne Schwerkraft).\nMesseinheit: m/s^2</string>
 	<string name="step_counter">Schrittzähler</string>
-	<string name="step_counter_description">Number of steps taken by the user since the last reboot while the sensor was activated.\nUnit of measure: Steps</string>
+	<string name="step_counter_description">Anzahl der Schritte, die der Benutzer seit dem letzten Neustart unternommen hat, während der Sensor aktiviert wurde.\nMesseinheit:
+		Schritte</string>
 	<string name="rotation_vector">Rotationsvektor</string>
-	<string name="rotation_vector_description">Rotation vector component along the x/y/z axis (x * sin(θ/2)).\nUnit of measure: Unitless</string>
+	<string name="rotation_vector_description">Rotationsvektorkomponente entlang der x / y / z-Achse (x * sin(θ/2)).\nMesseinheit: ohne Einheit</string>
 
 	<string name="game_rotation_vector">Gamerotationsvektor</string>
-	<string name="game_rotation_vector_description">Rotation vector component along the x/y/z axis (x * sin(θ/2)).\nUnit of measure: Unitless</string>
+	<string name="game_rotation_vector_description">Rotationsvektorkomponente entlang der x / y / z-Achse (x * sin(θ/2)).\nMesseinheit: ohne Einheit</string>
 	<string name="geomagnetic_rotation_vector">Geomagnitischer Rotationsvektor</string>
-	<string name="geomagnetic_rotation_vector_description">Rotation vector component along the x/y/z axis (x * sin(θ/2)).\nUnit of measure: Unitless</string>
+	<string name="geomagnetic_rotation_vector_description">RRotationsvektorkomponente entlang der x / y / z-Achse (x * sin(θ/2)).\nMesseinheit: ohne Einheit</string>
 	<string name="magnetic_field">Magnetisches Feld</string>
-	<string name="magnetic_field_description">Geomagnetic field strength along the x/y/z axis.\nUnit of measure: μT</string>
-	<string name="magnetic_field_uncalibrated">Magnetisches Feld Unkalibriert</string>
-	<string name="magnetic_field_uncalibrated_description">Geomagnetic field strength (without hard iron calibration) along the x/y/z axis.\nUnit of measure: μT</string>
+	<string name="magnetic_field_description">Geomagnetische Feldstärke entlang der x / y / z-Achse.\nMesseinheit: μT</string>
 	<string name="orientation">Orientierung</string>
-	<string name="orientation_description">angle around the x/y/z-axis\nUnit of measure: Degrees</string>
+	<string name="orientation_description">Winkel um die x / y / z-Achse.\nMesseinheit: Grad</string>
 	<string name="proximity">Entfernung</string>
-	<string name="proximity_description">Distance from object.\nUnit of measure: cm</string>
+	<string name="proximity_description">Entfernung von einem physikalischen Objekt.\nMesseinheit: cm</string>
 
 	<string name="ambient_temperature">Umgebungstemperatur</string>
-	<string name="ambient_temperature_description">Ambient air temperature.\nUnit of measure: °C</string>
+	<string name="ambient_temperature_description">Umgebungslufttemperatur.\nMesseinheit: °C</string>
 	<string name="light">Licht</string>
-	<string name="light_description">Illuminance.\nUnit of measure: lx</string>
+	<string name="light_description">Beleuchtungsstärke.\nMesseinheit: lx</string>
 	<string name="pressure">Druck</string>
-	<string name="pressure_description">Ambient air pressure.\nUnit of measure: hPa or mbar</string>
+	<string name="pressure_description">Umgebungsluftdruck.\nMesseinheit: hPa oder mbar</string>
 	<string name="temperature">Temperatur</string>
-	<string name="temperature_description">Device temperature.\nUnit of measure: °C</string>
+	<string name="temperature_description">Gerätetemperatur.\nMesseinheit: °C</string>
 
 
 	<string name="group_others_sensor_settings">Einstellungen der Sensoren</string>
@@ -196,7 +188,7 @@
 	<string name="dialog_ar_objects_delete_all">AR-Objekte löschen?</string>
 	<string name="dialog_ar_objects_delete_all_message">Wollen Sie wirklich alle gesetzten Objekte löschen?</string>
 	<string name="about_title">Impressum</string>
-	<string name="impressum_description">Für die ARApp der Forschungsgruppe TECO liegen Copyright und alle weiteren Rechte bei der Forschungsgruppe TECO , welche dem Lehrstuhl für
+	<string name="impressum_description">Für die AR-App der Forschungsgruppe TECO liegen Copyright und alle weiteren Rechte bei der Forschungsgruppe TECO , welche dem Lehrstuhl für
 		Pervasive Computing Systems am Karlsruher Institut für Technologie, Vincenz-Prießnitz-Straße 1, 76131 Karlsruhe, Deutschland, angegliedert ist. Weiterverbreitung, auch in Auszügen, für pädagogische, wissenschaftliche oder private Zwecke ist unter Angabe der Quelle gestattet (sofern nicht anders an der entsprechenden Stelle ausdrücklich angegeben). Eine Verwendung im gewerblichen Bereich bedarf der Genehmigung durch der Forschungsgruppe TECO. Ansprechpartner ist Prof. Dr. Michael Beigl (Inhaber des Lehrstuhls Pervasive Computing Systems)</string>
 	<string name="copyright">Copyright</string>
 	<string name="areditor">AR-Editor</string>
