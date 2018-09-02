@@ -94,12 +94,12 @@ public class Survey implements Parcelable {
 	}
 
 	protected Survey(Parcel in) {
-		id = in.readLong();
+		id = in.readByte() == 0x00 ? null : in.readLong();
 		projectDirectory = in.readString();
 		identifier = in.readString();
 		name = in.readString();
 		description = in.readString();
-		studyId = in.readLong();
+		studyId = in.readByte() == 0x00 ? null : in.readLong();
 	}
 
 	@Override
@@ -109,12 +109,22 @@ public class Survey implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeLong(id);
+		if (id == null) {
+			dest.writeByte((byte) (0x00));
+		} else {
+			dest.writeByte((byte) (0x01));
+			dest.writeLong(id);
+		}
 		dest.writeString(projectDirectory);
 		dest.writeString(identifier);
 		dest.writeString(name);
 		dest.writeString(description);
-		dest.writeLong(studyId);
+		if (studyId == null) {
+			dest.writeByte((byte) (0x00));
+		} else {
+			dest.writeByte((byte) (0x01));
+			dest.writeLong(studyId);
+		}
 	}
 
 	@SuppressWarnings("unused")
