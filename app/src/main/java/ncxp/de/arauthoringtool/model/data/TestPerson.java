@@ -17,15 +17,21 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 		CASCADE))
 public class TestPerson implements Parcelable {
 
-	public static final String TABLE_NAME      = "Subject";
-	public static final String COLUMN_ID       = "id";
-	public static final String COLUMN_STUDY_ID = "study_id";
+	public static final String TABLE_NAME                    = "Subject";
+	public static final String COLUMN_ID                     = "id";
+	public static final String COLUMN_STUDY_ID               = "study_id";
+	public static final String COLUMN_TASK_COMPLETION_TIME   = "task_completion_time";
+	public static final String COLUMN_AMOUNT_OF_TOUCH_EVENTS = "amount_of_touch_events";
 
 	@PrimaryKey(autoGenerate = true)
 	@ColumnInfo(name = COLUMN_ID)
 	private Long            id;
 	@ColumnInfo(name = COLUMN_STUDY_ID)
 	private Long            studyId;
+	@ColumnInfo(name = COLUMN_TASK_COMPLETION_TIME)
+	private long            taskCompletionTime;
+	@ColumnInfo(name = COLUMN_AMOUNT_OF_TOUCH_EVENTS)
+	private int             amountOfTouchEvents;
 	@Ignore
 	private TestPersonState state;
 	@Ignore
@@ -59,6 +65,22 @@ public class TestPerson implements Parcelable {
 		this.dataList = dataList;
 	}
 
+	public long getTaskCompletionTime() {
+		return taskCompletionTime;
+	}
+
+	public void setTaskCompletionTime(long taskCompletionTime) {
+		this.taskCompletionTime = taskCompletionTime;
+	}
+
+	public int getAmountOfTouchEvents() {
+		return amountOfTouchEvents;
+	}
+
+	public void setAmountOfTouchEvents(int amountOfTouchEvents) {
+		this.amountOfTouchEvents = amountOfTouchEvents;
+	}
+
 	public static String[] getCSVHeader() {
 		return new String[]{COLUMN_ID};
 	}
@@ -71,6 +93,8 @@ public class TestPerson implements Parcelable {
 	protected TestPerson(Parcel in) {
 		id = in.readByte() == 0x00 ? null : in.readLong();
 		studyId = in.readByte() == 0x00 ? null : in.readLong();
+		taskCompletionTime = in.readLong();
+		amountOfTouchEvents = in.readInt();
 		state = (TestPersonState) in.readValue(TestPersonState.class.getClassLoader());
 		if (in.readByte() == 0x01) {
 			dataList = new ArrayList<Data>();
@@ -99,6 +123,8 @@ public class TestPerson implements Parcelable {
 			dest.writeByte((byte) (0x01));
 			dest.writeLong(studyId);
 		}
+		dest.writeLong(taskCompletionTime);
+		dest.writeInt(amountOfTouchEvents);
 		dest.writeValue(state);
 		if (dataList == null) {
 			dest.writeByte((byte) (0x00));

@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Chronometer;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import ncxp.de.arauthoringtool.ArEditorActivity;
 import ncxp.de.arauthoringtool.R;
 import ncxp.de.arauthoringtool.SurveyActivity;
+import ncxp.de.arauthoringtool.model.data.TestPerson;
 import ncxp.de.arauthoringtool.model.data.TestPersonState;
 import ncxp.de.arauthoringtool.ui.areditor.util.EditorState;
 import ncxp.de.arauthoringtool.ui.areditor.util.RotationTechnique;
@@ -29,7 +31,7 @@ import ncxp.de.arauthoringtool.ui.areditor.util.ScaleTechnique;
 import ncxp.de.arauthoringtool.ui.areditor.util.SelectionTechnique;
 import ncxp.de.arauthoringtool.viewmodel.ArEditorViewModel;
 
-public class ArStudyFragment extends Fragment {
+public class ArStudyFragment extends Fragment implements View.OnTouchListener {
 
 	private ArEditorViewModel     viewModel;
 	private ImageButton           settingsButton;
@@ -46,6 +48,7 @@ public class ArStudyFragment extends Fragment {
 	private TextView              studyStatusView;
 	private Chronometer           chronometer;
 	private ArInteractionListener arInteractionListener;
+	private int                   amountOfTouchEvents;
 
 	public static ArStudyFragment newInstance() {
 		return new ArStudyFragment();
@@ -151,6 +154,7 @@ public class ArStudyFragment extends Fragment {
 			hideDirectorModus();
 			showSubjectModus();
 			timeIcon.setImageDrawable(getContext().getDrawable(R.drawable.timer));
+			amountOfTouchEvents = 0;
 			chronometer.setBase(SystemClock.elapsedRealtime());
 			chronometer.start();
 			updateState(TestPersonState.RUNNING);
@@ -165,6 +169,15 @@ public class ArStudyFragment extends Fragment {
 			showDirectorModus();
 			showSurveys();
 			updateState(TestPersonState.FINISHED);
+			TestPerson currentSubject = viewModel.getStudy().getCurrentSubject();
+			if (viewModel.getStudy().getTaskCompletionTimeActive()) {
+				long time = SystemClock.elapsedRealtime() - chronometer.getBase();
+				currentSubject.setTaskCompletionTime(time);
+			}
+			if (viewModel.getStudy().getAmountOfTouchEventsActive()) {
+				currentSubject.setAmountOfTouchEvents(amountOfTouchEvents);
+			}
+			viewModel.saveTestperson(currentSubject);
 		}).setNegativeButton(R.string.cancel, (dialog, which) -> {
 			viewModel.startSensorService();
 			updateState(currentState);
@@ -265,4 +278,13 @@ public class ArStudyFragment extends Fragment {
 		updateState(TestPersonState.STOPPED);
 		showFinishDialog(state);
 	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		if (state.equals(TestPersonState.RUNNING)) {
+			amountOfTouchEvents++;
+		}
+		return false;
+	}
+
 }

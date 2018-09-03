@@ -307,4 +307,8 @@ public class ArEditorViewModel extends AndroidViewModel {
 	public void setComingFromStudyModus(boolean comingFromStudyModus) {
 		this.comingFromStudyModus = comingFromStudyModus;
 	}
+
+	public void saveTestperson(TestPerson person) {
+		testPersonRepository.saveTestPerson(person);
+	}
 }
