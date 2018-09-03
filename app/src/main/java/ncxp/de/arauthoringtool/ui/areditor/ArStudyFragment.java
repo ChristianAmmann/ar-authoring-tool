@@ -8,8 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Chronometer;
@@ -31,24 +31,25 @@ import ncxp.de.arauthoringtool.ui.areditor.util.ScaleTechnique;
 import ncxp.de.arauthoringtool.ui.areditor.util.SelectionTechnique;
 import ncxp.de.arauthoringtool.viewmodel.ArEditorViewModel;
 
-public class ArStudyFragment extends Fragment implements View.OnTouchListener {
+public class ArStudyFragment extends Fragment {
 
-	private ArEditorViewModel     viewModel;
-	private ImageButton           settingsButton;
-	private ImageButton           expandBottomToolbarButton;
-	private ImageButton           addSubjectButton;
-	private ImageButton           cancelButton;
-	private ImageButton           playAndPauseButton;
-	private ImageButton           finishButton;
-	private ImageButton           editButton;
-	private ImageButton           backButton;
-	private ImageView             timeIcon;
-	private LinearLayout          bottomToolbar;
-	private TestPersonState       state = TestPersonState.STOPPED;
+	private ArEditorViewModel viewModel;
+	private ImageButton       settingsButton;
+	private ImageButton       expandBottomToolbarButton;
+	private ImageButton       addSubjectButton;
+	private ImageButton       cancelButton;
+	private ImageButton       playAndPauseButton;
+	private ImageButton       finishButton;
+	private ImageButton       editButton;
+	private ImageButton       backButton;
+	private ImageView         timeIcon;
+	private LinearLayout      bottomToolbar;
+	private RelativeLayout    container;
+	private int               amountOfTouchEvents;
+
 	private TextView              studyStatusView;
 	private Chronometer           chronometer;
 	private ArInteractionListener arInteractionListener;
-	private int                   amountOfTouchEvents;
 
 	public static ArStudyFragment newInstance() {
 		return new ArStudyFragment();
@@ -71,6 +72,14 @@ public class ArStudyFragment extends Fragment implements View.OnTouchListener {
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		viewModel = ArEditorActivity.obtainViewModel(getActivity());
+		container = view.findViewById(R.id.study_container);
+		container.setOnClickListener(viewClicked -> {
+			Log.d("asdf", viewModel.getTestPersonState().name());
+			TestPersonState testPersonState = viewModel.getTestPersonState();
+			if (testPersonState.equals(TestPersonState.RUNNING)) {
+				amountOfTouchEvents++;
+			}
+		});
 		expandBottomToolbarButton = view.findViewById(R.id.expand_bottom_toolbar_button);
 		settingsButton = view.findViewById(R.id.ar_settings_button);
 		addSubjectButton = view.findViewById(R.id.add_subject_button);
@@ -82,7 +91,7 @@ public class ArStudyFragment extends Fragment implements View.OnTouchListener {
 		studyStatusView = view.findViewById(R.id.study_status);
 		editButton = view.findViewById(R.id.edit_modus);
 		editButton.setOnClickListener(clickedView -> {
-			viewModel.setState(EditorState.EDIT_MODE);
+			viewModel.setEditorState(EditorState.EDIT_MODE);
 			arInteractionListener.onEditorStateChanged();
 		});
 		chronometer = view.findViewById(R.id.time_view);
@@ -144,7 +153,7 @@ public class ArStudyFragment extends Fragment implements View.OnTouchListener {
 
 
 	private void updateState(TestPersonState state) {
-		this.state = state;
+		viewModel.setTestPersonState(state);
 		studyStatusView.setText(state.name());
 	}
 
@@ -236,24 +245,24 @@ public class ArStudyFragment extends Fragment implements View.OnTouchListener {
 	}
 
 	private void onPlayAndPauseClicked(View view) {
-		if (state.equals(TestPersonState.RUNNING)) {
-			state = TestPersonState.STOPPED;
+		if (viewModel.getTestPersonState().equals(TestPersonState.RUNNING)) {
+			updateState(TestPersonState.STOPPED);
 			chronometer.stop();
 			playAndPauseButton.setImageResource(R.drawable.play_circle_outline);
 			timeIcon.setImageDrawable(getContext().getDrawable(R.drawable.timer_off));
 			viewModel.stopSensorService();
 		} else {
-			state = TestPersonState.RUNNING;
+			updateState(TestPersonState.RUNNING);
 			chronometer.start();
 			viewModel.startSensorService();
 			playAndPauseButton.setImageResource(R.drawable.pause_circle_outline);
 		}
-		updateState(state);
+		updateState(viewModel.getTestPersonState());
 
 	}
 
 	private void onCancelClicked(View view) {
-		showCancelDialog(state);
+		showCancelDialog(viewModel.getTestPersonState());
 		chronometer.stop();
 		viewModel.stopSensorService();
 		timeIcon.setImageDrawable(getContext().getDrawable(R.drawable.timer_off));
@@ -276,15 +285,6 @@ public class ArStudyFragment extends Fragment implements View.OnTouchListener {
 		chronometer.stop();
 		viewModel.stopSensorService();
 		updateState(TestPersonState.STOPPED);
-		showFinishDialog(state);
+		showFinishDialog(viewModel.getTestPersonState());
 	}
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		if (state.equals(TestPersonState.RUNNING)) {
-			amountOfTouchEvents++;
-		}
-		return false;
-	}
-
 }

@@ -135,7 +135,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		initScaleWidgetNode();
 		setupAugmentedImageDatabase();
 		setupInteractionTechnique();
-		if (viewModel.getState().equals(EditorState.EDIT_MODE)) {
+		if (viewModel.getEditorState().equals(EditorState.EDIT_MODE)) {
 			viewModel.resetInteractionTechnique();
 			showEditModeFragment();
 		} else {
@@ -414,7 +414,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		ArEditorViewModel viewModel = ViewModelProviders.of(activity, createFactory(activity)).get(ArEditorViewModel.class);
 		viewModel.setArScene(arScene);
 		viewModel.setStudy(study);
-		viewModel.setState(state);
+		viewModel.setEditorState(state);
 		return viewModel;
 	}
 
@@ -547,7 +547,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 
 	@Override
 	public void onEditorStateChanged() {
-		if (viewModel.getState().equals(EditorState.EDIT_MODE)) {
+		if (viewModel.getEditorState().equals(EditorState.EDIT_MODE)) {
 			viewModel.setComingFromStudyModus(true);
 			showEditModeFragment();
 		} else {

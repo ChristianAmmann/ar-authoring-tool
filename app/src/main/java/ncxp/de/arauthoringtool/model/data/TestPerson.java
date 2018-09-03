@@ -28,6 +28,7 @@ public class TestPerson implements Parcelable {
 	private Long            id;
 	@ColumnInfo(name = COLUMN_STUDY_ID)
 	private Long            studyId;
+	//in milliseconds
 	@ColumnInfo(name = COLUMN_TASK_COMPLETION_TIME)
 	private long            taskCompletionTime;
 	@ColumnInfo(name = COLUMN_AMOUNT_OF_TOUCH_EVENTS)

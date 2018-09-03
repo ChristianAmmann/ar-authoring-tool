@@ -139,6 +139,8 @@ public class StudyViewModel extends ViewModel {
 			study.setSamplingRate(settings.getSensorMeasuringDistance());
 			study.setSamplingRate(settings.getSensorMeasuringDistance());
 			study.setAccuracy(settings.getSensorAccuracy());
+			study.setAmountOfTouchEventsActive(isAmountOfTouchEventsActive);
+			study.setTaskCompletionTimeActive(isTaskCompletionTimeActive);
 			long studyId = saveStudy(study);
 			saveActiveDeviceSensors(studyId);
 			saveSurveys(studyId);

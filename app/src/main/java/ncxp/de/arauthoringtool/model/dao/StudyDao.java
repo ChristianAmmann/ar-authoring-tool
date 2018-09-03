@@ -30,6 +30,6 @@ public interface StudyDao {
 	@Query("DELETE FROM " + Study.TABLE_NAME + " WHERE " + Study.COLUMN_ID + "= :id")
 	int deleteById(long id);
 
-	@Update
+	@Update(onConflict = OnConflictStrategy.REPLACE)
 	int update(Study study);
 }

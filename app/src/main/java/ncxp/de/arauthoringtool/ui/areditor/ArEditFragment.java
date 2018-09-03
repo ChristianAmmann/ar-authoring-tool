@@ -76,7 +76,7 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 		ImageButton backSceneButton = view.findViewById(R.id.back_arscene);
 		backSceneButton.setOnClickListener(clickedView -> {
 			if (viewModel.isComingFromStudyModus()) {
-				viewModel.setState(EditorState.STUDY_MODE);
+				viewModel.setEditorState(EditorState.STUDY_MODE);
 				arInteractionListener.onEditorStateChanged();
 			} else {
 				getActivity().finish();
@@ -132,7 +132,7 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 				} else {
 					viewModel.save(title, description);
 				}
-				viewModel.setState(EditorState.STUDY_MODE);
+				viewModel.setEditorState(EditorState.STUDY_MODE);
 				arInteractionListener.onEditorStateChanged();
 			}
 

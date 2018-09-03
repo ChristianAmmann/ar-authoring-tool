@@ -29,6 +29,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import ncxp.de.arauthoringtool.model.data.TestPerson;
+import ncxp.de.arauthoringtool.model.data.TestPersonState;
 import ncxp.de.arauthoringtool.model.repository.TestPersonRepository;
 import ncxp.de.arauthoringtool.sensorlogger.SensorBackgroundService;
 import ncxp.de.arauthoringtool.model.data.ARScene;
@@ -55,7 +56,8 @@ public class ArEditorViewModel extends AndroidViewModel {
 	private boolean                             bound                = false;
 	private Map<String, Node>                   augmentedImageMap;
 	private MutableLiveData<Node>               currentSelectedNode;
-	private EditorState                         state;
+	private EditorState                         editorState;
+	private TestPersonState                     testPersonState;
 	private MutableLiveData<SelectionTechnique> selectionTechnique;
 	private MutableLiveData<RotationTechnique>  rotationTechnique;
 	private MutableLiveData<ScaleTechnique>     scaleTechnique;
@@ -78,6 +80,7 @@ public class ArEditorViewModel extends AndroidViewModel {
 		rotationTechnique.postValue(RotationTechnique.TWO_FINGER);
 		scaleTechnique = new MutableLiveData<>();
 		scaleTechnique.postValue(ScaleTechnique.PINCH);
+		this.testPersonState = TestPersonState.STOPPED;
 	}
 
 	public LiveData<List<Thumbnail>> getThumbnails() {
@@ -262,12 +265,12 @@ public class ArEditorViewModel extends AndroidViewModel {
 		this.study = study;
 	}
 
-	public EditorState getState() {
-		return state;
+	public EditorState getEditorState() {
+		return editorState;
 	}
 
-	public void setState(EditorState state) {
-		this.state = state;
+	public void setEditorState(EditorState editorState) {
+		this.editorState = editorState;
 	}
 
 	public void setSelectionTechnique(SelectionTechnique selectionTechnique) {
@@ -309,6 +312,17 @@ public class ArEditorViewModel extends AndroidViewModel {
 	}
 
 	public void saveTestperson(TestPerson person) {
-		testPersonRepository.saveTestPerson(person);
+		ExecutorService executorService = Executors.newFixedThreadPool(2);
+		executorService.submit(() -> {
+			testPersonRepository.saveTestPerson(person);
+		});
+	}
+
+	public TestPersonState getTestPersonState() {
+		return testPersonState;
+	}
+
+	public void setTestPersonState(TestPersonState testPersonState) {
+		this.testPersonState = testPersonState;
 	}
 }
