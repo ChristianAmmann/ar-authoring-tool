@@ -20,14 +20,20 @@ public class TestPerson implements Parcelable {
 	public static final String TABLE_NAME                    = "Subject";
 	public static final String COLUMN_ID                     = "id";
 	public static final String COLUMN_STUDY_ID               = "study_id";
+	public static final String COLUMN_ARSCENE_NAME           = "arscene_name";
 	public static final String COLUMN_TASK_COMPLETION_TIME   = "task_completion_time";
 	public static final String COLUMN_AMOUNT_OF_TOUCH_EVENTS = "amount_of_touch_events";
+	public static final String COLUMN_TECHNIQUES             = "techniques";
 
 	@PrimaryKey(autoGenerate = true)
 	@ColumnInfo(name = COLUMN_ID)
 	private Long            id;
 	@ColumnInfo(name = COLUMN_STUDY_ID)
 	private Long            studyId;
+	@ColumnInfo(name = COLUMN_ARSCENE_NAME)
+	private String          arSceneName;
+	@ColumnInfo(name = COLUMN_TECHNIQUES)
+	private String          technqiues;
 	//in milliseconds
 	@ColumnInfo(name = COLUMN_TASK_COMPLETION_TIME)
 	private long            taskCompletionTime;
@@ -57,6 +63,21 @@ public class TestPerson implements Parcelable {
 		this.studyId = studyId;
 	}
 
+	public String getArSceneName() {
+		return arSceneName;
+	}
+
+	public void setArSceneName(String arSceneName) {
+		this.arSceneName = arSceneName;
+	}
+
+	public String getTechnqiues() {
+		return technqiues;
+	}
+
+	public void setTechnqiues(String technqiues) {
+		this.technqiues = technqiues;
+	}
 
 	public List<Data> getDataList() {
 		return dataList;
@@ -90,10 +111,11 @@ public class TestPerson implements Parcelable {
 		return new String[]{id.toString()};
 	}
 
-
 	protected TestPerson(Parcel in) {
 		id = in.readByte() == 0x00 ? null : in.readLong();
 		studyId = in.readByte() == 0x00 ? null : in.readLong();
+		arSceneName = in.readString();
+		technqiues = in.readString();
 		taskCompletionTime = in.readLong();
 		amountOfTouchEvents = in.readInt();
 		state = (TestPersonState) in.readValue(TestPersonState.class.getClassLoader());
@@ -124,6 +146,8 @@ public class TestPerson implements Parcelable {
 			dest.writeByte((byte) (0x01));
 			dest.writeLong(studyId);
 		}
+		dest.writeString(arSceneName);
+		dest.writeString(technqiues);
 		dest.writeLong(taskCompletionTime);
 		dest.writeInt(amountOfTouchEvents);
 		dest.writeValue(state);

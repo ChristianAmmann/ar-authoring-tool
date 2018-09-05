@@ -314,6 +314,8 @@ public class ArEditorViewModel extends AndroidViewModel {
 	public void saveTestperson(TestPerson person) {
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
+			person.setArSceneName(arScene.getName());
+			person.setTechnqiues(selectionTechnique.getValue().getName() + ", " + rotationTechnique.getValue().getName() + ", " + scaleTechnique.getValue().getName());
 			testPersonRepository.saveTestPerson(person);
 		});
 	}
