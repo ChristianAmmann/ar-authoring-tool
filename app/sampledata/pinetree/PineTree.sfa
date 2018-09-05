@@ -34,13 +34,13 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/pinetree/PineTree.obj",
+      file: "sampledata/pinetree/PineTree.obj",
       name: "PineTree",
       scale: 0.100691,
    },
    samplers: [
       {
-         file: "../../mobiledatacollection/app/sampledata/pinetree/PineTree_BaseColor.png",
+         file: "sampledata/pinetree/PineTree_BaseColor.png",
          name: "PineTree_BaseColor",
          pipeline_name: "PineTree_BaseColor.png",
       },

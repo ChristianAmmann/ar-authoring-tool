@@ -59,7 +59,7 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/grayrock/rock_02.obj",
+      file: "sampledata/grayrock/rock_02.obj",
       name: "rock_02",
       scale: 0.005012,
    },

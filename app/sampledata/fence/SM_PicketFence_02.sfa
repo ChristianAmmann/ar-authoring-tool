@@ -60,7 +60,7 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/fence/SM_PicketFence_02.obj",
+      file: "sampledata/fence/SM_PicketFence_02.obj",
       name: "SM_PicketFence_02",
    },
    version: "0.51:1",

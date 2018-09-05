@@ -60,7 +60,7 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/treestump/TreeStump_423.obj",
+      file: "sampledata/treestump/TreeStump_423.obj",
       name: "TreeStump_423",
       scale: 0.012233000000000001,
    },

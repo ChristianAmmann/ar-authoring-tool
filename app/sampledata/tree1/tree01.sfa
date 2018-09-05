@@ -34,7 +34,7 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/tree1/tree01.obj",
+      file: "sampledata/tree1/tree01.obj",
       name: "tree01",
       scale: 0.0032420000000000001,
    },

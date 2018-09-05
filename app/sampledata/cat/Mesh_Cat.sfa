@@ -34,13 +34,13 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/cat/Mesh_Cat.obj",
+      file: "sampledata/cat/Mesh_Cat.obj",
       name: "Mesh_Cat",
-      scale: 0.00375,
+      scale: 0.0057182999999999998,
    },
    samplers: [
       {
-         file: "../../mobiledatacollection/app/sampledata/cat/Tex_Cat.png",
+         file: "sampledata/cat/Tex_Cat.png",
          name: "Tex_Cat",
          pipeline_name: "Tex_Cat.png",
       },

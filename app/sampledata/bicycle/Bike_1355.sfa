@@ -320,7 +320,7 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/bicycle/Bike_1355.obj",
+      file: "sampledata/bicycle/Bike_1355.obj",
       name: "Bike_1355",
       scale: 0.0032263999999999998,
    },

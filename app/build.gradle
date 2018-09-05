@@ -5,7 +5,7 @@ android {
     compileSdkVersion 27
     buildToolsVersion "27.0.3"
     defaultConfig {
-        applicationId "ncxp.de.mobiledatacollection"
+        applicationId "ncxp.de.aruthoringtool"
         minSdkVersion 26
         targetSdkVersion 27
         versionCode 1
@@ -70,112 +70,107 @@ dependencies {
 
 }
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/placeholder/arrow.obj',
+sceneform.asset('sampledata/beagle/Mesh_Beagle.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/placeholder/arrow.sfa',
-        '../../mobiledatacollection/app/src/main/res/raw/arrow')
-
-sceneform.asset('../../mobiledatacollection/app/sampledata/fox/Mesh_Fox.obj',
-        'default',
-        '../../mobiledatacollection/app/sampledata/fox/Mesh_Fox.sfa',
-        'src/main/assets/fox')
-
-sceneform.asset('../../mobiledatacollection/app/sampledata/cat/Mesh_Cat.obj',
-        'default',
-        '../../mobiledatacollection/app/sampledata/cat/Mesh_Cat.sfa',
-        'src/main/assets/cat')
-
-sceneform.asset('../../mobiledatacollection/app/sampledata/lion/Lion.obj',
-        'default',
-        '../../mobiledatacollection/app/sampledata/lion/Lion.sfa',
-        'src/main/assets/lion')
-
-sceneform.asset('../../mobiledatacollection/app/sampledata/wolf/Wolf_01.obj',
-        'default',
-        '../../mobiledatacollection/app/sampledata/wolf/Wolf_01.sfa',
-        'src/main/assets/wolf')
-
-sceneform.asset('../../mobiledatacollection/app/sampledata/beagle/Mesh_Beagle.obj',
-        'default',
-        '../../mobiledatacollection/app/sampledata/beagle/Mesh_Beagle.sfa',
+        'sampledata/beagle/Mesh_Beagle.sfa',
         'src/main/assets/beagle')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/placeholder/model.obj',
+sceneform.asset('sampledata/cat/Mesh_Cat.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/placeholder/model.sfa',
-        '../../mobiledatacollection/app/src/main/res/raw/frame')
+        'sampledata/cat/Mesh_Cat.sfa',
+        'src/main/assets/cat')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/bicycle/Bike_1355.obj',
+sceneform.asset('sampledata/fox/Mesh_Fox.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/bicycle/Bike_1355.sfa',
-        '../../mobiledatacollection/app/src/main/assets/bicycle')
+        'sampledata/fox/Mesh_Fox.sfa',
+        'src/main/assets/fox')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/brownrock/PUSHILIN_rock.obj',
+sceneform.asset('sampledata/lion/Lion.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/brownrock/PUSHILIN_rock.sfa',
+        'sampledata/lion/Lion.sfa',
+        'src/main/assets/lion')
+
+sceneform.asset('sampledata/wolf/Wolf_01.obj',
+        'default',
+        'sampledata/wolf/Wolf_01.sfa',
+        'src/main/assets/wolf')
+
+sceneform.asset('sampledata/placeholder/model.obj',
+        'default',
+        'sampledata/placeholder/model.sfa',
+        'src/main/res/raw/frame')
+
+sceneform.asset('sampledata/bicycle/Bike_1355.obj',
+        'default',
+        'sampledata/bicycle/Bike_1355.sfa',
+        'src/main/assets/bicycle')
+
+sceneform.asset('sampledata/brownrock/PUSHILIN_rock.obj',
+        'default',
+        'sampledata/brownrock/PUSHILIN_rock.sfa',
         'src/main/assets/brownrock')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/bulldozer/Bulldozer_1375.obj',
+sceneform.asset('sampledata/bulldozer/Bulldozer_1375.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/bulldozer/Bulldozer_1375.sfa',
+        'sampledata/bulldozer/Bulldozer_1375.sfa',
         'src/main/assets/bulldozer')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/bush/Mesh_RoseBush.obj',
+sceneform.asset('sampledata/bush/Mesh_RoseBush.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/bush/Mesh_RoseBush.sfa',
+        'sampledata/bush/Mesh_RoseBush.sfa',
         'src/main/assets/bush')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/fence/SM_PicketFence_02.obj',
+sceneform.asset('sampledata/fence/SM_PicketFence_02.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/fence/SM_PicketFence_02.sfa',
+        'sampledata/fence/SM_PicketFence_02.sfa',
         'src/main/assets/fence')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/grayrock/rock_02.obj',
+sceneform.asset('sampledata/grayrock/rock_02.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/grayrock/rock_02.sfa',
+        'sampledata/grayrock/rock_02.sfa',
         'src/main/assets/grayrock')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/log/PUSHILIN_log.obj',
+sceneform.asset('sampledata/log/PUSHILIN_log.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/log/PUSHILIN_log.sfa',
+        'sampledata/log/PUSHILIN_log.sfa',
         'src/main/assets/log')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/mountain/Mountain_01.obj',
+sceneform.asset('sampledata/mountain/Mountain_01.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/mountain/Mountain_01.sfa',
+        'sampledata/mountain/Mountain_01.sfa',
         'src/main/assets/mountain')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/pinetree/PineTree.obj',
+sceneform.asset('sampledata/pinetree/PineTree.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/pinetree/PineTree.sfa',
+        'sampledata/pinetree/PineTree.sfa',
         'src/main/assets/pinetree')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/tree/PUSHILIN_bush.obj',
+sceneform.asset('sampledata/tree/PUSHILIN_bush.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/tree/PUSHILIN_bush.sfa',
+        'sampledata/tree/PUSHILIN_bush.sfa',
         'src/main/assets/tree')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/tree1/tree01.obj',
+sceneform.asset('sampledata/tree1/tree01.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/tree1/tree01.sfa',
+        'sampledata/tree1/tree01.sfa',
         'src/main/assets/tree1')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/treestump/TreeStump_423.obj',
+sceneform.asset('sampledata/treestump/TreeStump_423.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/treestump/TreeStump_423.sfa',
+        'sampledata/treestump/TreeStump_423.sfa',
         'src/main/assets/treestump')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/truck/Jeep.obj',
+sceneform.asset('sampledata/truck/Jeep.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/truck/Jeep.sfa',
+        'sampledata/truck/Jeep.sfa',
         'src/main/assets/truck')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/well/SM_Well_02.obj',
+sceneform.asset('sampledata/well/SM_Well_02.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/well/SM_Well_02.sfa',
+        'sampledata/well/SM_Well_02.sfa',
         'src/main/assets/well')
 
-sceneform.asset('../../mobiledatacollection/app/sampledata/woods/Woods_01.obj',
+sceneform.asset('sampledata/woods/Woods_01.obj',
         'default',
-        '../../mobiledatacollection/app/sampledata/woods/Woods_01.sfa',
+        'sampledata/woods/Woods_01.sfa',
         'src/main/assets/woods')

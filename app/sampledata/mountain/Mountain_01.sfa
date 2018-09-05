@@ -85,7 +85,7 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/mountain/Mountain_01.obj",
+      file: "sampledata/mountain/Mountain_01.obj",
       name: "Mountain_01",
       scale: 0.21004100000000001,
    },

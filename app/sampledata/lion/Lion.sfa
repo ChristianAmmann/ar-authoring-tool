@@ -34,13 +34,13 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/lion/Lion.obj",
+      file: "sampledata/lion/Lion.obj",
       name: "Lion",
-      scale: 0.05,
+      scale: 0.029385699999999998,
    },
    samplers: [
       {
-         file: "../../mobiledatacollection/app/sampledata/lion/Lion_BaseColor.png",
+         file: "sampledata/lion/Lion_BaseColor.png",
          name: "Lion_BaseColor",
          pipeline_name: "Lion_BaseColor.png",
       },

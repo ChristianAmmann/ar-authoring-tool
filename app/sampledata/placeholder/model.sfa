@@ -33,9 +33,9 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/placeholder/model.obj",
+      file: "sampledata/placeholder/model.obj",
       name: "model",
-      scale: 0.28,
+      scale: 0.35,
    },
    version: "0.51:1",
 }

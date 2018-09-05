@@ -138,7 +138,7 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/bulldozer/Bulldozer_1375.obj",
+      file: "sampledata/bulldozer/Bulldozer_1375.obj",
       name: "Bulldozer_1375",
       scale: 0.049994999999999998,
    },

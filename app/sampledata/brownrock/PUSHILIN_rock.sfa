@@ -34,13 +34,13 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/brownrock/PUSHILIN_rock.obj",
+      file: "sampledata/brownrock/PUSHILIN_rock.obj",
       name: "PUSHILIN_rock",
       scale: 0.71360400000000002,
    },
    samplers: [
       {
-         file: "../../mobiledatacollection/app/sampledata/brownrock/PUSHILIN_rock.png",
+         file: "sampledata/brownrock/PUSHILIN_rock.png",
          name: "PUSHILIN_rock",
          pipeline_name: "PUSHILIN_rock.png",
       },

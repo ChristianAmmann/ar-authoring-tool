@@ -59,7 +59,7 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/woods/Woods_01.obj",
+      file: "sampledata/woods/Woods_01.obj",
       name: "Woods_01",
       scale: 0.093132000000000006,
    },

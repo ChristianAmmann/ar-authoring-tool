@@ -34,13 +34,13 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/truck/Jeep.obj",
+      file: "sampledata/truck/Jeep.obj",
       name: "Jeep",
       scale: 0.084913000000000002,
    },
    samplers: [
       {
-         file: "../../mobiledatacollection/app/sampledata/truck/Jeep_BaseColor.png",
+         file: "sampledata/truck/Jeep_BaseColor.png",
          name: "Jeep_BaseColor",
          pipeline_name: "Jeep_BaseColor.png",
       },

@@ -34,13 +34,13 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/bush/Mesh_RoseBush.obj",
+      file: "sampledata/bush/Mesh_RoseBush.obj",
       name: "Mesh_RoseBush",
       scale: 0.031634000000000002,
    },
    samplers: [
       {
-         file: "../../mobiledatacollection/app/sampledata/bush/Tex_RoseBush.png",
+         file: "sampledata/bush/Tex_RoseBush.png",
          name: "Tex_RoseBush",
          pipeline_name: "Tex_RoseBush.png",
       },

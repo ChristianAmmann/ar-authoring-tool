@@ -34,13 +34,13 @@
          "Orientation",
       ],
       collision: {},
-      file: "../../mobiledatacollection/app/sampledata/tree/PUSHILIN_bush.obj",
+      file: "sampledata/tree/PUSHILIN_bush.obj",
       name: "PUSHILIN_bush",
       scale: 0.76629899999999995,
    },
    samplers: [
       {
-         file: "../../mobiledatacollection/app/sampledata/tree/PUSHILIN_bush.png",
+         file: "sampledata/tree/PUSHILIN_bush.png",
          name: "PUSHILIN_bush",
          pipeline_name: "PUSHILIN_bush.png",
       },
