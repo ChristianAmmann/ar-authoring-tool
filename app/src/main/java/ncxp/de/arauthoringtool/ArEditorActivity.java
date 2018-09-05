@@ -135,16 +135,17 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		viewModel.getSelectionTechnique().observe(this, technique -> {
 			transformationSystem.getSelectionVisualizer().removeSelectionVisual(transformationSystem.getSelectedNode());
 			switch (technique) {
-				case CROSSHAIR:
-					onCrosshairTechnique();
-					break;
 				case RAYCASTING:
 					onRaycastingTechnique();
+					break;
+				case CROSSHAIR:
+					onCrosshairTechnique();
 					break;
 				case NONE:
 					onNoneSelectionTechnique();
 					break;
 			}
+
 		});
 	}
 
@@ -455,6 +456,9 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 				if (viewModel.getRotationTechnique().getValue().equals(RotationTechnique.WIDGET_3D)) {
 					attachRotateWidget(node);
 				}
+				if (viewModel.getEditorState().equals(EditorState.EDIT_MODE)) {
+					attachDeleteWidget(node);
+				}
 				viewModel.setCurrentSelectedNode(node);
 			});
 			if (parent instanceof ImageAnchor) {
@@ -492,6 +496,17 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		scaleWidgetNode.setLocalPosition(node.getRight().scaled(0.35f));
 	}
 
+	private void attachDeleteWidget(Node node) {
+		deleteWidgetNode.setParent(node);
+		Vector3 topRight = Vector3.add(node.getUp(), node.getRight());
+		deleteWidgetNode.setLocalPosition(topRight.scaled(0.1f));
+		deleteWidgetNode.setOnTapListener((hitTestResult, motionEvent) -> {
+			ImageAnchor imageAnchor = (ImageAnchor) node.getParent();
+			imageAnchor.removeChild(node);
+			attachNewPlaceholder(imageAnchor);
+		});
+	}
+
 
 	private void replaceARObject(String imageName, Node parent) {
 		Node anchor;
@@ -506,17 +521,6 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		createARObject(anchor, imageName, Quaternion.identity(), Vector3.one());
 	}
 
-
-	private void attachDeleteNode(Node node) {
-		deleteWidgetNode.setParent(node);
-		deleteWidgetNode.setOnTapListener((hitTestResult, motionEvent) -> {
-			ImageAnchor imageAnchor = (ImageAnchor) node.getParent();
-			imageAnchor.removeChild(node);
-			attachNewPlaceholder(imageAnchor);
-			//TODO
-			//showActionButtons();
-		});
-	}
 
 	@Override
 	public void onReplaceArObject(String imageName, Node node) {
