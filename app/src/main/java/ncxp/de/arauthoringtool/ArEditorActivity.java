@@ -127,6 +127,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 			viewModel.resetInteractionTechnique();
 			showEditModeFragment();
 		} else {
+			removeDeleteWidget();
 			showStudyModeFragment();
 		}
 	}
@@ -249,6 +250,13 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		if (rotateWidgetNode != null && rotateWidgetNode.getParent() != null) {
 			Node parent = rotateWidgetNode.getParent();
 			parent.removeChild(rotateWidgetNode);
+		}
+	}
+
+	private void removeDeleteWidget() {
+		if (deleteWidgetNode != null && deleteWidgetNode.getParent() != null) {
+			Node parent = deleteWidgetNode.getParent();
+			parent.removeChild(deleteWidgetNode);
 		}
 	}
 
