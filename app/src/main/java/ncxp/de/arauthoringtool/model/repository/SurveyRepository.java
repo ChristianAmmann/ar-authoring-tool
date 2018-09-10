@@ -29,4 +29,8 @@ public class SurveyRepository {
 		surveysArray = surveys.toArray(surveysArray);
 		surveyDao.insertAll(surveysArray);
 	}
+
+	public void updateSurveys(List<Survey> surveys) {
+		surveys.forEach(surveyDao::update);
+	}
 }

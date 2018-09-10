@@ -139,8 +139,8 @@ public class StudiesFragment extends Fragment implements StudyListener {
 
 	@Override
 	public void onResume() {
-		super.onResume();
 		viewModel.refreshStudies();
+		super.onResume();
 	}
 
 	private boolean isExternalPermissionForDatabaseGranted() {

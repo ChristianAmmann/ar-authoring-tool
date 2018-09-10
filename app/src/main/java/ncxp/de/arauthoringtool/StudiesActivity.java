@@ -23,11 +23,6 @@ import ncxp.de.arauthoringtool.viewmodel.factory.StudiesViewModelFactory;
 
 public class StudiesActivity extends AppCompatActivity {
 
-	private static final int EXTERNAL_PERMISSION_CODE = 4001;
-
-	private FloatingActionButton fab;
-	private Toolbar              toolbar;
-
 	public static StudiesViewModel obtainViewModel(FragmentActivity activity) {
 		return ViewModelProviders.of(activity, createFactory(activity)).get(StudiesViewModel.class);
 	}
@@ -37,12 +32,12 @@ public class StudiesActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_studies);
 
-		fab = findViewById(R.id.fab_add_study);
+		FloatingActionButton fab = findViewById(R.id.fab_add_study);
 		fab.setOnClickListener(view -> {
 			Intent intent = new Intent(this, StudyActivity.class);
 			startActivity(intent);
 		});
-		toolbar = findViewById(R.id.action_bar);
+		Toolbar toolbar = findViewById(R.id.action_bar);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 		showFragment(savedInstanceState);

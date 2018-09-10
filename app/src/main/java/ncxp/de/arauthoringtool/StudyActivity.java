@@ -37,7 +37,6 @@ public class StudyActivity extends AppCompatActivity {
 
 	public static final String STUDY_KEY = "study_key";
 
-	private Toolbar              toolbar;
 	private BottomNavigationView navigationView;
 	private ViewPager            viewPager;
 	private MenuItem             previousMenuItem;
@@ -47,7 +46,7 @@ public class StudyActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_study);
-		toolbar = findViewById(R.id.toolbar);
+		Toolbar toolbar = findViewById(R.id.toolbar);
 		toolbar.setTitle(R.string.new_study);
 		viewPager = findViewById(R.id.container);
 		setupViewPagerAdapter();
@@ -163,6 +162,7 @@ public class StudyActivity extends AppCompatActivity {
 			if (validInput) {
 				String name = titleInput.getText().toString();
 				String description = descriptionInput.getText().toString();
+
 				if (viewModel.getStudy() != null) {
 					Study study = viewModel.getStudy();
 					study.setName(name);
@@ -173,9 +173,12 @@ public class StudyActivity extends AppCompatActivity {
 				} else {
 					viewModel.save(name, description);
 				}
-
-				dialog.dismiss();
-				finish();
+				viewModel.isLoading().observe(this, loading -> {
+					if (!loading) {
+						dialog.dismiss();
+						finish();
+					}
+				});
 			}
 		});
 		if (viewModel.getStudy() != null) {

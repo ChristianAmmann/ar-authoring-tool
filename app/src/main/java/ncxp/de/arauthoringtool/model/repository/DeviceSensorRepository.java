@@ -24,4 +24,8 @@ public class DeviceSensorRepository {
 		return deviceSensorDao.insert(deviceSensor);
 	}
 
+	public int updateDeviceSensor(DeviceSensor deviceSensor) {
+		return deviceSensorDao.update(deviceSensor);
+	}
+
 }

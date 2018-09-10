@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +73,6 @@ public class ArStudyFragment extends Fragment {
 		viewModel = ArEditorActivity.obtainViewModel(getActivity());
 		container = view.findViewById(R.id.study_container);
 		container.setOnClickListener(viewClicked -> {
-			Log.d("asdf", viewModel.getTestPersonState().name());
 			TestPersonState testPersonState = viewModel.getTestPersonState();
 			if (testPersonState.equals(TestPersonState.RUNNING)) {
 				amountOfTouchEvents++;

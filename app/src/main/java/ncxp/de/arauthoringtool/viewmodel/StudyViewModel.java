@@ -10,8 +10,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-import ncxp.de.arauthoringtool.sensorlogger.SensorDataManager;
-import ncxp.de.arauthoringtool.sensorlogger.SensorGroup;
 import ncxp.de.arauthoringtool.model.data.DeviceSensor;
 import ncxp.de.arauthoringtool.model.data.Study;
 import ncxp.de.arauthoringtool.model.data.StudyDeviceSensorJoin;
@@ -20,6 +18,8 @@ import ncxp.de.arauthoringtool.model.repository.DeviceSensorRepository;
 import ncxp.de.arauthoringtool.model.repository.StudyDeviceSensorJoinRepository;
 import ncxp.de.arauthoringtool.model.repository.StudyRepository;
 import ncxp.de.arauthoringtool.model.repository.SurveyRepository;
+import ncxp.de.arauthoringtool.sensorlogger.SensorDataManager;
+import ncxp.de.arauthoringtool.sensorlogger.SensorGroup;
 import ncxp.de.arauthoringtool.ui.study.adapter.SensorSettings;
 
 public class StudyViewModel extends ViewModel {
@@ -36,6 +36,7 @@ public class StudyViewModel extends ViewModel {
 	private SensorSettings                      settings;
 	private boolean                             isTaskCompletionTimeActive;
 	private boolean                             isAmountOfTouchEventsActive;
+	private MutableLiveData<Boolean>            loading;
 
 	public StudyViewModel(StudyRepository studyRepo,
 						  SurveyRepository surveyRepo,
@@ -49,6 +50,7 @@ public class StudyViewModel extends ViewModel {
 		this.studyDeviceSensorJoinRepo = studyDeviceSensorJoinRepo;
 		this.sensors = new MutableLiveData<>();
 		this.surveys = new MutableLiveData<>();
+		this.loading = new MutableLiveData<>();
 	}
 
 
@@ -130,6 +132,7 @@ public class StudyViewModel extends ViewModel {
 	}
 
 	public void save(String name, String description) {
+		loading.postValue(true);
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
 			Study study = new Study();
@@ -141,29 +144,36 @@ public class StudyViewModel extends ViewModel {
 			study.setAccuracy(settings.getSensorAccuracy());
 			study.setAmountOfTouchEventsActive(isAmountOfTouchEventsActive);
 			study.setTaskCompletionTimeActive(isTaskCompletionTimeActive);
-			long studyId = saveStudy(study);
+			long studyId = studyRepo.saveStudy(study);
 			saveActiveDeviceSensors(studyId);
 			saveSurveys(studyId);
+			loading.postValue(false);
 		});
 	}
 
 	public void update(Study updateStudy) {
+		loading.postValue(true);
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
-			study.setAmountOfTouchEventsActive(isAmountOfTouchEventsActive);
-			study.setTaskCompletionTimeActive(isTaskCompletionTimeActive);
-			updateStudy(updateStudy);
-			saveActiveDeviceSensors(updateStudy.getId());
-			saveSurveys(updateStudy.getId());
+			updateStudy.setAmountOfTouchEventsActive(isAmountOfTouchEventsActive);
+			updateStudy.setTaskCompletionTimeActive(isTaskCompletionTimeActive);
+			studyRepo.updateStudy(updateStudy);
+			updateActiveDeviceSensors(updateStudy);
+			updateSurveys(updateStudy.getId());
+			loading.postValue(false);
 		});
 	}
 
-	private void updateStudy(Study study) {
-		studyRepo.saveStudy(study);
-	}
-
-	private long saveStudy(Study study) {
-		return studyRepo.saveStudy(study);
+	private void updateActiveDeviceSensors(Study updateStudy) {
+		sensors.getValue().stream().forEach(deviceSensor -> {
+			deviceRepo.saveDeviceSensor(deviceSensor);
+			StudyDeviceSensorJoin join = new StudyDeviceSensorJoin(updateStudy.getId(), deviceSensor.getName());
+			if (!deviceSensor.isActive()) {
+				studyDeviceSensorJoinRepo.removeStudyDeviceSensorJoin(join);
+			} else {
+				studyDeviceSensorJoinRepo.saveStudyDeviceSensorJoin(join);
+			}
+		});
 	}
 
 	private void saveActiveDeviceSensors(long studyId) {
@@ -177,6 +187,11 @@ public class StudyViewModel extends ViewModel {
 	private void saveSurveys(long studyId) {
 		surveys.getValue().forEach(survey -> survey.setStudyId(studyId));
 		surveyRepo.saveSurveys(surveys.getValue());
+	}
+
+	private void updateSurveys(long studyId) {
+		surveys.getValue().forEach(survey -> survey.setStudyId(studyId));
+		surveyRepo.updateSurveys(surveys.getValue());
 	}
 
 	public List<Object> getSectionedDeviceSensors(List<DeviceSensor> deviceSensors) {
@@ -213,5 +228,9 @@ public class StudyViewModel extends ViewModel {
 
 	public void setAmountOfTouchEvents(boolean active) {
 		this.isAmountOfTouchEventsActive = active;
+	}
+
+	public LiveData<Boolean> isLoading() {
+		return this.loading;
 	}
 }

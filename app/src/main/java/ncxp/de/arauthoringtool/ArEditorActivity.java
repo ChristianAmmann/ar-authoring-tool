@@ -86,6 +86,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	public static final  String AUGMENTED_IMAGE_DB = "markers.imgdb";
 	private static final float  MAX_SCALE          = 4f;
 	private static final float  MIN_SCALE          = 0.1f;
+	private static final float  SENSITIVITY_SCALE  = 0.5f;
 
 	private ArFragment           arFragment;
 	private TransformationSystem transformationSystem;
@@ -464,6 +465,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 				if (viewModel.getRotationTechnique().getValue().equals(RotationTechnique.WIDGET_3D)) {
 					attachRotateWidget(node);
 				}
+				Log.d(TAG, viewModel.getEditorState().name());
 				if (viewModel.getEditorState().equals(EditorState.EDIT_MODE)) {
 					attachDeleteWidget(node);
 				}
@@ -488,37 +490,36 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		ArNode node = new ArNode(transformationSystem, sjbFile, renderable);
 		node.getScaleController().setMaxScale(MAX_SCALE);
 		node.getScaleController().setMinScale(MIN_SCALE);
+		node.getScaleController().setSensitivity(SENSITIVITY_SCALE);
 		return node;
 	}
 
 
 	private void attachRotateWidget(ArNode node) {
-		Node parent = node.getParent();
-		rotateWidgetNode.setParent(parent);
+		rotateWidgetNode.setParent(node.getParent());
 		rotateWidgetNode.setLocalPosition(node.getForward().scaled(0.2f));
 	}
 
 	private void attachScaleWidget(ArNode node) {
-		Node parent = node.getParent();
-		scaleWidgetNode.setParent(parent);
+		scaleWidgetNode.setParent(node.getParent());
 		scaleWidgetNode.setLocalPosition(node.getRight().scaled(0.35f));
 	}
 
 	private void attachDeleteWidget(Node node) {
-		deleteWidgetNode.setParent(node);
-		Vector3 topRight = Vector3.add(node.getUp(), node.getRight());
-		deleteWidgetNode.setLocalPosition(topRight.scaled(0.1f));
+		deleteWidgetNode.setParent(node.getParent());
+		deleteWidgetNode.setLocalPosition(node.getRight().scaled(0.1f));
 		deleteWidgetNode.setOnTapListener((hitTestResult, motionEvent) -> {
 			ImageAnchor imageAnchor = (ImageAnchor) node.getParent();
 			imageAnchor.removeChild(node);
 			attachNewPlaceholder(imageAnchor);
+			deleteWidgetNode.getParent().removeChild(deleteWidgetNode);
 		});
 	}
 
 
 	private void replaceARObject(String imageName, Node parent) {
 		Node anchor;
-		if (parent != null) {
+		if (parent != null && parent.getParent() != null) {
 			anchor = parent.getParent();
 			anchor.removeChild(parent);
 		} else {

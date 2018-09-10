@@ -28,6 +28,10 @@ public class StudyRepository {
 		return studyDao.insert(study);
 	}
 
+	public long updateStudy(Study study) {
+		return studyDao.update(study);
+	}
+
 	public void deleteStudy(Study study) {
 		studyDao.deleteById(study.getId());
 	}

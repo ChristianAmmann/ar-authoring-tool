@@ -22,4 +22,12 @@ public class StudyDeviceSensorJoinRepository {
 	public List<DeviceSensor> getDeviceSensorsForStudy(Study study) {
 		return deviceSensorJoinDao.getDeviceSensorsForStudy(study.getId());
 	}
+
+	public int updateStudyDeviceSensorJoin(StudyDeviceSensorJoin studyDeviceSensorJoin) {
+		return deviceSensorJoinDao.update(studyDeviceSensorJoin);
+	}
+
+	public int removeStudyDeviceSensorJoin(StudyDeviceSensorJoin studyDeviceSensorJoin) {
+		return deviceSensorJoinDao.delete(studyDeviceSensorJoin);
+	}
 }

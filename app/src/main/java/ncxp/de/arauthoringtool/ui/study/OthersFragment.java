@@ -29,7 +29,6 @@ public class OthersFragment extends Fragment implements OptionOthersListener {
 
 	private StudyViewModel viewModel;
 	private RecyclerView   othersRecyclerView;
-	private OtherAdapter   sectionAdapter;
 
 	public static OthersFragment newInstance() {
 		return new OthersFragment();
@@ -54,7 +53,7 @@ public class OthersFragment extends Fragment implements OptionOthersListener {
 	}
 
 	private void setupOtherView() {
-		sectionAdapter = new OtherAdapter(new ArrayList<>(), getContext(), this);
+		OtherAdapter sectionAdapter = new OtherAdapter(new ArrayList<>(), getContext(), this);
 		othersRecyclerView.setHasFixedSize(true);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 		othersRecyclerView.setLayoutManager(layoutManager);

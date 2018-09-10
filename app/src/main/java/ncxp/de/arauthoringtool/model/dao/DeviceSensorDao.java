@@ -5,6 +5,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
 
@@ -21,4 +22,7 @@ public interface DeviceSensorDao {
 
 	@Query("SELECT * FROM " + DeviceSensor.TABLE_NAME)
 	LiveData<List<DeviceSensor>> selectAll();
+
+	@Update(onConflict = OnConflictStrategy.REPLACE)
+	int update(DeviceSensor deviceSensor);
 }
