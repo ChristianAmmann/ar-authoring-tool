@@ -126,6 +126,12 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		setupScaleTechnique();
 		viewModel.resetInteractionTechnique();
 		if (viewModel.getEditorState().equals(EditorState.EDIT_MODE)) {
+			arFragment.getArSceneView().getScene().setOnTouchListener((hitTestResult, motionEvent) -> {
+				if (hitTestResult.getNode() == null) {
+					removeDeleteWidget();
+				}
+				return false;
+			});
 			showEditModeFragment();
 		} else {
 			showStudyModeFragment();
