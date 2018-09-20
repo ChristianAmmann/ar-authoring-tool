@@ -17,8 +17,14 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import ncxp.de.arauthoringtool.ui.onboarding.areditor.OnboardingArEditorImageFragment;
-import ncxp.de.arauthoringtool.ui.onboarding.areditor.OnboardingArEditorInteractionFragment;
+import ncxp.de.arauthoringtool.ui.onboarding.areditor.OnboardingArEditorDragFragment;
+import ncxp.de.arauthoringtool.ui.onboarding.areditor.OnboardingArEditorPlacingStepFourFragment;
+import ncxp.de.arauthoringtool.ui.onboarding.areditor.OnboardingArEditorPlacingStepOneFragment;
+import ncxp.de.arauthoringtool.ui.onboarding.areditor.OnboardingArEditorPlacingStepThreeFragment;
+import ncxp.de.arauthoringtool.ui.onboarding.areditor.OnboardingArEditorPlacingStepTwoFragment;
+import ncxp.de.arauthoringtool.ui.onboarding.areditor.OnboardingArEditorRotateFragment;
+import ncxp.de.arauthoringtool.ui.onboarding.areditor.OnboardingArEditorScaleFragment;
+import ncxp.de.arauthoringtool.ui.onboarding.areditor.OnboardingArEditorSelectFragment;
 import ncxp.de.arauthoringtool.ui.onboarding.areditor.OnboardingArEditorSurfaceFragment;
 import ncxp.de.arauthoringtool.ui.study.adapter.ViewPagerAdapter;
 
@@ -124,8 +130,15 @@ public class OnboardingArEditorActivity extends AppCompatActivity {
 	private List<Fragment> getFragments() {
 		List<Fragment> fragments = new ArrayList<>();
 		fragments.add(OnboardingArEditorSurfaceFragment.newInstance());
-		fragments.add(OnboardingArEditorImageFragment.newInstance());
-		fragments.add(OnboardingArEditorInteractionFragment.newInstance());
+		fragments.add(OnboardingArEditorPlacingStepOneFragment.newInstance());
+		fragments.add(OnboardingArEditorPlacingStepTwoFragment.newInstance());
+		fragments.add(OnboardingArEditorPlacingStepThreeFragment.newInstance());
+		fragments.add(OnboardingArEditorPlacingStepFourFragment.newInstance());
+		fragments.add(OnboardingArEditorSelectFragment.newInstance());
+		fragments.add(OnboardingArEditorDragFragment.newInstance());
+		fragments.add(OnboardingArEditorScaleFragment.newInstance());
+		fragments.add(OnboardingArEditorRotateFragment.newInstance());
+
 		return fragments;
 	}
 }

@@ -33,4 +33,8 @@ public class SurveyRepository {
 	public void updateSurveys(List<Survey> surveys) {
 		surveys.forEach(surveyDao::update);
 	}
+
+	public void removeSurvey(Survey survey) {
+		surveyDao.deleteById(survey.getId());
+	}
 }

@@ -13,21 +13,22 @@
 		android:layout_height="wrap_content"
 		android:fontFamily="sans-serif-medium"
 		android:paddingBottom="@dimen/spacing_medium"
-		android:text="@string/onboarding_areditor_surface"
+		android:text="@string/onboarding_areditor_rotate_title"
 		android:textColor="@android:color/white"
 		android:textSize="@dimen/material_typography_h6"/>
+
+	<ImageView
+		android:layout_width="100dp"
+		android:layout_height="100dp"
+		android:padding="@dimen/spacing_small"
+		android:src="@drawable/rotate_gesture"/>
 
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:fontFamily="sans-serif"
-		android:text="@string/onboarding_areditor_surface_scan_description"
+		android:text="@string/onboarding_areditor_rotate"
 		android:textColor="@android:color/white"
 		android:textSize="@dimen/material_typography_subtitle1"/>
-
-	<ImageView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:src="@drawable/scan_surface"/>
 
 </LinearLayout>

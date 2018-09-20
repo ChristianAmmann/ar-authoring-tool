@@ -192,21 +192,54 @@
 		Pervasive Computing Systems am Karlsruher Institut für Technologie, Vincenz-Prießnitz-Straße 1, 76131 Karlsruhe, Deutschland, angegliedert ist. Weiterverbreitung, auch in Auszügen, für pädagogische, wissenschaftliche oder private Zwecke ist unter Angabe der Quelle gestattet (sofern nicht anders an der entsprechenden Stelle ausdrücklich angegeben). Eine Verwendung im gewerblichen Bereich bedarf der Genehmigung durch der Forschungsgruppe TECO. Ansprechpartner ist Prof. Dr. Michael Beigl (Inhaber des Lehrstuhls Pervasive Computing Systems)</string>
 	<string name="copyright">Copyright</string>
 	<string name="areditor">AR-Editor</string>
-	<string name="onboarding_app_about_description">TODO: Beschreibung der App</string>
+	<string name="onboarding_app_about_description">Diese App dient für das Erstellen von einfachen AR Szenarien für HCI-Studien. Dabei können AR Szenarien mit geringem
+		Aufwand erstellt werden.\n\nDie App bietet die grundsätzlichen Interaktionen mit AR Objekte, wie Platzieren, Skalieren und Rotieren. Desweiteren können Fragebogen
+		importiert, Sensorwerte bzw. weitere Daten für Studien erhoben werden. </string>
 	<string name="arscene">Erstellung von AR-Szenarien</string>
-	<string name="onboarding_arscene_description">TODO: Beschreibung der Erstellung der AR-Szenarien</string>
+	<string name="onboarding_arscene_description">In der App können Sie mehrere AR Szenarien erstellen.\n\nAR Szenarien können für weitere Studien widerverwendet werden, sodass Sie
+		nicht für jede Studie ein eigenes AR Szenario basteln müssen. Zusätzlich können AR Szenarien jederzeit bearbeitet oder gelöscht werden.\n\nFür eine gute AR Erfahrungen empfehlen wir eine geschlossene Umgebung mit viel Platz und eine gute Beleuchtung.\n\nBei der Erstellung sollen Sie soweit wie möglich
+		realitätsgetreu bleiben. Daher können Sie in der App keine virtuellen Objekte frei in der Luft platzieren, sondern nur auf erkannten Oberflächen.
+	</string>
 	<string name="permissions">Berechtigungen</string>
-	<string name="onboarding_permissions_description">TODO: Beschreibung der Erstellung der AR-Szenarien</string>
+	<string name="onboarding_permissions_description">Für die Verwendung der App sind zunächst Berechtigungen auf Kamera und externer Speicher notwendig. Die Berechtigung für
+	die Kamera ist notwendig, um Augmented Reality auf dem Smartphone zu ermöglichen. Desweiteren ist der Zugriff auf den externen Speicher notwendig, um später aufgezeichnete
+		Daten zu exportieren.</string>
 	<string name="onboarding_study_title">Verwaltung von Studien</string>
-	<string name="onboarding_study_description">TODO: Beschreibung der Studienverwaltung</string>
+	<string name="onboarding_study_description">In der App können Sie Studien erstellen und verwalten. Nach der Durchführung der Studie können Sie die aufgezeichneten
+		Daten als CSV Datei exportieren.\n\nFür die Erstellung eines AR Szenario müssen Sie zunächst eine Studie erstellen und konfigurieren. Bei der Konfigurierung können
+	Sie Fragebögen von SoSci-Survey importieren, Sensoren auswählen und Bearbeitungszeit einstellen.</string>
 	<string name="onboarding_areditor_surface">AR-Umgebung scannen</string>
-	<string name="onboarding_areditor_surface_description">TODO: Beschreibung</string>
-	<string name="onboarding_areditor_image">Objekte platzieren mit QR-Codes</string>
-	<string name="onboarding_areditor_image_description">TODO: Beschreibung</string>
+	<string name="onboarding_areditor_image">AR Objekte platzieren</string>
+	<string name="onboarding_areditor_image_description">Für die initiale Platzierung von Objekten werden QR-Codes benutzt. Sie können nur die beigefügten QR-Codes verwenden.\n\nUm AR Objekte zu platzieren, können Sie die QR-Codes beliebig im Raum verteilen. Dabei ist zu beachten, dass die QR-Codes sich nicht überlappen. Die QR-Codes
+		dienen ausschließlich zum Speichern Ihrer AR-Objekte und nicht für die Position im Raum. Sie müssen sich daher nicht zu Beginn festlegen wo Ihre Objekte sein
+		sollen.</string>
 	<string name="onboarding_areditor_interaction">Interaktion mit AR-Objekten</string>
 	<string name="dont_show_again">Nicht mehr anzeigen</string>
 	<string name="camera_permission">Berechtigung für Kamera</string>
 	<string name="microfon_permission">Berechtigung für Mikrofon</string>
 	<string name="storage_permission">Berechtigung für externer Speicher</string>
 	<string name="amount_of_subjects">Proband(en) teilgenommen</string>
+	<string name="onboarding_areditor_select">Um Objekte auszuwählen, müssen sie das Objekt antippen. Sie können immer nur ein Objekt auswählen. Wenn Sie das Objekt nicht mehr
+		ausgewählt haben möchten, können sie an eine Freistelle oder ein anderes Objekt antippen.</string>
+	<string name="onboarding_areditor_scale">Für das Vergrößern/Verkleinern eines Objektes müssen Sie zunächst ein Objekt auswählen. Anschließend können sie mit zwei Fingern das
+		Objekt
+		skalieren. Dabei legen Sie den Daumen und einen Finger dicht nebeneinander auf den Bildschirm und bewegen die Finger auseinander, ohne diese vom Bildschirm abzuheben.
+		.</string>
+	<string name="onboarding_areditor_rotate">Vor dem Rotieren eines Objekts müssen Sie zunächst ein Objekt auswählen. Anschließend können Sie mit zwei Fingern das Objekt
+		rotieren, indem Sie zwei Finger auf den Bildschirm legen und nach links oder rechts drehen. Sie können hierbei das Objekt nur in die y-Achse rotieren.</string>
+	<string name="onboarding_areditor_drag">Sie können Objekte horizontal verschieben, indem Sie Ihr Finger auf das Objekt legen und von einem Ort zum
+		anderen bewegen.
+		.</string>
+	<string name="onboarding_areditor_rotate_title">Rotieren eines AR Objektes</string>
+	<string name="onboarding_areditor_drag_title">Verschieben eines AR Objektes</string>
+	<string name="onboarding_areditor_select_title">Auswählen eines AR Objektes</string>
+	<string name="onboarding_areditor_scale_title">Skalieren eines AR Objektes</string>
+	<string name="onboarding_areditor_surface_scan">Oberflächen erkennen</string>
+	<string name="onboarding_areditor_surface_scan_description">Bevor Sie eine AR Szene erstellen können, muss das Smartphone zunächst die Umgebung verstehen. Dabei
+		erkennt das Smartphone horizontale Oberflächen, welche Sie später nutzen können, um Objekte auf der Oberfläche zu verschieben.</string>
+	<string name="onboarding_areditor_surface_scan_instructions">Um Oberflächen zu erkennen, schwänken Sie das Smartphone leicht über horizontale Oberflächen. Dabei sollten Sie
+		ruckartige oder schnelle Bewegungen vermeiden.\n\nErkannte Oberflächen werden mit einem weißen Muster visualisiert.</string>
+	<string name="onboarding_areditor_placing_instructions">Wenn Sie die QR-Codes platziert haben, können Sie diese nun scannen. Beim erfolgreichen Scannen wird ein gelber
+		Rahmen um den QR-Code angezeigt. Sie können nun ein AR-Objekt auf diesen Rahmen setzen.</string>
+	<string name="onboarding_areditor_placing_instructions_2">Um ein AR-Objekt auf den gelben Rahmen zu platzieren, tippen Sie den Rahmen an. Dabei wird der ausgewählte Rahmen grün. Anschließend wird Ihnen ein Menü mit den möglichen AR-Objekten angezeigt. Sie können jederzeit das ausgewählte Objekt ersetzen. Ausgewählte AR-Objekte werden mit einem umschließenden Ring visualisert.</string>
 </resources>

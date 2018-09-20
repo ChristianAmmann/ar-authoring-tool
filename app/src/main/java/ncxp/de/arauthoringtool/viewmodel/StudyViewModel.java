@@ -123,12 +123,25 @@ public class StudyViewModel extends ViewModel {
 		survey.setProjectDirectory(projectDirectory);
 		survey.setIdentifier(identifier);
 		List<Survey> newSurveys = surveys.getValue();
-		newSurveys.add(survey);
+		if (newSurveys != null) {
+			newSurveys.add(survey);
+		} else {
+			newSurveys = new ArrayList<>();
+			newSurveys.add(survey);
+		}
 		surveys.postValue(newSurveys);
 	}
 
 	public void removeSurvey(Survey survey) {
-		surveys.getValue().remove(survey);
+		ExecutorService executorService = Executors.newFixedThreadPool(2);
+		executorService.submit(() -> {
+			if (survey.getId() != null) {
+				surveyRepo.removeSurvey(survey);
+			}
+			List<Survey> value = surveys.getValue();
+			value.remove(survey);
+			surveys.postValue(value);
+		});
 	}
 
 	public void save(String name, String description) {
@@ -185,8 +198,10 @@ public class StudyViewModel extends ViewModel {
 	}
 
 	private void saveSurveys(long studyId) {
-		surveys.getValue().forEach(survey -> survey.setStudyId(studyId));
-		surveyRepo.saveSurveys(surveys.getValue());
+		if (surveys.getValue() != null && !surveys.getValue().isEmpty()) {
+			surveys.getValue().forEach(survey -> survey.setStudyId(studyId));
+			surveyRepo.saveSurveys(surveys.getValue());
+		}
 	}
 
 	private void updateSurveys(long studyId) {

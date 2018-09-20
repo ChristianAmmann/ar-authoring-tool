@@ -212,7 +212,6 @@ public class SurveyFragment extends Fragment implements OptionSurveyListener {
 		builder.setPositiveButton(R.string.dialog_survey_remove, (dialog, which) -> {
 			surveyAdapter.deleteItem(survey);
 			viewModel.removeSurvey(survey);
-			//TODO Remove in db with viewmodel
 		});
 		builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
 		builder.create().show();

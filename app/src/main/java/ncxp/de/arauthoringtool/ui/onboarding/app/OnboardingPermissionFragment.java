@@ -20,7 +20,6 @@ public class OnboardingPermissionFragment extends Fragment {
 	private static final int       PERMISSION_KEY = 346;
 	private              ImageView cameraCheck;
 	private              ImageView memoryCheck;
-	private              ImageView microfonCheck;
 
 	public static OnboardingPermissionFragment newInstance() {
 		return new OnboardingPermissionFragment();
@@ -32,8 +31,6 @@ public class OnboardingPermissionFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_onboarding_app_permissions, container, false);
 		cameraCheck = view.findViewById(R.id.camera_permission_check);
 		memoryCheck = view.findViewById(R.id.extern_memory_check);
-		microfonCheck = view.findViewById(R.id.microfon_permission_check);
-		setupView();
 		return view;
 	}
 
@@ -48,12 +45,6 @@ public class OnboardingPermissionFragment extends Fragment {
 		if (checkMemoryPermission()) {
 			memoryCheck.setImageDrawable(getActivity().getDrawable(R.drawable.check_circle));
 			memoryCheck.setColorFilter(ContextCompat.getColor(getContext(), android.R.color.holo_green_light));
-		} else {
-			requestPermissions = true;
-		}
-		if (checkMicrofonPermission()) {
-			microfonCheck.setImageDrawable(getActivity().getDrawable(R.drawable.check_circle));
-			microfonCheck.setColorFilter(ContextCompat.getColor(getContext(), android.R.color.holo_green_light));
 		} else {
 			requestPermissions = true;
 		}
@@ -76,14 +67,7 @@ public class OnboardingPermissionFragment extends Fragment {
 		return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 	}
 
-	private boolean checkMicrofonPermission() {
-		return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
-	}
-
 	private void requestPermissions() {
-		ActivityCompat.requestPermissions(getActivity(),
-										  new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO},
-										  PERMISSION_KEY);
-
+		ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_KEY);
 	}
 }

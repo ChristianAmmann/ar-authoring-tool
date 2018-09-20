@@ -10,15 +10,15 @@ import android.view.ViewGroup;
 
 import ncxp.de.arauthoringtool.R;
 
-public class OnboardingArEditorImageFragment extends Fragment {
+public class OnboardingArEditorPlacingStepFourFragment extends Fragment {
 
-	public static OnboardingArEditorImageFragment newInstance() {
-		return new OnboardingArEditorImageFragment();
+	public static OnboardingArEditorPlacingStepFourFragment newInstance() {
+		return new OnboardingArEditorPlacingStepFourFragment();
 	}
 
 	@Nullable
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_onboarding_areditor_image_placing, container, false);
+		return inflater.inflate(R.layout.fragment_onboarding_areditor_placing_step_four, container, false);
 	}
 }

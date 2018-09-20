@@ -43,7 +43,6 @@ import com.google.ar.sceneform.rendering.PlaneRenderer;
 import com.google.ar.sceneform.rendering.Texture;
 import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
-import com.google.ar.sceneform.ux.TransformationSystem;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -88,20 +87,19 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	private static final float  MIN_SCALE          = 0.1f;
 	private static final float  SENSITIVITY_SCALE  = 0.5f;
 
-	private ArFragment           arFragment;
-	private TransformationSystem transformationSystem;
-	private ModelRenderable      frameRenderable;
-	private ArEditorViewModel    viewModel;
-	private DeleteWidgetNode     deleteWidgetNode;
-	private ScaleWidgetNode      scaleWidgetNode;
-	private RotateWidgetNode     rotateWidgetNode;
-	private Material             highlight;
-	private ImageView            crosshair;
-	private GestureDetector      trackableGestureDetector;
-	private DisplayMetrics       metrics;
-	private float                displayCenterY;
-	private float                displayCenterX;
-	private Camera               camera;
+	private ArFragment        arFragment;
+	private ModelRenderable   frameRenderable;
+	private ArEditorViewModel viewModel;
+	private DeleteWidgetNode  deleteWidgetNode;
+	private ScaleWidgetNode   scaleWidgetNode;
+	private RotateWidgetNode  rotateWidgetNode;
+	private Material          highlight;
+	private ImageView         crosshair;
+	private GestureDetector   trackableGestureDetector;
+	private DisplayMetrics    metrics;
+	private float             displayCenterY;
+	private float             displayCenterX;
+	private Camera            camera;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -124,18 +122,17 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		setupSelectionTechnique();
 		setupRotationTechnique();
 		setupScaleTechnique();
+		viewModel.resetInteractionTechnique();
 		if (viewModel.getEditorState().equals(EditorState.EDIT_MODE)) {
-			viewModel.resetInteractionTechnique();
 			showEditModeFragment();
 		} else {
-			removeDeleteWidget();
 			showStudyModeFragment();
 		}
 	}
 
 	private void setupSelectionTechnique() {
 		viewModel.getSelectionTechnique().observe(this, technique -> {
-			transformationSystem.getSelectionVisualizer().removeSelectionVisual(transformationSystem.getSelectedNode());
+			arFragment.getTransformationSystem().getSelectionVisualizer().removeSelectionVisual(arFragment.getTransformationSystem().getSelectedNode());
 			switch (technique) {
 				case RAYCASTING:
 					onRaycastingTechnique();
@@ -167,10 +164,10 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 																			camera.getViewMatrix().data));
 				if (hitTestResult.getNode() != null) {
 					ArNode node = (ArNode) hitTestResult.getNode();
-					transformationSystem.getSelectionVisualizer().applySelectionVisual(node);
+					arFragment.getTransformationSystem().getSelectionVisualizer().applySelectionVisual(node);
 					node.select();
 				} else {
-					transformationSystem.getSelectionVisualizer().removeSelectionVisual(transformationSystem.getSelectedNode());
+					arFragment.getTransformationSystem().getSelectionVisualizer().removeSelectionVisual(arFragment.getTransformationSystem().getSelectedNode());
 				}
 				return true;
 			}
@@ -180,6 +177,10 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 
 	private void onRaycastingTechnique() {
 		crosshair.setVisibility(View.GONE);
+		arFragment.setOnTapArPlaneListener((hitResult, plane, motionEvent) -> {
+			viewModel.setCurrentSelectedNode(null);
+			removeDeleteWidget();
+		});
 		arFragment.getArSceneView().getScene().setOnPeekTouchListener((hitTestResult, motionEvent) -> arFragment.onPeekTouch(hitTestResult, motionEvent));
 		trackableGestureDetector = null;
 	}
@@ -273,7 +274,6 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		arFragment.getArSceneView().getScene().setOnUpdateListener(this::onUpdateFrame);
 		arFragment.getPlaneDiscoveryController().hide();
 		arFragment.getPlaneDiscoveryController().setInstructionView(null);
-		transformationSystem = arFragment.getTransformationSystem();
 		Texture.Sampler sampler = Texture.Sampler.builder()
 												 .setMinFilter(Texture.Sampler.MinFilter.LINEAR)
 												 .setMagFilter(Texture.Sampler.MagFilter.LINEAR)
@@ -457,27 +457,13 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 			node.setLocalRotation(rotation);
 			node.setLocalScale(scale);
 			node.setParent(parent);
-			node.setOnTapListener((hitTestResult, motionEvent) -> {
-				node.select();
-				if (viewModel.getScaleTechnique().getValue().equals(ScaleTechnique.WIDGET_3D)) {
-					attachScaleWidget(node);
-				}
-				if (viewModel.getRotationTechnique().getValue().equals(RotationTechnique.WIDGET_3D)) {
-					attachRotateWidget(node);
-				}
-				Log.d(TAG, viewModel.getEditorState().name());
-				if (viewModel.getEditorState().equals(EditorState.EDIT_MODE)) {
-					attachDeleteWidget(node);
-				}
-				viewModel.setCurrentSelectedNode(node);
-			});
+			node.setOnTapListener((hitTestResult, motionEvent) -> onArNodeTapped(node));
 			if (parent instanceof ImageAnchor) {
 				ImageAnchor imageAnchor = (ImageAnchor) parent;
 				viewModel.addARObject(imageAnchor.getImage().getName(), node);
 			}
 			node.select();
 			viewModel.setCurrentSelectedNode(node);
-
 		}).exceptionally(throwable -> {
 			Toast toast = Toast.makeText(this, "Laden der SFB Datei nicht möglich. Heißen Bilddatei und 3D Modell-Datei gleich?", Toast.LENGTH_LONG);
 			toast.setGravity(Gravity.CENTER, 0, 0);
@@ -486,8 +472,22 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		});
 	}
 
+	private void onArNodeTapped(ArNode node) {
+		node.select();
+		viewModel.setCurrentSelectedNode(node);
+		if (viewModel.getScaleTechnique().getValue().equals(ScaleTechnique.WIDGET_3D)) {
+			attachScaleWidget(node);
+		}
+		if (viewModel.getRotationTechnique().getValue().equals(RotationTechnique.WIDGET_3D)) {
+			attachRotateWidget(node);
+		}
+		if (viewModel.getEditorState().equals(EditorState.EDIT_MODE)) {
+			attachDeleteWidget(node);
+		}
+	}
+
 	private ArNode createArNode(String sjbFile, ModelRenderable renderable) {
-		ArNode node = new ArNode(transformationSystem, sjbFile, renderable);
+		ArNode node = new ArNode(arFragment.getTransformationSystem(), sjbFile, renderable);
 		node.getScaleController().setMaxScale(MAX_SCALE);
 		node.getScaleController().setMinScale(MIN_SCALE);
 		node.getScaleController().setSensitivity(SENSITIVITY_SCALE);
@@ -553,6 +553,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 			viewModel.setComingFromStudyModus(true);
 			showEditModeFragment();
 		} else {
+			removeDeleteWidget();
 			viewModel.setComingFromStudyModus(false);
 			showStudyModeFragment();
 		}
