@@ -69,15 +69,21 @@ public class ArStudyFragment extends Fragment {
 	}
 
 	@Override
-	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		viewModel = ArEditorActivity.obtainViewModel(getActivity());
+	}
+
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		container = view.findViewById(R.id.study_container);
-		container.setOnClickListener(viewClicked -> {
+		//TODO Bug
+		/*container.setOnClickListener(viewClicked -> {
 			TestPersonState testPersonState = viewModel.getTestPersonState();
 			if (testPersonState.equals(TestPersonState.RUNNING)) {
 				amountOfTouchEvents++;
 			}
-		});
+		});*/
 		expandBottomToolbarButton = view.findViewById(R.id.expand_bottom_toolbar_button);
 		settingsButton = view.findViewById(R.id.ar_settings_button);
 		addSubjectButton = view.findViewById(R.id.add_subject_button);
@@ -89,8 +95,7 @@ public class ArStudyFragment extends Fragment {
 		studyStatusView = view.findViewById(R.id.study_status);
 		editButton = view.findViewById(R.id.edit_modus);
 		editButton.setOnClickListener(clickedView -> {
-			viewModel.setEditorState(EditorState.EDIT_MODE);
-			arInteractionListener.onEditorStateChanged();
+			arInteractionListener.onEditorStateChanged(EditorState.EDIT_MODE);
 		});
 		chronometer = view.findViewById(R.id.time_view);
 		chronometer.setOnChronometerTickListener(chronometerChanged -> chronometer = chronometerChanged);

@@ -88,6 +88,8 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	private static final float  SENSITIVITY_SCALE  = 0.5f;
 
 	private ArFragment        arFragment;
+	private ArEditFragment    editFragment;
+	private ArStudyFragment   studyFragment;
 	private ModelRenderable   frameRenderable;
 	private ArEditorViewModel viewModel;
 	private DeleteWidgetNode  deleteWidgetNode;
@@ -263,11 +265,17 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	}
 
 	private void showEditModeFragment() {
-		getSupportFragmentManager().beginTransaction().replace(R.id.editor_container, ArEditFragment.newInstance(), null).commit();
+		if (editFragment == null) {
+			editFragment = ArEditFragment.newInstance();
+		}
+		getSupportFragmentManager().beginTransaction().replace(R.id.editor_container, editFragment, null).commit();
 	}
 
 	private void showStudyModeFragment() {
-		getSupportFragmentManager().beginTransaction().replace(R.id.editor_container, ArStudyFragment.newInstance(), null).commit();
+		if (studyFragment == null) {
+			studyFragment = ArStudyFragment.newInstance();
+		}
+		getSupportFragmentManager().beginTransaction().replace(R.id.editor_container, studyFragment, null).commit();
 	}
 
 	private void setupArFragment() {
@@ -548,14 +556,18 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	}
 
 	@Override
-	public void onEditorStateChanged() {
-		if (viewModel.getEditorState().equals(EditorState.EDIT_MODE)) {
-			viewModel.setComingFromStudyModus(true);
-			showEditModeFragment();
-		} else {
-			removeDeleteWidget();
-			viewModel.setComingFromStudyModus(false);
-			showStudyModeFragment();
+	public void onEditorStateChanged(EditorState state) {
+		viewModel.setEditorState(state);
+		switch (state) {
+			case EDIT_MODE:
+				viewModel.setComingFromStudyModus(true);
+				showEditModeFragment();
+				break;
+			case STUDY_MODE:
+				removeDeleteWidget();
+				viewModel.setComingFromStudyModus(false);
+				showStudyModeFragment();
+				break;
 		}
 	}
 

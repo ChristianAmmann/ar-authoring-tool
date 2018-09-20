@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -34,7 +35,6 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 	private RecyclerView          modelRecyclerView;
 	private ThumbnailAdapter      thumbnailAdapter;
 	private ArInteractionListener arInteractionListener;
-
 
 	public static ArEditFragment newInstance() {
 		return new ArEditFragment();
@@ -55,8 +55,13 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 	}
 
 	@Override
-	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		viewModel = ArEditorActivity.obtainViewModel(getActivity());
+	}
+
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		fitToScanView = view.findViewById(R.id.image_view_fit_to_scan);
 		modelRecyclerView = view.findViewById(R.id.model_thumbnail_list);
 		expandThumbnailButton = view.findViewById(R.id.expand_thumbnail_button);
@@ -76,8 +81,7 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 		ImageButton backSceneButton = view.findViewById(R.id.back_arscene);
 		backSceneButton.setOnClickListener(clickedView -> {
 			if (viewModel.isComingFromStudyModus()) {
-				viewModel.setEditorState(EditorState.STUDY_MODE);
-				arInteractionListener.onEditorStateChanged();
+				arInteractionListener.onEditorStateChanged(EditorState.STUDY_MODE);
 			} else {
 				getActivity().finish();
 			}
@@ -118,6 +122,10 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 		View dialogView = inflater.inflate(R.layout.dialog_save_arscene, null);
 		TextInputEditText titleInput = dialogView.findViewById(R.id.arscene_title_edit);
 		TextInputEditText descriptionInput = dialogView.findViewById(R.id.arscene_description_edit);
+		if (viewModel.getArScene() != null) {
+			titleInput.setText(viewModel.getArScene().getName());
+			descriptionInput.setText(viewModel.getArScene().getDescription());
+		}
 		builder.setView(dialogView).setPositiveButton(R.string.save, (dialog, which) -> {
 			boolean validInput = validateInput(titleInput, R.string.dialog_arscene_error_title);
 			validInput &= validateInput(descriptionInput, R.string.dialog_arscene_error_description);
@@ -132,8 +140,9 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 				} else {
 					viewModel.save(title, description);
 				}
-				viewModel.setEditorState(EditorState.STUDY_MODE);
-				arInteractionListener.onEditorStateChanged();
+				arInteractionListener.onEditorStateChanged(EditorState.STUDY_MODE);
+			} else {
+				Toast.makeText(getContext(), R.string.dialog_save_arscene_error, Toast.LENGTH_SHORT).show();
 			}
 
 		});
