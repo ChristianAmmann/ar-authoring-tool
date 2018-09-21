@@ -1,0 +1,246 @@
+<resources>
+	<string name="app_name">AR Authoring Tool</string>
+	<string name="impressum">Impressum</string>
+	<string name="help">Hilfe</string>
+	<string name="search">Suche</string>
+	<string name="card_expand">Studie aufklappen</string>
+	<string name="start">Starten</string>
+	<string name="share">Teilen</string>
+	<string name="more">Mehr</string>
+	<string name="export">Exportieren</string>
+	<string name="edit">Editieren</string>
+	<string name="delete">Löschen</string>
+	<string name="share_study">Datenerhebung als Datei teilen</string>
+	<string name="no_study_placeholder">Keine Studien vorhanden</string>
+	<string name="no_study_hint">Mit \"+\" können Sie Studien erstellen. Ihre erstellten Studien werden hier angezeigt.</string>
+	<string name="no_arscene_placeholder">Keine AR-Szenen vorhanden</string>
+	<string name="no_arcene_hint">Mit \"+\" können Sie AR-Szenen erstellen. Ihre erstellten AR-Szenen werden hier angezeigt.</string>
+	<string name="sensors">Sensoren</string>
+	<string name="survey">Fragebögen</string>
+	<string name="others">Weitere</string>
+	<string name="name_of_study">Name der Studie</string>
+	<string name="test">Testen</string>
+	<string name="load">Laden</string>
+	<string name="no_survey_placeholder">Keine Fragebogen vorhanden</string>
+	<string name="no_survey_hint">Mit \"+\" können Sie Fragebogen einfügen. Ihre einfgefügten Fragebogen werden hier angezeigt.</string>
+	<string name="description_study">Kurzbeschreibung der Studie</string>
+	<string name="save">Speichern</string>
+	<string name="new_study">Neue Studie</string>
+
+	<string name="dialog_delete_title">Studie löschen?</string>
+	<string name="dialog_delete_message">Durch das Löschen werden alle Einstellungen und Studiendaten gelöscht! Sie können Ihre Studiendaten durch Exportieren
+		sicherstellen.</string>
+	<string name="cancel">Abbrechen</string>
+	<string name="dialog_delete_arscene_title">AR-Szene löschen?</string>
+	<string name="dialog_delete_arscene_message">Durch das Löschen wird die Zuordnung von QR-Codes und den virtuellen Objekten gelöscht.</string>
+
+	<string name="dialog_survey_delete_title">Fragebogen entfernen?</string>
+	<string name="dialog_survey_delete_message">Durch das Entfernen wird der Fragebogen nicht mehr eingebunden. Die Daten des Fragebogens finden Sie auf SosciSurvey.</string>
+	<string name="dialog_survey_remove">Entfernen</string>
+	<string name="settings">Einstellungen</string>
+	<string name="manage_study">Studien verwalten</string>
+	<string name="manage_ar_scene">AR-Szenen verwalten</string>
+	<string name="ar_settings">AR-Einstellungen</string>
+	<string name="selection">Selektion</string>
+	<string name="scale">Skalieren</string>
+	<string name="rotate">Rotation</string>
+	<string name="rotation">Rotation</string>
+	<string name="scale_variant">Skalieren</string>
+	<string name="apply">Anwenden</string>
+	<string name="crosshairs">Fadenkreuz</string>
+	<string name="name_survey">Name des Fragebogens</string>
+	<string name="soci_survey_survey_id">SoSci Survey Id des Fragebogens</string>
+	<string name="survey_description">Kurzbeschreibung des Fragenbogens</string>
+	<string name="dialog_survey_title">Fragebogen einbinden</string>
+	<string name="study_title">Titel der Studie</string>
+	<string name="dialog_study_save_title">Studie speichern</string>
+	<string name="dialog_survey_error_title">Der Fragebogen benötigt einen Titel</string>
+	<string name="dialog_survey_error_description">Der Fragebogen benötigt eine Beschreibung</string>
+	<string name="dialog_survey_error_project_directory">Der Fragebogen benötigt ein SoSci-Survey Projektverzeichnis</string>
+	<string name="dialog_study_error_title">Die Studie benötigt einen Titel</string>
+	<string name="dialog_study_error_description">Die Studie benötigt eine Beschreibung</string>
+	<string name="settings_sensor_accuracy">Genauigkeit der Sensoren</string>
+	<string name="settings_sensor_accuracy_description">Genauigkeit von Gering zu Hoch. Dabei werden nur Sensorwerte mit der gewählten Genauigkeit gespeichert.</string>
+	<string name="settings_sensor_timeinterval_title">Messabstände</string>
+	<string name="settings_sensor_timeinterval_description">Sensorwerte werden nach dem angegebenen Messabstände aufgezeichnet</string>
+	<string name="study_status_idle">Standby</string>
+	<string name="study_status_running">Läuft</string>
+	<string name="study_status_stopped">Pausiert</string>
+	<string name="init_time_text">00:00.00</string>
+	<string name="time_format">%1$.3f s</string>
+	<string name="stopwatch_format">%1$d:%2$s.%3$s</string>
+
+	<!-- Sensorenbeschreibung und Gruppen -->
+	<string name="group_motion_sensor">Bewegungssensoren</string>
+	<string name="group_position_sensor">Positionssensoren</string>
+	<string name="group_environment_sensor">Umgebungssensoren</string>
+	<string name="group_other_sensor">Weitere Sensoren</string>
+
+	<string name="accelerometer">Beschleunigung</string>
+	<string name="accelerometer_description">Beschleunigungskraft entlang der x / y / z-Achse (einschließlich der Schwerkraft).\nMesseinheit: m/s^2</string>
+	<string name="gravity">Gravitation</string>
+	<string name="gravity_description">Schwerkraft entlang der x / y / z-Achse.\nMesseinheit: m/s^2</string>
+	<string name="gyroscope">Gyroskop</string>
+	<string name="gyroscope_description">Drehrate um die x / y / z-Achse.\nMesseinheit: rad/s</string>
+	<string name="linear_accelerometer">Lineare Beschleunigung</string>
+	<string name="linear_accelerometer_description">Beschleunigungskraft entlang der x / y / z-Achse (ohne Schwerkraft).\nMesseinheit: m/s^2</string>
+	<string name="step_counter">Schrittzähler</string>
+	<string name="step_counter_description">Anzahl der Schritte, die der Benutzer seit dem letzten Neustart unternommen hat, während der Sensor aktiviert wurde.\nMesseinheit:
+		Schritte</string>
+	<string name="rotation_vector">Rotationsvektor</string>
+	<string name="rotation_vector_description">Rotationsvektorkomponente entlang der x / y / z-Achse (x * sin(θ/2)).\nMesseinheit: ohne Einheit</string>
+
+	<string name="game_rotation_vector">Gamerotationsvektor</string>
+	<string name="game_rotation_vector_description">Rotationsvektorkomponente entlang der x / y / z-Achse (x * sin(θ/2)).\nMesseinheit: ohne Einheit</string>
+	<string name="geomagnetic_rotation_vector">Geomagnitischer Rotationsvektor</string>
+	<string name="geomagnetic_rotation_vector_description">RRotationsvektorkomponente entlang der x / y / z-Achse (x * sin(θ/2)).\nMesseinheit: ohne Einheit</string>
+	<string name="magnetic_field">Magnetisches Feld</string>
+	<string name="magnetic_field_description">Geomagnetische Feldstärke entlang der x / y / z-Achse.\nMesseinheit: μT</string>
+	<string name="orientation">Orientierung</string>
+	<string name="orientation_description">Winkel um die x / y / z-Achse.\nMesseinheit: Grad</string>
+	<string name="proximity">Entfernung</string>
+	<string name="proximity_description">Entfernung von einem physikalischen Objekt.\nMesseinheit: cm</string>
+
+	<string name="ambient_temperature">Umgebungstemperatur</string>
+	<string name="ambient_temperature_description">Umgebungslufttemperatur.\nMesseinheit: °C</string>
+	<string name="light">Licht</string>
+	<string name="light_description">Beleuchtungsstärke.\nMesseinheit: lx</string>
+	<string name="pressure">Druck</string>
+	<string name="pressure_description">Umgebungsluftdruck.\nMesseinheit: hPa oder mbar</string>
+	<string name="temperature">Temperatur</string>
+	<string name="temperature_description">Gerätetemperatur.\nMesseinheit: °C</string>
+
+
+	<string name="group_others_sensor_settings">Einstellungen der Sensoren</string>
+	<string name="group_others_video_audio">Video &amp; Audio</string>
+	<string name="group_others_miscellaneous">Weitere Optionen</string>
+
+	<string name="sosci_survey_url">https://www.soscisurvey.de/%1$s/?q=%2$s&amp;r=%3$s</string>
+	<string name="snackbar_hint_sosci_survey">Durch das Testen des Fragenbogens werden Sie auf SoSci Survey als Proband/Besucher gezählt.</string>
+	<string name="snackbar_error_sosci_survey">Sollte ihren Fragenbogen nicht korrekt angezeigt werden, passen Sie die Einstellung der Umfrage an.</string>
+	<string name="snackbar_proband_error_sosci_survey">Ups… Leider kann der Fragebogen nicht auf gerufen werden. Der Studienleiter soll die Einstellungen anpassen.</string>
+	<string name="ok">ok</string>
+	<string name="onboarding_survey_import_title">Fragebogen einbinden</string>
+	<string name="onboarding_survey_import_description">Fragebogen können über die Seite Sosci Survey erstellt werden und die App importiert werden. Dabei ist es
+		entscheidend, dass der Fragebogen veröffentlicht ist und Probanden auf diesen zugreifen können. Das Veröffentlichen können Sie auf der SoSci Survey Seite
+		freischalten. Die weitere Schritten erklären Ihnen welche Informationen benötigt werden, um erfolgreich einen Fragenbogen in die App einzubinden</string>
+	<string name="onboarding_survey_platform_id_title">Wie binde ich einen Fragebogen ein?</string>
+	<string name="onboarding_survey_platform_id_description">Für das Einbinden eines Fragenbogens sind zwei Informationen wichtig: Das Projektverzeichnis des Fragenbogens
+		in SoSci-Survey und gegebenfalls die Kennung des Fragebogens. Wenn Sie keine Kennung für den Fragebogen auf SoSci-Survey angegeben haben, lassen Sie diese Angabe
+		einfach leer. Im Folgenden sehen Sie ein Beispiel wie die Kennung und das Projektverzeichnis zu finden ist:</string>
+	<string name="onboarding_survey_javascript_title">Kommunikation zum Fragenbogen aufbauen</string>
+	<string name="onboarding_survey_javascript_description">Nachdem ein Proband ihr Fragebogen beantwortet hat, braucht die App eine Möglichkeit mit ihrem Fragebogen zu
+		kommunizieren, sodass Sie am Ende den Probanden anonym zur den gespeicherten Daten auf der App verbinden können. Hierzu müssen Sie folgenden Code-Schnipsel auf die
+	letzte Seite (z.B. Vielen Dank-Seite) im HTML-Bereich einfügen:</string>
+	<string name="internet_address">Internetadresse</string>
+	<string name="soscisurvey_base_url">https://www.soscisurvey.de/</string>
+	<string name="soscisurvey_url_suffix">/?q=</string>
+	<string name="survey_project">Projekt</string>
+	<string name="survey_identifier">Kennung</string>
+	<string name="survey_settings">Fragebogen Einstellung</string>
+	<string name="survey_description_hint">z.B. SUS Fragebogen</string>
+	<string name="survey_title_hint">z.B. Mein Fragebogen</string>
+	<string name="data_collection">Datenerhebung</string>
+	<string name="study_description">Kurzbeschreibung</string>
+	<string name="expand_bottom_toolbar">Untere Toolbar öffnen</string>
+	<string name="test_modus_action">Testmodus aktivieren/deaktivieren</string>
+	<string name="add_subject_button">Probanden zur Studie hinzufügen</string>
+	<string name="timer_on_off">Timer an/aus</string>
+	<string name="done">Fertig</string>
+	<string name="pause">Pausieren</string>
+	<string name="time_divider">,</string>
+	<string name="seconds">Sekunden</string>
+	<string name="milliseconds">Millisekunden</string>
+	<string name="export_database">Datenbank exportieren</string>
+	<string name="screen_capturing">Bildschrim aufzeichnen</string>
+	<string name="screen_capturing_description">Während der Studie wird der Bildschrim vom Probanden aufgezeichnet</string>
+	<string name="audio_capturing">Ton aufzeichnen</string>
+	<string name="audio_capturing_description">Während der Studie wird der Ton vom Probanden aufgezeichnet</string>
+	<string name="task_completion_time">Bearbeitungszeit</string>
+	<string name="task_completion_time_description">Die benötigte Zeit eines Probanden um die Studie zu absolvieren</string>
+	<string name="touch_events">Anzahl der Touch-Eingaben</string>
+	<string name="touch_events_description">Benötigte Anzahl der Touch-Eingaben um die Studie zu absolvieren</string>
+	<string name="survey_javascript">&lt;script type=\"text/javascript\"&gt;Android.finishedSurvey();&lt;/script&gt;</string>
+	<string name="copy_code">Code kopieren</string>
+	<string name="open_sosci_survey">SoSci Survey öffnen</string>
+	<string name="export_toast">Die Studie ist unter %1$s exportiert</string>
+	<string name="add_subject_hint">Soll ein neue Proband zur Studie \"%1$s\" hinzugefügt werden?\nStellen Sie sicher, dass die AR-Szene richtig geladen ist.
+		Achten Sie darauf, dass der Proband keine schnelle Bewegungen oder das Gerät schüttelt. Dadurch vermeiden Sie, dass die virtuellen Objekte an ihrer Stelle bleiben.
+		Nachdem Hinzufügen weisen Sie den Proband in die Studie ein. Der Proband kann mit dem Play-Button die Aufzeichnung starten.</string>
+	<string name="add_subject">Probanden hinzufügen?</string>
+	<string name="add">Hinzufügen</string>
+	<string name="are_you_ready">Bist du bereit?</string>
+	<string name="subject_start_help">In der Navigation kannst du die Studie pausieren und abschließen. Nur mit Absprache deines Studienleiter kannst du ebenso die Studie
+		abbrechen</string>
+	<string name="lets_go">Los geht\'s</string>
+	<string name="cancel_study">Studie abbrechen?</string>
+	<string name="cancel_study_hint">Willst du die Studie abbrechen?</string>
+	<string name="no">Nein</string>
+	<string name="confirm">Bestätigen</string>
+	<string name="finish_study">Studie abschließen</string>
+	<string name="finish_study_hint">Bist du mit der Studie fertig?</string>
+	<string name="my_arscenes">Meine AR-Szenen</string>
+	<string name="title_ar_scene">Titel der AR-Szene</string>
+	<string name="description_ar_scene">Beschreibung der AR-Szene</string>
+	<string name="dialog_title_save_ar_scene">AR-Szene speichern?</string>
+	<string name="dialog_arscene_error_title">Die AR-Szene benötigt einen Titel</string>
+	<string name="dialog_arscene_error_description">Die AR-Szene benötigt eine Beschreibung</string>
+	<string name="dialog_ar_objects_delete_all">AR-Objekte löschen?</string>
+	<string name="dialog_ar_objects_delete_all_message">Wollen Sie wirklich alle gesetzten Objekte löschen?</string>
+	<string name="about_title">Impressum</string>
+	<string name="impressum_description">Für die AR-App der Forschungsgruppe TECO liegen Copyright und alle weiteren Rechte bei der Forschungsgruppe TECO , welche dem Lehrstuhl für
+		Pervasive Computing Systems am Karlsruher Institut für Technologie, Vincenz-Prießnitz-Straße 1, 76131 Karlsruhe, Deutschland, angegliedert ist. Weiterverbreitung, auch in Auszügen, für pädagogische, wissenschaftliche oder private Zwecke ist unter Angabe der Quelle gestattet (sofern nicht anders an der entsprechenden Stelle ausdrücklich angegeben). Eine Verwendung im gewerblichen Bereich bedarf der Genehmigung durch der Forschungsgruppe TECO. Ansprechpartner ist Prof. Dr. Michael Beigl (Inhaber des Lehrstuhls Pervasive Computing Systems)</string>
+	<string name="copyright">Copyright</string>
+	<string name="areditor">AR-Editor</string>
+	<string name="onboarding_app_about_description">Diese App dient für das Erstellen von einfachen AR Szenarien für HCI-Studien. Dabei können AR Szenarien mit geringem
+		Aufwand erstellt werden.\n\nDie App bietet die grundsätzlichen Interaktionen mit AR Objekte, wie Platzieren, Skalieren und Rotieren. Desweiteren können Fragebogen
+		importiert, Sensorwerte bzw. weitere Daten für Studien erhoben werden. </string>
+	<string name="arscene">Erstellung von AR-Szenarien</string>
+	<string name="onboarding_arscene_description">In der App können Sie mehrere AR Szenarien erstellen.\n\nAR Szenarien können für weitere Studien widerverwendet werden, sodass Sie
+		nicht für jede Studie ein eigenes AR Szenario basteln müssen. Zusätzlich können AR Szenarien jederzeit bearbeitet oder gelöscht werden.\n\nFür eine gute AR Erfahrungen empfehlen wir eine geschlossene Umgebung mit viel Platz und eine gute Beleuchtung.\n\nBei der Erstellung sollen Sie soweit wie möglich
+		realitätsgetreu bleiben. Daher können Sie in der App keine virtuellen Objekte frei in der Luft platzieren, sondern nur auf erkannten Oberflächen.
+	</string>
+	<string name="permissions">Berechtigungen</string>
+	<string name="onboarding_permissions_description">Für die Verwendung der App sind zunächst Berechtigungen auf Kamera und externer Speicher notwendig. Die Berechtigung für
+	die Kamera ist notwendig, um Augmented Reality auf dem Smartphone zu ermöglichen. Desweiteren ist der Zugriff auf den externen Speicher notwendig, um später aufgezeichnete
+		Daten zu exportieren.</string>
+	<string name="onboarding_study_title">Verwaltung von Studien</string>
+	<string name="onboarding_study_description">In der App können Sie Studien erstellen und verwalten. Nach der Durchführung der Studie können Sie die aufgezeichneten
+		Daten als CSV Datei exportieren.\n\nFür die Erstellung eines AR Szenario müssen Sie zunächst eine Studie erstellen und konfigurieren. Bei der Konfigurierung können
+	Sie Fragebögen von SoSci-Survey importieren, Sensoren auswählen und Bearbeitungszeit einstellen.</string>
+	<string name="onboarding_areditor_surface">AR-Umgebung scannen</string>
+	<string name="onboarding_areditor_image">AR Objekte platzieren</string>
+	<string name="onboarding_areditor_image_description">Für die initiale Platzierung von Objekten werden QR-Codes benutzt. Sie können nur die beigefügten QR-Codes verwenden.\n\nUm AR Objekte zu platzieren, können Sie die QR-Codes beliebig im Raum verteilen. Dabei ist zu beachten, dass die QR-Codes sich nicht überlappen. Die QR-Codes
+		dienen ausschließlich zum Speichern Ihrer AR-Objekte und nicht für die Position im Raum. Sie müssen sich daher nicht zu Beginn festlegen wo Ihre Objekte sein
+		sollen.</string>
+	<string name="onboarding_areditor_interaction">Interaktion mit AR-Objekten</string>
+	<string name="dont_show_again">Nicht mehr anzeigen</string>
+	<string name="camera_permission">Berechtigung für Kamera</string>
+	<string name="microfon_permission">Berechtigung für Mikrofon</string>
+	<string name="storage_permission">Berechtigung für externer Speicher</string>
+	<string name="amount_of_subjects">Proband(en) teilgenommen</string>
+	<string name="onboarding_areditor_select">Um Objekte auszuwählen, müssen sie das Objekt antippen. Sie können immer nur ein Objekt auswählen. Wenn Sie das Objekt nicht mehr
+		ausgewählt haben möchten, können sie an eine Freistelle oder ein anderes Objekt antippen.</string>
+	<string name="onboarding_areditor_scale">Für das Vergrößern/Verkleinern eines Objektes müssen Sie zunächst ein Objekt auswählen. Anschließend können sie mit zwei Fingern das
+		Objekt
+		skalieren. Dabei legen Sie den Daumen und einen Finger dicht nebeneinander auf den Bildschirm und bewegen die Finger auseinander, ohne diese vom Bildschirm abzuheben.
+		.</string>
+	<string name="onboarding_areditor_rotate">Vor dem Rotieren eines Objekts müssen Sie zunächst ein Objekt auswählen. Anschließend können Sie mit zwei Fingern das Objekt
+		rotieren, indem Sie zwei Finger auf den Bildschirm legen und nach links oder rechts drehen. Sie können hierbei das Objekt nur in die y-Achse rotieren.</string>
+	<string name="onboarding_areditor_drag">Sie können Objekte horizontal verschieben, indem Sie Ihr Finger auf das Objekt legen und von einem Ort zum
+		anderen bewegen.
+		.</string>
+	<string name="onboarding_areditor_rotate_title">Rotieren eines AR Objektes</string>
+	<string name="onboarding_areditor_drag_title">Verschieben eines AR Objektes</string>
+	<string name="onboarding_areditor_select_title">Auswählen eines AR Objektes</string>
+	<string name="onboarding_areditor_scale_title">Skalieren eines AR Objektes</string>
+	<string name="onboarding_areditor_surface_scan">Oberflächen erkennen</string>
+	<string name="onboarding_areditor_surface_scan_description">Bevor Sie eine AR Szene erstellen können, muss das Smartphone zunächst die Umgebung verstehen. Dabei
+		erkennt das Smartphone horizontale Oberflächen, welche Sie später nutzen können, um Objekte auf der Oberfläche zu verschieben.</string>
+	<string name="onboarding_areditor_surface_scan_instructions">Um Oberflächen zu erkennen, schwänken Sie das Smartphone leicht über horizontale Oberflächen. Dabei sollten Sie
+		ruckartige oder schnelle Bewegungen vermeiden.\n\nErkannte Oberflächen werden mit einem weißen Muster visualisiert.</string>
+	<string name="onboarding_areditor_placing_instructions">Wenn Sie die QR-Codes platziert haben, können Sie diese nun scannen. Beim erfolgreichen Scannen wird ein gelber
+		Rahmen um den QR-Code angezeigt. Sie können nun ein AR-Objekt auf diesen Rahmen setzen.</string>
+	<string name="onboarding_areditor_placing_instructions_2">Um ein AR-Objekt auf den gelben Rahmen zu platzieren, tippen Sie den Rahmen an. Dabei wird der ausgewählte Rahmen grün. Anschließend wird Ihnen ein Menü mit den möglichen AR-Objekten angezeigt. Sie können jederzeit das ausgewählte Objekt ersetzen. Ausgewählte AR-Objekte werden mit einem umschließenden Ring visualisert.</string>
+	<string name="dialog_save_arscene_error">AR Szene benötigt einen Titel und eine Beschreibung</string>
+</resources>

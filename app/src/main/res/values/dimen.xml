@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="mtrl_card_spacing">8dp</dimen>
+	<dimen name="mtrl_card_elevation">1dp</dimen>
+	<dimen name="mtrl_cards_primary_title_top_padding">24dp</dimen>
+	<dimen name="mtrl_cards_primary_title_bottom_padding">16dp</dimen>
+	<dimen name="mtrl_cards_action_button_row_padding">8dp</dimen>
+	<dimen name="mtrl_cards_supporting_text_top_padding">16dp</dimen>
+	<dimen name="mtrl_cards_supporting_text_bottom_padding">24dp</dimen>
+	<dimen name="mtrl_cards_padding">16dp</dimen>
+	<dimen name="mtrl_cards_left_and_right_padding">16dp</dimen>
+	<dimen name="mtrl_cards_top_and_bottom_padding">16dp</dimen>
+	<dimen name="mtrl_cards_padding_from_edge_of_screen_to_card">8dp</dimen>
+	<dimen name="mtrl_cards_space_between_cards">8dp</dimen>
+
+	<dimen name="material_typography_button">14sp</dimen>
+	<dimen name="material_typography_caption">12sp</dimen>
+	<dimen name="material_typography_body1">16sp</dimen>
+	<dimen name="material_typography_body2">14sp</dimen>
+	<dimen name="material_typography_subheading">17sp</dimen>
+	<dimen name="material_typography_title">21sp</dimen>
+	<dimen name="material_typography_headline">24sp</dimen>
+	<dimen name="material_typography_display1">34sp</dimen>
+	<dimen name="material_typography_display2">45sp</dimen>
+	<dimen name="material_typography_display3">56sp</dimen>
+	<dimen name="material_typography_display4">112sp</dimen>
+	<dimen name="material_typography_h1">96sp</dimen>
+	<dimen name="material_typography_h2">60sp</dimen>
+	<dimen name="material_typography_h3">48sp</dimen>
+	<dimen name="material_typography_h4">34sp</dimen>
+	<dimen name="material_typography_h5">24sp</dimen>
+	<dimen name="material_typography_h6">20sp</dimen>
+	<dimen name="material_typography_subtitle1">16sp</dimen>
+	<dimen name="material_typography_subtitle2">14sp</dimen>
+	<dimen name="fab_padding">10dp</dimen>
+	<dimen name="placeholder_spacing">24dp</dimen>
+
+	<dimen name="settings_padding">15dp</dimen>
+	<dimen name="save_arcene_margin">15dp</dimen>
+	<dimen name="back_arcene_margin">15dp</dimen>
+	<dimen name="delete_object_margin">15dp</dimen>
+
+	<dimen name="two_line_item__min_height">64dp</dimen>
+
+	<dimen name="progress_bar_margin_bottom">-8dp</dimen>
+	<dimen name="progress_bar_margin_top">-4dp</dimen>
+
+	<dimen name="surrounding">16dp</dimen>
+	<dimen name="spacing_small">4dp</dimen>
+	<dimen name="spacing_medium">8dp</dimen>
+	<dimen name="spacing_normal">12dp</dimen>
+	<dimen name="spacing_large">16dp</dimen>
+	<dimen name="spacing_extra_large">24dp</dimen>
+	<dimen name="spacing_extra_extra_large">40dp</dimen>
+
+	<dimen name="spacing_page_indicator">52dp</dimen>
+</resources>

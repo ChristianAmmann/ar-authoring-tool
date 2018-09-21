@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+									xmlns:tools="http://schemas.android.com/tools"
+									android:layout_width="match_parent"
+									android:layout_height="wrap_content"
+									android:layout_marginLeft="@dimen/mtrl_card_spacing"
+									android:layout_marginRight="@dimen/mtrl_card_spacing"
+									android:layout_marginTop="@dimen/mtrl_card_spacing"
+									android:elevation="@dimen/mtrl_card_elevation"
+									android:minHeight="120dp"
+									android:orientation="vertical">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:padding="@dimen/mtrl_cards_padding">
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+
+				<TextView
+					android:id="@+id/survey_name"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="sans-serif-medium"
+					android:textAppearance="@android:style/TextAppearance.Material.Title"
+					android:textSize="@dimen/material_typography_h6"
+					tools:text="Fragebogen"/>
+
+				<TextView
+					android:id="@+id/survey_description"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="sans-serif"
+					android:textSize="@dimen/material_typography_body2"
+					tools:text="Kurzbeschreibung des Fragebogens"/>
+
+			</LinearLayout>
+		</LinearLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="#1E000000"
+			android:paddingBottom="4dp"
+			android:paddingTop="4dp"/>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+
+			<Button
+				android:id="@+id/test_button"
+				style="@style/CardButton"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:text="@string/test"
+				android:textAllCaps="true"/>
+
+			<View
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"/>
+
+
+			<ImageButton
+				android:id="@+id/more_options"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:layout_weight="0.1"
+				android:background="@android:color/white"
+				android:contentDescription="@string/more"
+				android:src="@drawable/dots_vertical"/>
+		</LinearLayout>
+
+	</LinearLayout>
+
+
+</android.support.v7.widget.CardView>

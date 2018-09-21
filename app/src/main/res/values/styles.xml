@@ -1,0 +1,89 @@
+<resources>
+
+	<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+		<item name="colorPrimary">@color/colorPrimary</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+		<item name="colorAccent">@color/colorAccent</item>
+	</style>
+
+	<style name="ToolbarTheme" parent="AppTheme">
+		<item name="android:textColorSecondary">@android:color/white</item>
+	</style>
+
+	<style name="CardButton" parent="Widget.AppCompat.Button.Borderless.Colored">
+		<item name="android:textColor">@color/colorPrimary</item>
+	</style>
+
+	<style name="BorderlessButton" parent="CardButton"/>
+
+	<style name="ButtonStyleOnBoarding" parent="Widget.AppCompat.Button.Colored">
+		<item name="android:colorButtonNormal">@color/colorPrimaryDark</item>
+		<item name="colorButtonNormal">@color/colorPrimaryDark</item>
+		<item name="android:textColor">#FFFFFF</item>
+	</style>
+
+	<style name="DefaultNumberPickerTheme" parent="AppTheme">
+		<item name="colorControlNormal">@color/colorPrimary</item>
+	</style>
+
+	<style name="ARTheme" parent="Theme.AppCompat.NoActionBar"/>
+
+	<!-- Typography
+
+	<style name="H1Text" parent="">
+		<item name="android:textSize">@dimen/material_typography_h1</item>
+		<item name="android:fontFamily">sans-serif-light</item>
+	</style>
+
+	<style name="H2Text" parent="">
+		<item name="android:textSize">@dimen/material_typography_h2</item>
+		<item name="android:fontFamily">sans-serif-light</item>
+	</style>
+
+	<style name="H3Text" parent="">
+		<item name="android:textSize">@dimen/material_typography_h3</item>
+		<item name="android:fontFamily">sans-serif</item>
+	</style>
+
+	<style name="H4Text" parent="">
+		<item name="android:textSize">@dimen/material_typography_h4</item>
+		<item name="android:fontFamily">sans-serif</item>
+	</style>
+
+	<style name="H5Text" parent="">
+		<item name="android:textSize">@dimen/material_typography_h5</item>
+		<item name="android:fontFamily">sans-serif</item>
+	</style>
+
+	<style name="H6Text" parent="">
+		<item name="android:textSize">@dimen/material_typography_h6</item>
+		<item name="android:fontFamily">sans-serif-medium</item>
+	</style>
+
+	<style name="Subtitle1Text" parent="">
+		<item name="android:textSize">@dimen/material_typography_subtitle1</item>
+		<item name="android:fontFamily">sans-serif</item>
+	</style>
+
+	<style name="Subtitle2Text" parent="">
+		<item name="android:textSize">@dimen/material_typography_subtitle2</item>
+		<item name="android:fontFamily">sans-serif-medium</item>
+	</style>
+
+	<style name="Body1Text" parent="">
+		<item name="android:textSize">@dimen/material_typography_body1</item>
+		<item name="android:fontFamily">sans-serif</item>
+	</style>
+
+	<style name="Body2Text" parent="">
+		<item name="android:textSize">@dimen/material_typography_body2</item>
+		<item name="android:fontFamily">sans-serif</item>
+	</style>-->
+
+</resources>
+
+	<!--
+	sans-serif-light
+	sans-serif-medium
+	sans-serif
+	-->

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  android:background="@color/colorPrimary"
+			  android:gravity="center_horizontal"
+			  android:orientation="vertical"
+			  android:padding="@dimen/surrounding">
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:fontFamily="sans-serif-medium"
+		android:paddingBottom="@dimen/spacing_medium"
+		android:text="@string/onboarding_survey_javascript_title"
+		android:textColor="@android:color/white"
+		android:textSize="@dimen/material_typography_h6"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:fontFamily="sans-serif"
+		android:text="@string/onboarding_survey_javascript_description"
+		android:textColor="@android:color/white"
+		android:textSize="@dimen/material_typography_subtitle1"/>
+
+	<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/code_snippet"/>
+
+	<View
+		android:layout_width="wrap_content"
+		android:layout_height="0dp"
+		android:layout_weight="1"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<Button
+			android:id="@+id/copy_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:layout_weight="1"
+			android:text="@string/copy_code"
+			android:textColor="@android:color/white"
+			android:theme="@style/ButtonStyleOnBoarding"/>
+
+		<Button
+			android:id="@+id/open_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:layout_weight="1"
+			android:text="@string/open_sosci_survey"
+			android:textColor="@android:color/white"
+			android:theme="@style/ButtonStyleOnBoarding"/>
+	</LinearLayout>
+
+
+</LinearLayout>

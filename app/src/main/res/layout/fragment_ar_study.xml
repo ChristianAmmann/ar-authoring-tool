@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/study_container"
+				xmlns:android="http://schemas.android.com/apk/res/android"
+				xmlns:app="http://schemas.android.com/apk/res-auto"
+				xmlns:tools="http://schemas.android.com/tools"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent">
+
+	<LinearLayout
+		android:id="@+id/study_action_container"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentEnd="true"
+		android:layout_alignParentTop="true"
+		android:orientation="horizontal">
+
+		<ImageButton
+			android:id="@+id/edit_modus"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@null"
+			android:padding="@dimen/settings_padding"
+			android:src="@drawable/pencil"/>
+
+		<ImageButton
+			android:id="@+id/ar_settings_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@null"
+			android:contentDescription="@string/settings"
+			android:padding="@dimen/settings_padding"
+			android:src="@drawable/settings"/>
+
+	</LinearLayout>
+
+	<ImageButton
+		android:id="@+id/expand_bottom_toolbar_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_above="@id/study_bottom_toolbar"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true"
+		android:background="@null"
+		android:contentDescription="@string/expand_bottom_toolbar"
+		android:padding="@dimen/spacing_extra_large"
+		android:src="@drawable/chevron_up"
+		android:tint="@android:color/white"/>
+
+	<ImageButton
+		android:id="@+id/back"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@null"
+		android:padding="@dimen/back_arcene_margin"
+		android:src="@drawable/arrow_left"/>
+
+
+	<LinearLayout
+		android:id="@+id/study_bottom_toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:background="@color/light_black"
+		android:gravity="center_vertical"
+		android:minHeight="?attr/actionBarSize"
+		android:orientation="horizontal"
+		android:visibility="gone">
+
+		<ImageView
+			android:id="@+id/timer_icon"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="@dimen/settings_padding"
+			android:contentDescription="@string/timer_on_off"
+			android:src="@drawable/timer_off"/>
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<TextView
+				android:id="@+id/study_status"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/study_status_idle"
+				android:textAllCaps="true"/>
+
+			<Chronometer
+				android:id="@+id/time_view"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"/>
+		</LinearLayout>
+
+		<View
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:layout_weight="1"/>
+
+		<ImageButton
+			android:id="@+id/add_subject_button"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_weight="0.1"
+			android:background="@null"
+			android:contentDescription="@string/add_subject_button"
+			android:src="@drawable/plus"/>
+
+		<ImageButton
+			android:id="@+id/cancel"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_weight="0.15"
+			android:background="@null"
+			android:contentDescription="@string/cancel"
+			android:src="@drawable/close_circle"
+			android:visibility="gone"/>
+
+		<ImageButton
+			android:id="@+id/play_and_pause"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_weight="0.15"
+			android:background="@null"
+			android:contentDescription="@string/pause"
+			android:src="@drawable/pause_circle_outline"
+			android:visibility="gone"/>
+
+		<ImageButton
+			android:id="@+id/finish"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_weight="0.15"
+			android:background="@null"
+			android:contentDescription="@string/done"
+			android:src="@drawable/check_circle_outline"
+			android:visibility="gone"/>
+
+	</LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  android:orientation="vertical">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_vertical"
+		android:minHeight="@dimen/two_line_item__min_height"
+		android:orientation="horizontal"
+		android:paddingEnd="20dp">
+
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_margin="20dp"
+			android:contentDescription="@string/selection"
+			android:src="@drawable/gesture_tap"/>
+
+
+		<android.support.v7.widget.AppCompatSpinner
+			android:id="@+id/spinner_selection"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:entries="@array/selection_array"/>
+	</LinearLayout>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:background="@android:color/darker_gray"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_vertical"
+		android:minHeight="@dimen/two_line_item__min_height"
+		android:orientation="horizontal"
+		android:paddingEnd="20dp">
+
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_margin="20dp"
+			android:contentDescription="@string/rotate"
+			android:src="@drawable/rotate_3d"/>
+
+
+		<android.support.v7.widget.AppCompatSpinner
+			android:id="@+id/spinner_rotation"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:entries="@array/rotation_array"/>
+	</LinearLayout>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:background="@android:color/darker_gray"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_vertical"
+		android:minHeight="@dimen/two_line_item__min_height"
+		android:orientation="horizontal"
+		android:paddingEnd="20dp">
+
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_margin="20dp"
+			android:contentDescription="@string/scale"
+			android:src="@drawable/arrow_expand_all"/>
+
+
+		<android.support.v7.widget.AppCompatSpinner
+			android:id="@+id/spinner_scale"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:entries="@array/scale_array"/>
+
+	</LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  android:background="@color/colorPrimary"
+			  android:orientation="vertical"
+			  android:padding="@dimen/spacing_medium">
+
+	<android.support.v4.view.ViewPager android:id="@+id/pager"
+									   xmlns:android="http://schemas.android.com/apk/res/android"
+									   android:layout_width="match_parent"
+									   android:layout_height="wrap_content"
+									   android:layout_weight="0.8"/>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="0.2"
+		android:minHeight="@dimen/spacing_page_indicator">
+
+
+		<LinearLayout
+			android:id="@+id/dots"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:gravity="center"
+			android:orientation="horizontal"/>
+
+		<Button
+			android:id="@+id/continue_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:layout_toStartOf="@id/dots"
+			android:background="?attr/selectableItemBackground"
+			android:text="@string/done"
+			android:textColor="@android:color/white"
+			android:visibility="gone"/>
+	</RelativeLayout>
+</LinearLayout>

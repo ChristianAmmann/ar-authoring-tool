@@ -1,0 +1,49 @@
+{
+   materials: [
+      {
+         name: "lambert5SG",
+         parameters: [
+            {
+               baseColor: "Tex_RoseBush",
+            },
+            {
+               baseColorTint: [
+                  1,
+                  1,
+                  1,
+                  1,
+               ],
+            },
+            {
+               metallic: 0,
+            },
+            {
+               roughness: 1,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/obj_material.sfm",
+      },
+   ],
+   model: {
+      attributes: [
+         "Position",
+         "TexCoord",
+         "Orientation",
+      ],
+      collision: {},
+      file: "../../mobiledatacollection/app/sampledata/bush/Mesh_RoseBush.obj",
+      name: "Mesh_RoseBush",
+      scale: 0.031634000000000002,
+   },
+   samplers: [
+      {
+         file: "../../mobiledatacollection/app/sampledata/bush/Tex_RoseBush.png",
+         name: "Tex_RoseBush",
+         pipeline_name: "Tex_RoseBush.png",
+      },
+   ],
+   version: "0.51:1",
+}
