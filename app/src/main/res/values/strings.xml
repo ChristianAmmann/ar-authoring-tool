@@ -243,4 +243,6 @@
 		Rahmen um den QR-Code angezeigt. Sie können nun ein AR-Objekt auf diesen Rahmen setzen.</string>
 	<string name="onboarding_areditor_placing_instructions_2">Um ein AR-Objekt auf den gelben Rahmen zu platzieren, tippen Sie den Rahmen an. Dabei wird der ausgewählte Rahmen grün. Anschließend wird Ihnen ein Menü mit den möglichen AR-Objekten angezeigt. Sie können jederzeit das ausgewählte Objekt ersetzen. Ausgewählte AR-Objekte werden mit einem umschließenden Ring visualisert.</string>
 	<string name="dialog_save_arscene_error">AR Szene benötigt einen Titel und eine Beschreibung</string>
+	<string name="edit_modi">Bearbeitungsmodus</string>
+	<string name="study_modi">Studienmodus</string>
 </resources>
