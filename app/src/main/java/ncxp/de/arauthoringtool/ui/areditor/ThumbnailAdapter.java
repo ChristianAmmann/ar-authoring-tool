@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import java.util.List;
 
@@ -14,6 +15,9 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> 
 
 	private List<Thumbnail>   thumbnails;
 	private ThumbnailListener listener;
+	private Thumbnail         selectedThumbnail;
+	private ImageView         selectionFrame;
+
 
 	public ThumbnailAdapter(List<Thumbnail> thumbnails, ThumbnailListener listener) {
 		this.thumbnails = thumbnails;
@@ -31,7 +35,19 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> 
 	public void onBindViewHolder(@NonNull ThumbnailViewHolder holder, int position) {
 		Thumbnail thumbnail = thumbnails.get(position);
 		holder.getThumbnail().setImageDrawable(thumbnail.getDrawable());
-		holder.getThumbnail().setOnClickListener(view -> listener.onThumbnailClicked(thumbnail.getImageName()));
+		int visibility = thumbnail.isSelected() ? View.VISIBLE : View.GONE;
+		holder.getSelectionView().setVisibility(visibility);
+		holder.getThumbnail().setOnClickListener(view -> {
+			if (selectedThumbnail != null && selectionFrame != null) {
+				selectedThumbnail.setSelected(false);
+				selectionFrame.setVisibility(View.GONE);
+			}
+			thumbnail.setSelected(true);
+			selectedThumbnail = thumbnail;
+			selectionFrame = holder.getSelectionView();
+			selectionFrame.setVisibility(View.VISIBLE);
+			listener.onThumbnailClicked(thumbnail.getImageName());
+		});
 
 	}
 
