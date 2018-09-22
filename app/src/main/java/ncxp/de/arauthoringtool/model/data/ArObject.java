@@ -10,20 +10,19 @@ import android.support.annotation.NonNull;
 import com.google.ar.sceneform.math.Quaternion;
 import com.google.ar.sceneform.math.Vector3;
 
-@Entity(tableName = ArImageToObjectRelation.TABLE_NAME, primaryKeys = {ArImageToObjectRelation.COLUMN_AR_SCENE_ID, ArImageToObjectRelation.COLUMN_IMAGE_NAME})
-public class ArImageToObjectRelation implements Parcelable {
+@Entity(tableName = ArObject.TABLE_NAME, primaryKeys = {ArObject.COLUMN_AR_SCENE_ID, ArObject.COLUMN_IMAGE_NAME})
+public class ArObject implements Parcelable {
 
-	public static final String TABLE_NAME          = "ARImageToObject";
-	public static final String COLUMN_AR_SCENE_ID  = "arSceneId";
-	public static final String COLUMN_AR_MARKER_ID = "arMarkerId";
-	public static final String COLUMN_IMAGE_NAME   = "imageName";
-	public static final String COLUMN_SCALE_X      = "scaleX";
-	public static final String COLUMN_SCALE_Y      = "scaleY";
-	public static final String COLUMN_SCALE_Z      = "scaleZ";
-	public static final String COLUMN_ROTATION_X   = "rotationX";
-	public static final String COLUMN_ROTATION_Y   = "rotationY";
-	public static final String COLUMN_ROTATION_Z   = "rotationZ";
-	public static final String COLUMN_ROTATION_W   = "rotationW";
+	public static final String TABLE_NAME         = "ARObjects";
+	public static final String COLUMN_AR_SCENE_ID = "arSceneId";
+	public static final String COLUMN_IMAGE_NAME  = "imageName";
+	public static final String COLUMN_SCALE_X     = "scaleX";
+	public static final String COLUMN_SCALE_Y     = "scaleY";
+	public static final String COLUMN_SCALE_Z     = "scaleZ";
+	public static final String COLUMN_ROTATION_X  = "rotationX";
+	public static final String COLUMN_ROTATION_Y  = "rotationY";
+	public static final String COLUMN_ROTATION_Z  = "rotationZ";
+	public static final String COLUMN_ROTATION_W  = "rotationW";
 
 
 	@ColumnInfo(name = COLUMN_AR_SCENE_ID)
@@ -32,8 +31,6 @@ public class ArImageToObjectRelation implements Parcelable {
 	@ColumnInfo(name = COLUMN_IMAGE_NAME)
 	@NonNull
 	private String imageName;
-	@ColumnInfo(name = COLUMN_AR_MARKER_ID)
-	private String arMarkerId;
 	@ColumnInfo(name = COLUMN_SCALE_X)
 	private float  scaleX;
 	@ColumnInfo(name = COLUMN_SCALE_Y)
@@ -49,12 +46,11 @@ public class ArImageToObjectRelation implements Parcelable {
 	@ColumnInfo(name = COLUMN_ROTATION_W)
 	private float  rotationW;
 
-	public ArImageToObjectRelation() {
+	public ArObject() {
 	}
 
 	@Ignore
-	public ArImageToObjectRelation(String arMarkerId, String imageName, Vector3 scale, Quaternion rotation) {
-		this.arMarkerId = arMarkerId;
+	public ArObject(String imageName, Vector3 scale, Quaternion rotation) {
 		this.imageName = imageName;
 		this.scaleX = scale.x;
 		this.scaleY = scale.y;
@@ -63,14 +59,6 @@ public class ArImageToObjectRelation implements Parcelable {
 		this.rotationY = rotation.y;
 		this.rotationZ = rotation.z;
 		this.rotationW = rotation.w;
-	}
-
-	public String getArMarkerId() {
-		return arMarkerId;
-	}
-
-	public void setArMarkerId(String arMarkerId) {
-		this.arMarkerId = arMarkerId;
 	}
 
 	public String getImageName() {
@@ -153,10 +141,9 @@ public class ArImageToObjectRelation implements Parcelable {
 		return new Vector3(scaleX, scaleY, scaleZ);
 	}
 
-	protected ArImageToObjectRelation(Parcel in) {
+	protected ArObject(Parcel in) {
 		arSceneId = in.readLong();
 		imageName = in.readString();
-		arMarkerId = in.readString();
 		scaleX = in.readFloat();
 		scaleY = in.readFloat();
 		scaleZ = in.readFloat();
@@ -175,7 +162,6 @@ public class ArImageToObjectRelation implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeLong(arSceneId);
 		dest.writeString(imageName);
-		dest.writeString(arMarkerId);
 		dest.writeFloat(scaleX);
 		dest.writeFloat(scaleY);
 		dest.writeFloat(scaleZ);
@@ -186,15 +172,15 @@ public class ArImageToObjectRelation implements Parcelable {
 	}
 
 	@SuppressWarnings("unused")
-	public static final Parcelable.Creator<ArImageToObjectRelation> CREATOR = new Parcelable.Creator<ArImageToObjectRelation>() {
+	public static final Parcelable.Creator<ArObject> CREATOR = new Parcelable.Creator<ArObject>() {
 		@Override
-		public ArImageToObjectRelation createFromParcel(Parcel in) {
-			return new ArImageToObjectRelation(in);
+		public ArObject createFromParcel(Parcel in) {
+			return new ArObject(in);
 		}
 
 		@Override
-		public ArImageToObjectRelation[] newArray(int size) {
-			return new ArImageToObjectRelation[size];
+		public ArObject[] newArray(int size) {
+			return new ArObject[size];
 		}
 	};
 }

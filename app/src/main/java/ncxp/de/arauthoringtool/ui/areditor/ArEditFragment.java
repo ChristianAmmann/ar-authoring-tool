@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -29,7 +28,7 @@ import ncxp.de.arauthoringtool.viewmodel.ArEditorViewModel;
 public class ArEditFragment extends Fragment implements ThumbnailListener {
 
 	private ArEditorViewModel     viewModel;
-	private ImageView             fitToScanView;
+	//private ImageView             fitToScanView;
 	private ImageButton           expandThumbnailButton;
 	private LinearLayout          actionButtonsContainer;
 	private RecyclerView          modelRecyclerView;
@@ -62,7 +61,7 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-		fitToScanView = view.findViewById(R.id.image_view_fit_to_scan);
+		//fitToScanView = view.findViewById(R.id.image_view_fit_to_scan);
 		modelRecyclerView = view.findViewById(R.id.model_thumbnail_list);
 		expandThumbnailButton = view.findViewById(R.id.expand_thumbnail_button);
 		expandThumbnailButton.setOnClickListener(clickedView -> {
@@ -85,23 +84,17 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 			} else {
 				getActivity().finish();
 			}
-
 		});
-
 		initBottomBar();
 		setupAdapter();
 		viewModel.getThumbnails().observe(this, drawables -> thumbnailAdapter.replaceItems(drawables));
 		viewModel.init();
+		showBottomThumbnails();
+		showActionButtons();
 		viewModel.getCurrentSelectedNode().observe(this, current -> {
-			if (current != null) {
-				showBottomThumbnails();
-				showActionButtons();
-				fitToScanView.setVisibility(View.GONE);
-			}
+			showActionButtons();
 		});
-
 	}
-
 
 	private void setupAdapter() {
 		modelRecyclerView.setHasFixedSize(true);
@@ -112,7 +105,8 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 
 	@Override
 	public void onThumbnailClicked(String imageName) {
-		arInteractionListener.onReplaceArObject(imageName, viewModel.getCurrentSelectedNode().getValue());
+		viewModel.setCurrentImageSelection(imageName);
+		//arInteractionListener.onReplaceArObject(imageName, viewModel.getCurrentSelectedNode().getValue());
 	}
 
 	private void showSaveDialog() {
@@ -163,7 +157,6 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 		return true;
 	}
 
-
 	private void showDeleteDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		builder.setTitle(R.string.dialog_ar_objects_delete_all).setMessage(R.string.dialog_ar_objects_delete_all_message);
@@ -189,13 +182,12 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 	}
 
 	private void showActionButtons() {
-		if (viewModel.containsARObject()) {
+		if (!viewModel.getArNodes().isEmpty()) {
 			actionButtonsContainer.setVisibility(View.VISIBLE);
 		} else {
 			actionButtonsContainer.setVisibility(View.GONE);
 		}
 	}
-
 
 	private void initBottomBar() {
 		expandThumbnailButton.setOnClickListener((view) -> {
@@ -206,7 +198,6 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 				showBottomThumbnails();
 			}
 			modelRecyclerView.setVisibility(visibility);
-
 		});
 	}
 }
