@@ -53,6 +53,5 @@ public class MappingFragment extends Fragment {
 		mappingAdapter = new MappingAdapter(new ArrayList<>());
 		mappingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		mappingRecyclerView.setAdapter(mappingAdapter);
-
 	}
 }

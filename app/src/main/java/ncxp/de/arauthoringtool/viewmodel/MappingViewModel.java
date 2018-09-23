@@ -17,21 +17,18 @@ import java.util.concurrent.Executors;
 import ncxp.de.arauthoringtool.model.data.ARScene;
 import ncxp.de.arauthoringtool.model.data.ArObject;
 import ncxp.de.arauthoringtool.model.data.Study;
-import ncxp.de.arauthoringtool.model.repository.ArSceneRepository;
 import ncxp.de.arauthoringtool.ui.areditor.Thumbnail;
+import ncxp.de.arauthoringtool.ui.areditor.util.EditorState;
 
 public class MappingViewModel extends AndroidViewModel {
 
-	private static final String FILE_TYPE = ".png";
-
-	private ArSceneRepository                arSceneRepository;
 	private Study                            study;
 	private ARScene                          arScene;
 	private MutableLiveData<List<Thumbnail>> thumbnails;
+	private EditorState                      editorState;
 
-	public MappingViewModel(@NonNull Application application, ArSceneRepository arSceneRepository) {
+	public MappingViewModel(@NonNull Application application) {
 		super(application);
-		this.arSceneRepository = arSceneRepository;
 		this.thumbnails = new MutableLiveData<>();
 		thumbnails.postValue(new ArrayList<>());
 	}
@@ -84,5 +81,13 @@ public class MappingViewModel extends AndroidViewModel {
 
 	public void setArScene(ARScene arScene) {
 		this.arScene = arScene;
+	}
+
+	public EditorState getState() {
+		return editorState;
+	}
+
+	public void setState(EditorState editorState) {
+		this.editorState = editorState;
 	}
 }

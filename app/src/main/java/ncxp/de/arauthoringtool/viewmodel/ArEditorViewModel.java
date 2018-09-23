@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 
+import com.google.ar.core.AugmentedImage;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.math.Quaternion;
 import com.google.ar.sceneform.math.Vector3;
@@ -302,5 +303,13 @@ public class ArEditorViewModel extends AndroidViewModel {
 
 	public void setCurrentImageSelection(String currentImageSelection) {
 		this.currentImageSelection = currentImageSelection;
+	}
+
+	public boolean containsAugmentedImage(AugmentedImage augmentedImage) {
+		return arScene.getArImageObjects().size() >= augmentedImage.getIndex() + 1;
+	}
+
+	public ArObject getArObject(AugmentedImage augmentedImage) {
+		return arScene.getArImageObjects().get(augmentedImage.getIndex());
 	}
 }

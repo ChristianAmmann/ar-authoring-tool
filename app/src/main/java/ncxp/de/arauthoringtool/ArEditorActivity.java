@@ -48,11 +48,13 @@ import ncxp.de.arauthoringtool.model.dao.ArObjectDao;
 import ncxp.de.arauthoringtool.model.dao.ArSceneDao;
 import ncxp.de.arauthoringtool.model.dao.TestPersonDao;
 import ncxp.de.arauthoringtool.model.data.ARScene;
+import ncxp.de.arauthoringtool.model.data.ArObject;
 import ncxp.de.arauthoringtool.model.data.Study;
 import ncxp.de.arauthoringtool.model.repository.ArSceneRepository;
 import ncxp.de.arauthoringtool.model.repository.TestPersonRepository;
 import ncxp.de.arauthoringtool.sceneform.ArNode;
 import ncxp.de.arauthoringtool.sceneform.DeleteWidgetNode;
+import ncxp.de.arauthoringtool.sceneform.ImageAnchor;
 import ncxp.de.arauthoringtool.sceneform.RotateWidgetNode;
 import ncxp.de.arauthoringtool.sceneform.ScaleWidgetNode;
 import ncxp.de.arauthoringtool.ui.areditor.ArEditFragment;
@@ -80,12 +82,10 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	private ArFragment        arFragment;
 	private ArEditFragment    editFragment;
 	private ArStudyFragment   studyFragment;
-	//private ModelRenderable   frameRenderable;
 	private ArEditorViewModel viewModel;
 	private DeleteWidgetNode  deleteWidgetNode;
 	private ScaleWidgetNode   scaleWidgetNode;
 	private RotateWidgetNode  rotateWidgetNode;
-	//private Material          highlight;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,7 +93,6 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		setContentView(R.layout.activity_arimage_marker);
 		arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ar_marker_fragment);
 		viewModel = obtainViewModel(this);
-		//initPlacingFrame();
 		initDeleteWidgetNode();
 		initRotateWidgetNode();
 		initScaleWidgetNode();
@@ -215,7 +214,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 			return false;
 		});
 		arFragment.setOnTapArPlaneListener(this::onTapArPlane);
-		//arFragment.getArSceneView().getScene().setOnUpdateListener(this::onUpdateFrame);
+		arFragment.getArSceneView().getScene().addOnUpdateListener(this::onUpdateFrame);
 	}
 
 	private void onTapArPlane(HitResult hitResult, Plane plane, MotionEvent motionEvent) {
@@ -245,30 +244,14 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	}
 
 	private void updateAugmentedImage(AugmentedImage augmentedImage) {
-		//TODO
-		/*if (!viewModel.containsAugmentedImage(augmentedImage)) {
+		if (viewModel.containsAugmentedImage(augmentedImage)) {
 			ImageAnchor imageAnchor = new ImageAnchor();
 			imageAnchor.setImage(augmentedImage);
-
-			if (viewModel.containsArSceneObject(augmentedImage.getName())) {
-				ArImageToObjectRelation arImageToObjectRelation = viewModel.getArSceneObjectFileName(augmentedImage.getName());
-				createARObject(imageAnchor, arImageToObjectRelation.getImageName(), arImageToObjectRelation.getRotation(), arImageToObjectRelation.getScale());
-			} else {
-				//attachNewPlaceholder(imageAnchor);
-				viewModel.addARObject(augmentedImage.getName(), imageAnchor);
-			}
+			ArObject arObject = viewModel.getArObject(augmentedImage);
+			createARObject(imageAnchor, arObject.getImageName(), arObject.getRotation(), arObject.getScale());
 			arFragment.getArSceneView().getScene().addChild(imageAnchor);
-		}*/
+		}
 	}
-
-	/*private void initPlacingFrame() {
-		ModelRenderable.builder().setSource(this, R.raw.frame).build().thenAccept(renderable -> {
-			MaterialFactory.makeOpaqueWithColor(this, new Color(0, 1f, 0)).thenAccept(material -> {
-				highlight = material;
-				frameRenderable = renderable;
-			});
-		});
-	}*/
 
 	private void initDeleteWidgetNode() {
 		ViewRenderable.builder().setView(this, R.layout.delete_view).build().thenAccept((renderable) -> deleteWidgetNode = new DeleteWidgetNode(renderable));

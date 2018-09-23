@@ -23,6 +23,7 @@ import ncxp.de.arauthoringtool.ArSceneActivity;
 import ncxp.de.arauthoringtool.MappingActivity;
 import ncxp.de.arauthoringtool.R;
 import ncxp.de.arauthoringtool.model.data.ARScene;
+import ncxp.de.arauthoringtool.ui.areditor.util.EditorState;
 import ncxp.de.arauthoringtool.viewmodel.ArSceneViewModel;
 
 public class ArSceneFragment extends Fragment implements ArSceneListener {
@@ -79,7 +80,7 @@ public class ArSceneFragment extends Fragment implements ArSceneListener {
 				Intent intent = new Intent(getActivity(), MappingActivity.class);
 				intent.putExtra(MappingActivity.ARSCENE_KEY, arScene);
 				intent.putExtra(MappingActivity.KEY_STUDY, viewModel.getStudy());
-				//intent.putExtra(ArEditorActivity.KEY_EDITOR_STATE, EditorState.EDIT_MODE);
+				intent.putExtra(MappingActivity.KEY_EDITOR_STATE, EditorState.EDIT_MODE);
 				startActivity(intent);
 				break;
 			case R.id.delete:
@@ -115,7 +116,7 @@ public class ArSceneFragment extends Fragment implements ArSceneListener {
 		Intent intent = new Intent(getActivity(), MappingActivity.class);
 		intent.putExtra(MappingActivity.ARSCENE_KEY, arScene);
 		intent.putExtra(MappingActivity.KEY_STUDY, viewModel.getStudy());
-		//intent.putExtra(ArEditorActivity.KEY_EDITOR_STATE, EditorState.STUDY_MODE);
+		intent.putExtra(MappingActivity.KEY_EDITOR_STATE, EditorState.STUDY_MODE);
 		getActivity().startActivity(intent);
 	}
 
