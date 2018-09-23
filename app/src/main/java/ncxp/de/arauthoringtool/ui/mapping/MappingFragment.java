@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import ncxp.de.arauthoringtool.MappingActivity;
 import ncxp.de.arauthoringtool.R;
 import ncxp.de.arauthoringtool.viewmodel.MappingViewModel;
@@ -40,11 +42,15 @@ public class MappingFragment extends Fragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		mappingRecyclerView = view.findViewById(R.id.mapping_recyclerview);
 		setupMappingView();
+		viewModel.getThumbnails().observe(this, thumbnails -> {
+			mappingAdapter.replaceItems(thumbnails);
+		});
+		viewModel.init();
 	}
 
 	private void setupMappingView() {
 		mappingRecyclerView.setHasFixedSize(true);
-		mappingAdapter = new MappingAdapter();
+		mappingAdapter = new MappingAdapter(new ArrayList<>());
 		mappingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		mappingRecyclerView.setAdapter(mappingAdapter);
 
