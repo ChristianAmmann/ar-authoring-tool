@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import ncxp.de.arauthoringtool.model.data.ARScene;
+import ncxp.de.arauthoringtool.model.data.ArObject;
 import ncxp.de.arauthoringtool.model.data.Study;
 import ncxp.de.arauthoringtool.model.repository.ArSceneRepository;
 import ncxp.de.arauthoringtool.ui.areditor.Thumbnail;
@@ -46,19 +47,12 @@ public class MappingViewModel extends AndroidViewModel {
 
 	private void loadThumbnails() {
 		List<Thumbnail> loadingThumbnails = new ArrayList<>();
-		try {
-			String[] models = getApplication().getAssets().list("");
-			for (String file : models) {
-				if (!file.toLowerCase().endsWith(FILE_TYPE)) {
-					continue;
-				}
-				Drawable drawable = getDrawable(file);
-				if (drawable != null) {
-					loadingThumbnails.add(new Thumbnail(drawable, file));
-				}
+		for (ArObject arObject : arScene.getArImageObjects()) {
+			String file = arObject.getImageName().replace("sfb", "png");
+			Drawable drawable = getDrawable(file);
+			if (drawable != null) {
+				loadingThumbnails.add(new Thumbnail(drawable, file));
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		thumbnails.postValue(loadingThumbnails);
 	}
