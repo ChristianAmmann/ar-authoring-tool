@@ -75,7 +75,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	public static final  String AUGMENTED_IMAGE_DB = "markers.imgdb";
 	private static final float  MAX_SCALE          = 4f;
 	private static final float  MIN_SCALE          = 0.1f;
-	private static final float  SENSITIVITY_SCALE  = 0.5f;
+	private static final float  SENSITIVITY_SCALE  = 0.4f;
 
 	private ArFragment        arFragment;
 	private ArEditFragment    editFragment;
