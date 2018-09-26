@@ -79,11 +79,7 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 		deleteButton.setOnDragListener(new TrashDragListener(R.drawable.delete_empty, R.drawable.delete));
 		ImageButton backSceneButton = view.findViewById(R.id.back_arscene);
 		backSceneButton.setOnClickListener(clickedView -> {
-			if (viewModel.isComingFromStudyModus()) {
-				arInteractionListener.onEditorStateChanged(EditorState.STUDY_MODE);
-			} else {
-				getActivity().finish();
-			}
+			getActivity().finish();
 		});
 		initBottomBar();
 		setupAdapter();

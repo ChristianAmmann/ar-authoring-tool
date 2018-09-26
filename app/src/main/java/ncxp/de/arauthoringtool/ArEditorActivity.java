@@ -463,12 +463,10 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		viewModel.setEditorState(state);
 		switch (state) {
 			case EDIT_MODE:
-				viewModel.setComingFromStudyModus(true);
 				showEditModeFragment();
 				break;
 			case STUDY_MODE:
 				removeDeleteWidget();
-				viewModel.setComingFromStudyModus(false);
 				showStudyModeFragment();
 				break;
 		}
