@@ -126,6 +126,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	}
 
 	private void onNoneSelectionTechnique() {
+		arFragment.setOnTapArPlaneListener(null);
 		arFragment.getArSceneView().getScene().setOnPeekTouchListener(null);
 	}
 
@@ -408,7 +409,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 
 	private void attachRotateWidget(ArNode node) {
 		rotateWidgetNode.setParent(node.getParent());
-		rotateWidgetNode.setLocalPosition(node.getForward().scaled(0.2f));
+		rotateWidgetNode.setLocalPosition(node.getDown().scaled(0.5f));
 	}
 
 	private void attachScaleWidget(ArNode node) {
