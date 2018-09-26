@@ -417,7 +417,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 
 	private void attachDeleteWidget(ArNode node) {
 		deleteWidgetNode.setParent(node.getParent());
-		deleteWidgetNode.setLocalPosition(node.getRight().scaled(0.1f));
+		deleteWidgetNode.setLocalPosition(node.getDown().scaled(0.5f));
 		deleteWidgetNode.setOnTapListener((hitTestResult, motionEvent) -> {
 			viewModel.getArNodes().remove(node);
 			node.getParent().removeChild(node);
