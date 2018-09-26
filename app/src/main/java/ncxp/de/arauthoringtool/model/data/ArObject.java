@@ -3,6 +3,7 @@ package ncxp.de.arauthoringtool.model.data;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -10,10 +11,11 @@ import android.support.annotation.NonNull;
 import com.google.ar.sceneform.math.Quaternion;
 import com.google.ar.sceneform.math.Vector3;
 
-@Entity(tableName = ArObject.TABLE_NAME, primaryKeys = {ArObject.COLUMN_AR_SCENE_ID, ArObject.COLUMN_IMAGE_NAME})
+@Entity(tableName = ArObject.TABLE_NAME)
 public class ArObject implements Parcelable {
 
 	public static final String TABLE_NAME         = "ARObjects";
+	public static final String COLUMN_ID          = "id";
 	public static final String COLUMN_AR_SCENE_ID = "arSceneId";
 	public static final String COLUMN_IMAGE_NAME  = "imageName";
 	public static final String COLUMN_SCALE_X     = "scaleX";
@@ -24,7 +26,9 @@ public class ArObject implements Parcelable {
 	public static final String COLUMN_ROTATION_Z  = "rotationZ";
 	public static final String COLUMN_ROTATION_W  = "rotationW";
 
-
+	@PrimaryKey(autoGenerate = true)
+	@ColumnInfo(name = COLUMN_ID)
+	private long   arObjectId;
 	@ColumnInfo(name = COLUMN_AR_SCENE_ID)
 	@NonNull
 	private long   arSceneId;
@@ -46,6 +50,7 @@ public class ArObject implements Parcelable {
 	@ColumnInfo(name = COLUMN_ROTATION_W)
 	private float  rotationW;
 
+
 	public ArObject() {
 	}
 
@@ -59,6 +64,27 @@ public class ArObject implements Parcelable {
 		this.rotationY = rotation.y;
 		this.rotationZ = rotation.z;
 		this.rotationW = rotation.w;
+	}
+
+	@Ignore
+	public ArObject(long arObjectId, String imageName, Vector3 scale, Quaternion rotation) {
+		this.arObjectId = arObjectId;
+		this.imageName = imageName;
+		this.scaleX = scale.x;
+		this.scaleY = scale.y;
+		this.scaleZ = scale.z;
+		this.rotationX = rotation.x;
+		this.rotationY = rotation.y;
+		this.rotationZ = rotation.z;
+		this.rotationW = rotation.w;
+	}
+
+	public long getArObjectId() {
+		return arObjectId;
+	}
+
+	public void setArObjectId(long arObjectId) {
+		this.arObjectId = arObjectId;
 	}
 
 	public String getImageName() {
@@ -142,6 +168,7 @@ public class ArObject implements Parcelable {
 	}
 
 	protected ArObject(Parcel in) {
+		arObjectId = in.readLong();
 		arSceneId = in.readLong();
 		imageName = in.readString();
 		scaleX = in.readFloat();
@@ -160,6 +187,7 @@ public class ArObject implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeLong(arObjectId);
 		dest.writeLong(arSceneId);
 		dest.writeString(imageName);
 		dest.writeFloat(scaleX);

@@ -128,7 +128,10 @@ public class ArEditorViewModel extends AndroidViewModel {
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
 			long arSceneId = arSceneRepository.saveArScene(scene);
-			arSceneRepository.saveArObjects(arSceneId, arObjects);
+			long[] ids = arSceneRepository.saveArObjects(arSceneId, arObjects);
+			for (int i = 0; i < ids.length; i++) {
+				arObjects.get(i).setArObjectId(ids[i]);
+			}
 			scene.setId(arSceneId);
 			setArScene(scene);
 		});
@@ -144,13 +147,35 @@ public class ArEditorViewModel extends AndroidViewModel {
 	}
 
 	public List<ArObject> convertTo(List<ArNode> arNodes) {
-		List<ArObject> arObjects = new ArrayList<>();
+		List<ArObject> newArObjects = new ArrayList<>();
+		List<ArObject> oldArObjects = new ArrayList<>();
+		if (arScene != null) {
+			oldArObjects = arScene.getArImageObjects();
+		}
+		List<ArObject> finalOldArObjects = oldArObjects;
 		arNodes.forEach(node -> {
 			Vector3 scale = node.getLocalScale();
 			Quaternion rotation = node.getLocalRotation();
-			arObjects.add(new ArObject(node.getFileName(), scale, rotation));
+			ArObject savedArObject = getExistingArObject(finalOldArObjects, node);
+			if (savedArObject != null) {
+				finalOldArObjects.remove(savedArObject);
+				newArObjects.add(new ArObject(savedArObject.getArObjectId(), node.getFileName(), scale, rotation));
+			} else {
+				newArObjects.add(new ArObject(node.getFileName(), scale, rotation));
+			}
 		});
-		return arObjects;
+		return newArObjects;
+	}
+
+	private ArObject getExistingArObject(List<ArObject> arObjects, ArNode node) {
+		if (arObjects != null && node.getQrCodeNumber() != null) {
+			for (ArObject arObject : arObjects) {
+				if (arObject.getImageName().replace("png", "sfb").equals(node.getFileName())) {
+					return arObject;
+				}
+			}
+		}
+		return null;
 	}
 
 	public void setArScene(ARScene arScene) {
@@ -306,10 +331,27 @@ public class ArEditorViewModel extends AndroidViewModel {
 	}
 
 	public boolean containsAugmentedImage(AugmentedImage augmentedImage) {
-		return arScene.getArImageObjects().size() >= augmentedImage.getIndex() + 1;
+		return arScene != null && arScene.getArImageObjects() != null && arScene.getArImageObjects().size() >= getQrCodeNumber(augmentedImage.getName());
 	}
 
 	public ArObject getArObject(AugmentedImage augmentedImage) {
-		return arScene.getArImageObjects().get(augmentedImage.getIndex());
+		return arScene.getArImageObjects().get(getQrCodeNumber(augmentedImage.getName()) - 1);
+	}
+
+	private int getQrCodeNumber(String imageName) {
+		imageName = imageName.substring(imageName.lastIndexOf("_") + 1);
+		imageName = imageName.substring(0, imageName.lastIndexOf("."));
+		return Integer.parseInt(imageName);
+	}
+
+	public boolean containsArNode(AugmentedImage augmentedImage) {
+		ArObject arObject = getArObject(augmentedImage);
+		if (arObject == null) {
+			return false;
+		}
+		String imageName = arObject.getImageName();
+		String sjbFile = imageName.replace("png", "sfb");
+		return arNodes != null && arNodes.stream()
+										 .anyMatch(arNode -> arNode.getFileName().equals(sjbFile) && arNode.getQrCodeNumber().equals(getQrCodeNumber(augmentedImage.getName())));
 	}
 }

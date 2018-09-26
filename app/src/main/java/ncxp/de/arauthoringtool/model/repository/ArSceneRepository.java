@@ -33,10 +33,10 @@ public class ArSceneRepository {
 		arObjectDao.deleteByArScene(arScene.getId());
 	}
 
-	public void saveArObjects(long arSceneId, List<ArObject> relations) {
-		relations.stream().forEach(relation -> relation.setArSceneId(arSceneId));
-		ArObject[] arImageToObjectRelations = new ArObject[relations.size()];
-		arImageToObjectRelations = relations.toArray(arImageToObjectRelations);
-		arObjectDao.insertAll(arImageToObjectRelations);
+	public long[] saveArObjects(long arSceneId, List<ArObject> arObjects) {
+		arObjects.stream().forEach(relation -> relation.setArSceneId(arSceneId));
+		ArObject[] arObjectArray = new ArObject[arObjects.size()];
+		arObjectArray = arObjects.toArray(arObjectArray);
+		return arObjectDao.insertAll(arObjectArray);
 	}
 }

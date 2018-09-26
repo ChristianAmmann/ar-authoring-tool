@@ -3,7 +3,6 @@ package ncxp.de.arauthoringtool;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
 import android.net.Uri;
-import android.opengl.Matrix;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -31,7 +30,6 @@ import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.FrameTime;
 import com.google.ar.sceneform.Node;
-import com.google.ar.sceneform.collision.Ray;
 import com.google.ar.sceneform.math.Quaternion;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
@@ -120,7 +118,6 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 					onNoneSelectionTechnique();
 					break;
 			}
-
 		});
 	}
 
@@ -244,7 +241,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	}
 
 	private void updateAugmentedImage(AugmentedImage augmentedImage) {
-		if (viewModel.containsAugmentedImage(augmentedImage)) {
+		if (viewModel.containsAugmentedImage(augmentedImage) && !viewModel.containsArNode(augmentedImage)) {
 			ImageAnchor imageAnchor = new ImageAnchor();
 			imageAnchor.setImage(augmentedImage);
 			ArObject arObject = viewModel.getArObject(augmentedImage);
@@ -373,6 +370,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 			node.setParent(parent);
 			node.setOnTapListener((hitTestResult, motionEvent) -> onArNodeTapped(node));
 			viewModel.getArNodes().add(node);
+			node.setQrCodeNumber(viewModel.getArNodes().size());
 			node.select();
 			viewModel.setCurrentSelectedNode(node);
 		}).exceptionally(throwable -> {
@@ -426,7 +424,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	}
 
 
-	private void replaceARObject(String imageName, Node parent) {
+	/*private void replaceARObject(String imageName, Node parent) {
 		Node anchor;
 		if (parent != null && parent.getParent() != null) {
 			anchor = parent.getParent();
@@ -437,7 +435,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 			anchor.removeChild(currentSelection);
 		}
 		createARObject(anchor, imageName, Quaternion.identity(), Vector3.one());
-	}
+	}*/
 
 
 	/*@Override
@@ -474,7 +472,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		}
 	}
 
-	public static Ray projectRay(float tapX, float tapY, float screenWidth, float screenHeight, float[] projectionMatrix, float[] viewMatrix) {
+	/*public static Ray projectRay(float tapX, float tapY, float screenWidth, float screenHeight, float[] projectionMatrix, float[] viewMatrix) {
 		float[] viewProjMtx = new float[16];
 		Matrix.multiplyMM(viewProjMtx, 0, projectionMatrix, 0, viewMatrix, 0);
 		return screenPointToRay(tapX, tapY, screenWidth, screenHeight, viewProjMtx);
@@ -498,5 +496,5 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		direction = new Vector3(direction.x - origin.x, direction.y - origin.y, direction.z - origin.z);
 		direction.normalized();
 		return new Ray(origin, direction);
-	}
+	}*/
 }
