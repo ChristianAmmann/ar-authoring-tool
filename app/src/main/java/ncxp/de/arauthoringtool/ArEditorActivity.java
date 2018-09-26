@@ -122,12 +122,12 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 
 	private void onRaycastingTechnique() {
 		arFragment.setOnTapArPlaneListener(this::onTapArPlane);
-		arFragment.getArSceneView().getScene().setOnPeekTouchListener((hitTestResult, motionEvent) -> arFragment.onPeekTouch(hitTestResult, motionEvent));
+		viewModel.getArNodes().stream().forEach(arNode -> arNode.setOnTapListener((hitTestResult, motionEvent) -> onArNodeTapped(arNode)));
 	}
 
 	private void onNoneSelectionTechnique() {
 		arFragment.setOnTapArPlaneListener(null);
-		arFragment.getArSceneView().getScene().setOnPeekTouchListener(null);
+		viewModel.getArNodes().stream().forEach(arNode -> arNode.setOnTapListener(null));
 	}
 
 	private void setupRotationTechnique() {
