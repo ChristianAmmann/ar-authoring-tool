@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -90,7 +89,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_arimage_marker);
 		arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ar_marker_fragment);
-		viewModel = obtainViewModel(this);
+		viewModel = obtainViewModel();
 		initDeleteWidgetNode();
 		initRotateWidgetNode();
 		initScaleWidgetNode();
@@ -224,10 +223,12 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		if (viewModel.getCurrentImageSelection() == null) {
 			return;
 		}
-		Anchor anchor = hitResult.createAnchor();
-		AnchorNode anchorNode = new AnchorNode(anchor);
-		anchorNode.setParent(arFragment.getArSceneView().getScene());
-		createARObject(anchorNode, viewModel.getCurrentImageSelection(), Quaternion.identity(), Vector3.one());
+		if (viewModel.getEditorState().equals(EditorState.EDIT_MODE)) {
+			Anchor anchor = hitResult.createAnchor();
+			AnchorNode anchorNode = new AnchorNode(anchor);
+			anchorNode.setParent(arFragment.getArSceneView().getScene());
+			createARObject(anchorNode, viewModel.getCurrentImageSelection(), Quaternion.identity(), Vector3.one());
+		}
 	}
 
 	private void onUpdateFrame(FrameTime frameTime) {
@@ -341,25 +342,25 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		}
 	}
 
-	public static ArEditorViewModel obtainViewModel(FragmentActivity activity) {
-		ARScene arScene = activity.getIntent().getParcelableExtra(ARSCENE_KEY);
-		Study study = activity.getIntent().getParcelableExtra(KEY_STUDY);
-		EditorState state = (EditorState) activity.getIntent().getSerializableExtra(KEY_EDITOR_STATE);
-		ArEditorViewModel viewModel = ViewModelProviders.of(activity, createFactory(activity)).get(ArEditorViewModel.class);
+	private ArEditorViewModel obtainViewModel() {
+		ARScene arScene = getIntent().getParcelableExtra(ARSCENE_KEY);
+		Study study = getIntent().getParcelableExtra(KEY_STUDY);
+		EditorState state = (EditorState) getIntent().getSerializableExtra(KEY_EDITOR_STATE);
+		ArEditorViewModel viewModel = ViewModelProviders.of(this, createFactory()).get(ArEditorViewModel.class);
 		viewModel.setArScene(arScene);
 		viewModel.setStudy(study);
 		viewModel.setEditorState(state);
 		return viewModel;
 	}
 
-	private static ArEditorViewModelFactory createFactory(FragmentActivity activity) {
-		StudyDatabase database = StudyDatabase.getInstance(activity);
+	private ArEditorViewModelFactory createFactory() {
+		StudyDatabase database = StudyDatabase.getInstance(this);
 		ArSceneDao arSceneDao = database.arSceneDao();
 		ArObjectDao arImageToObjectRelationDao = database.arImageToObjectRelationDao();
 		ArSceneRepository arSceneRepository = new ArSceneRepository(arSceneDao, arImageToObjectRelationDao);
 		TestPersonDao testPersonDao = database.testPerson();
 		TestPersonRepository testPersonRepository = new TestPersonRepository(testPersonDao);
-		return new ArEditorViewModelFactory(activity.getApplication(), arSceneRepository, testPersonRepository);
+		return new ArEditorViewModelFactory(getApplication(), arSceneRepository, testPersonRepository);
 	}
 
 	private void createARObject(Node parent, String imageName, Quaternion rotation, Vector3 scale) {

@@ -1,5 +1,6 @@
 package ncxp.de.arauthoringtool.ui.areditor;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,7 +20,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import ncxp.de.arauthoringtool.ArEditorActivity;
 import ncxp.de.arauthoringtool.R;
 import ncxp.de.arauthoringtool.model.data.ARScene;
 import ncxp.de.arauthoringtool.ui.areditor.util.EditorState;
@@ -56,7 +56,7 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		viewModel = ArEditorActivity.obtainViewModel(getActivity());
+		viewModel = ViewModelProviders.of(getActivity()).get(ArEditorViewModel.class);
 	}
 
 	@Override
@@ -120,6 +120,7 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 			boolean validInput = validateInput(titleInput, R.string.dialog_arscene_error_title);
 			validInput &= validateInput(descriptionInput, R.string.dialog_arscene_error_description);
 			if (validInput) {
+				arInteractionListener.onEditorStateChanged(EditorState.STUDY_MODE);
 				String title = titleInput.getText().toString();
 				String description = descriptionInput.getText().toString();
 				if (viewModel.getArScene() != null) {
@@ -130,7 +131,7 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 				} else {
 					viewModel.save(title, description);
 				}
-				arInteractionListener.onEditorStateChanged(EditorState.STUDY_MODE);
+
 			} else {
 				Toast.makeText(getContext(), R.string.dialog_save_arscene_error, Toast.LENGTH_SHORT).show();
 			}

@@ -1,5 +1,6 @@
 package ncxp.de.arauthoringtool.ui.areditor;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -73,7 +74,7 @@ public class ArStudyFragment extends Fragment {
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		viewModel = ArEditorActivity.obtainViewModel(getActivity());
+		viewModel = ViewModelProviders.of(getActivity()).get(ArEditorViewModel.class);
 	}
 
 	@Override
