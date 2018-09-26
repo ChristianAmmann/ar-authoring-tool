@@ -247,4 +247,5 @@
 	<string name="study_modi">Studienmodus</string>
 	<string name="mapping_description">Sie sehen hier die verwendeten AR Objekte für das AR Szenario. Bitte platzieren Sie die AR Objekte mit den QR-Codes im Raum.
 		Anschließend können Sie mit Play das AR Szenario starten.</string>
+	<string name="subject_modi">Probandenmodus</string>
 </resources>

@@ -415,10 +415,11 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		scaleWidgetNode.setLocalPosition(node.getRight().scaled(0.35f));
 	}
 
-	private void attachDeleteWidget(Node node) {
+	private void attachDeleteWidget(ArNode node) {
 		deleteWidgetNode.setParent(node.getParent());
 		deleteWidgetNode.setLocalPosition(node.getRight().scaled(0.1f));
 		deleteWidgetNode.setOnTapListener((hitTestResult, motionEvent) -> {
+			viewModel.getArNodes().remove(node);
 			node.getParent().removeChild(node);
 			deleteWidgetNode.getParent().removeChild(deleteWidgetNode);
 		});

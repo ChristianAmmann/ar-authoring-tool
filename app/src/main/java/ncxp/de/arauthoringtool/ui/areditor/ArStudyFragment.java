@@ -44,6 +44,8 @@ public class ArStudyFragment extends Fragment {
 	private ImageView         timeIcon;
 	private LinearLayout      bottomToolbar;
 	private RelativeLayout    container;
+	private LinearLayout      stateBanner;
+	private TextView          stateBannerText;
 	private int               amountOfTouchEvents;
 
 	private TextView              studyStatusView;
@@ -97,6 +99,8 @@ public class ArStudyFragment extends Fragment {
 		editButton.setOnClickListener(clickedView -> {
 			arInteractionListener.onEditorStateChanged(EditorState.EDIT_MODE);
 		});
+		stateBanner = view.findViewById(R.id.state_banner);
+		stateBannerText = view.findViewById(R.id.state_banner_text);
 		chronometer = view.findViewById(R.id.time_view);
 		chronometer.setOnChronometerTickListener(chronometerChanged -> chronometer = chronometerChanged);
 		backButton = view.findViewById(R.id.back);
@@ -171,6 +175,8 @@ public class ArStudyFragment extends Fragment {
 			chronometer.start();
 			updateState(TestPersonState.RUNNING);
 			viewModel.createTestpersonAndStartService();
+			stateBanner.setBackgroundColor(getContext().getColor(R.color.purple));
+			stateBannerText.setText(R.string.subject_modi);
 		}).setNegativeButton(R.string.cancel, null).create().show();
 	}
 
@@ -280,6 +286,8 @@ public class ArStudyFragment extends Fragment {
 			chronometer.setBase(SystemClock.elapsedRealtime());
 			updateState(TestPersonState.IDLE);
 			viewModel.abortSensorService();
+			stateBanner.setBackgroundColor(getContext().getColor(android.R.color.holo_green_light));
+			stateBannerText.setText(R.string.study_modi);
 		}).setNegativeButton(R.string.no, (dialog, which) -> updateState(currentState)).create().show();
 	}
 
@@ -289,5 +297,7 @@ public class ArStudyFragment extends Fragment {
 		viewModel.stopSensorService();
 		updateState(TestPersonState.STOPPED);
 		showFinishDialog(viewModel.getTestPersonState());
+		stateBanner.setBackgroundColor(getContext().getColor(android.R.color.holo_green_light));
+		stateBannerText.setText(R.string.study_modi);
 	}
 }
