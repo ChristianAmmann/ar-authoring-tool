@@ -28,7 +28,6 @@ import ncxp.de.arauthoringtool.viewmodel.ArEditorViewModel;
 public class ArEditFragment extends Fragment implements ThumbnailListener {
 
 	private ArEditorViewModel     viewModel;
-	//private ImageView             fitToScanView;
 	private ImageButton           expandThumbnailButton;
 	private LinearLayout          actionButtonsContainer;
 	private RecyclerView          modelRecyclerView;
@@ -61,7 +60,6 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-		//fitToScanView = view.findViewById(R.id.image_view_fit_to_scan);
 		modelRecyclerView = view.findViewById(R.id.model_thumbnail_list);
 		expandThumbnailButton = view.findViewById(R.id.expand_thumbnail_button);
 		expandThumbnailButton.setOnClickListener(clickedView -> {
@@ -78,9 +76,7 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 		deleteButton.setOnClickListener(clickedView -> showDeleteDialog());
 		deleteButton.setOnDragListener(new TrashDragListener(R.drawable.delete_empty, R.drawable.delete));
 		ImageButton backSceneButton = view.findViewById(R.id.back_arscene);
-		backSceneButton.setOnClickListener(clickedView -> {
-			getActivity().finish();
-		});
+		backSceneButton.setOnClickListener(clickedView -> getActivity().finish());
 		initBottomBar();
 		setupAdapter();
 		viewModel.getThumbnails().observe(this, drawables -> thumbnailAdapter.replaceItems(drawables));
@@ -102,7 +98,6 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 	@Override
 	public void onThumbnailClicked(String imageName) {
 		viewModel.setCurrentImageSelection(imageName);
-		//arInteractionListener.onReplaceArObject(imageName, viewModel.getCurrentSelectedNode().getValue());
 	}
 
 	private void showSaveDialog() {
