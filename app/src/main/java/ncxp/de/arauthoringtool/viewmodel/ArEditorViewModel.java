@@ -59,6 +59,7 @@ public class ArEditorViewModel extends AndroidViewModel {
 	private MutableLiveData<ScaleTechnique>     scaleTechnique;
 	private boolean                             comingFromStudyModus = false;
 	private String                              currentImageSelection;
+	private List<String>                        augmentedImagesPlaced;
 
 
 	public ArEditorViewModel(@NonNull Application application, ArSceneRepository arSceneRepository, TestPersonRepository testPersonRepository) {
@@ -76,6 +77,7 @@ public class ArEditorViewModel extends AndroidViewModel {
 		rotationTechnique = new MutableLiveData<>();
 		rotationTechnique.postValue(RotationTechnique.TWO_FINGER);
 		scaleTechnique = new MutableLiveData<>();
+		augmentedImagesPlaced = new ArrayList<>();
 		scaleTechnique.postValue(ScaleTechnique.PINCH);
 		this.testPersonState = TestPersonState.STOPPED;
 	}
@@ -353,5 +355,13 @@ public class ArEditorViewModel extends AndroidViewModel {
 		String sjbFile = imageName.replace("png", "sfb");
 		return arNodes != null && arNodes.stream()
 										 .anyMatch(arNode -> arNode.getFileName().equals(sjbFile) && arNode.getQrCodeNumber().equals(getQrCodeNumber(augmentedImage.getName())));
+	}
+
+	public boolean isAugmentedImageUsed(AugmentedImage augmentedImage) {
+		return augmentedImagesPlaced.stream().anyMatch(image -> augmentedImage.getName().equals(image));
+	}
+
+	public List<String> getAugmentedImagesUsed() {
+		return augmentedImagesPlaced;
 	}
 }

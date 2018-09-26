@@ -241,7 +241,8 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	}
 
 	private void updateAugmentedImage(AugmentedImage augmentedImage) {
-		if (viewModel.containsAugmentedImage(augmentedImage) && !viewModel.containsArNode(augmentedImage)) {
+		if (viewModel.containsAugmentedImage(augmentedImage) && !viewModel.isAugmentedImageUsed(augmentedImage)) {
+			viewModel.getAugmentedImagesUsed().add(augmentedImage.getName());
 			ImageAnchor imageAnchor = new ImageAnchor();
 			imageAnchor.setImage(augmentedImage);
 			ArObject arObject = viewModel.getArObject(augmentedImage);
