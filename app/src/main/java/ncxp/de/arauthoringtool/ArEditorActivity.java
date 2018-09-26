@@ -425,28 +425,6 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		});
 	}
 
-
-	/*private void replaceARObject(String imageName, Node parent) {
-		Node anchor;
-		if (parent != null && parent.getParent() != null) {
-			anchor = parent.getParent();
-			anchor.removeChild(parent);
-		} else {
-			Node currentSelection = viewModel.getCurrentSelectedNode().getValue();
-			anchor = currentSelection.getParent();
-			anchor.removeChild(currentSelection);
-		}
-		createARObject(anchor, imageName, Quaternion.identity(), Vector3.one());
-	}*/
-
-
-	/*@Override
-	public void onReplaceArObject(String imageName, Node node) {
-		if (node != null) {
-			replaceARObject(imageName, node);
-		}
-	}*/
-
 	@Override
 	public void onDeleteAllArObjects() {
 		viewModel.getArNodes().forEach(node -> {
@@ -471,30 +449,4 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 				break;
 		}
 	}
-
-	/*public static Ray projectRay(float tapX, float tapY, float screenWidth, float screenHeight, float[] projectionMatrix, float[] viewMatrix) {
-		float[] viewProjMtx = new float[16];
-		Matrix.multiplyMM(viewProjMtx, 0, projectionMatrix, 0, viewMatrix, 0);
-		return screenPointToRay(tapX, tapY, screenWidth, screenHeight, viewProjMtx);
-	}
-
-	public static Ray screenPointToRay(float tapX, float tapY, float screenWidth, float screenHeight, float[] viewProjMtx) {
-		tapY = screenHeight - tapY;
-		float x = tapX * 2.0F / screenWidth - 1.0F;
-		float y = tapY * 2.0F / screenHeight - 1.0F;
-		float[] farScreenPoint = new float[]{x, y, 1.0F, 1.0F};
-		float[] nearScreenPoint = new float[]{x, y, -1.0F, 1.0F};
-		float[] nearPlanePoint = new float[4];
-		float[] farPlanePoint = new float[4];
-		float[] invertedProjectionMatrix = new float[16];
-		Matrix.setIdentityM(invertedProjectionMatrix, 0);
-		Matrix.invertM(invertedProjectionMatrix, 0, viewProjMtx, 0);
-		Matrix.multiplyMV(nearPlanePoint, 0, invertedProjectionMatrix, 0, nearScreenPoint, 0);
-		Matrix.multiplyMV(farPlanePoint, 0, invertedProjectionMatrix, 0, farScreenPoint, 0);
-		Vector3 direction = new Vector3(farPlanePoint[0] / farPlanePoint[3], farPlanePoint[1] / farPlanePoint[3], farPlanePoint[2] / farPlanePoint[3]);
-		Vector3 origin = new Vector3(new Vector3(nearPlanePoint[0] / nearPlanePoint[3], nearPlanePoint[1] / nearPlanePoint[3], nearPlanePoint[2] / nearPlanePoint[3]));
-		direction = new Vector3(direction.x - origin.x, direction.y - origin.y, direction.z - origin.z);
-		direction.normalized();
-		return new Ray(origin, direction);
-	}*/
 }
