@@ -156,7 +156,7 @@ public class ArStudyFragment extends Fragment {
 			viewModel.setScaleTechnique(ScaleTechnique.getTechnique(scaleSpinner.getSelectedItemPosition()));
 
 		})).setNegativeButton(R.string.cancel, ((dialog, which) -> dialog.dismiss()));
-		builder.create().show();
+		builder.setCancelable(false).create().show();
 	}
 
 
@@ -201,7 +201,7 @@ public class ArStudyFragment extends Fragment {
 			viewModel.startSensorService();
 			updateState(currentState);
 			chronometer.start();
-		}).create().show();
+		}).setCancelable(false).create().show();
 	}
 
 	private void showSurveys() {
@@ -289,7 +289,12 @@ public class ArStudyFragment extends Fragment {
 			viewModel.abortSensorService();
 			stateBanner.setBackgroundColor(getContext().getColor(android.R.color.holo_green_light));
 			stateBannerText.setText(R.string.study_modi);
-		}).setNegativeButton(R.string.no, (dialog, which) -> updateState(currentState)).create().show();
+		}).setNegativeButton(R.string.no, (dialog, which) -> {
+			updateState(TestPersonState.RUNNING);
+			chronometer.start();
+			viewModel.startSensorService();
+			playAndPauseButton.setImageResource(R.drawable.pause_circle_outline);
+		}).setCancelable(false).create().show();
 	}
 
 
