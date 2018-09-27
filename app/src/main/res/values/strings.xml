@@ -116,7 +116,7 @@
 	<string name="group_others_miscellaneous">Weitere Optionen</string>
 
 	<string name="sosci_survey_url">https://www.soscisurvey.de/%1$s/?q=%2$s&amp;r=%3$s</string>
-	<string name="snackbar_hint_sosci_survey">Durch das Testen des Fragenbogens werden Sie auf SoSci Survey als Proband/Besucher gezählt.</string>
+	<string name="snackbar_hint_sosci_survey">Einbinden des SoSci Fragebogen erfolgreich.</string>
 	<string name="snackbar_error_sosci_survey">Sollte ihren Fragenbogen nicht korrekt angezeigt werden, passen Sie die Einstellung der Umfrage an.</string>
 	<string name="snackbar_proband_error_sosci_survey">Ups… Leider kann der Fragebogen nicht auf gerufen werden. Der Studienleiter soll die Einstellungen anpassen.</string>
 	<string name="ok">ok</string>
@@ -137,7 +137,7 @@
 	<string name="soscisurvey_url_suffix">/?q=</string>
 	<string name="survey_project">Projekt</string>
 	<string name="survey_identifier">Kennung</string>
-	<string name="survey_settings">Fragebogen Einstellung</string>
+	<string name="survey_settings">Einstellung des Fragebogens</string>
 	<string name="survey_description_hint">z.B. SUS Fragebogen</string>
 	<string name="survey_title_hint">z.B. Mein Fragebogen</string>
 	<string name="data_collection">Datenerhebung</string>
@@ -246,6 +246,6 @@
 	<string name="edit_modi">Bearbeitungsmodus</string>
 	<string name="study_modi">Studienmodus</string>
 	<string name="mapping_description">Sie sehen hier die verwendeten AR Objekte für das AR Szenario. Bitte platzieren Sie die AR Objekte mit den QR-Codes im Raum.
-		Anschließend können Sie mit Play das AR Szenario starten.</string>
+		Anschließend können Sie mit Play das AR Szenario starten. Wenn Sie die QR-Codes scannen, werden die Objekte auf dem QR-Code angezeigt.</string>
 	<string name="subject_modi">Probandenmodus</string>
 </resources>
