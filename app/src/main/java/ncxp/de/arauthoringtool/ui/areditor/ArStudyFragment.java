@@ -1,5 +1,6 @@
 package ncxp.de.arauthoringtool.ui.areditor;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,6 +45,8 @@ public class ArStudyFragment extends Fragment {
 	private ImageView         timeIcon;
 	private LinearLayout      bottomToolbar;
 	private RelativeLayout    container;
+	private LinearLayout      stateBanner;
+	private TextView          stateBannerText;
 	private int               amountOfTouchEvents;
 
 	private TextView              studyStatusView;
@@ -71,7 +74,7 @@ public class ArStudyFragment extends Fragment {
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		viewModel = ArEditorActivity.obtainViewModel(getActivity());
+		viewModel = ViewModelProviders.of(getActivity()).get(ArEditorViewModel.class);
 	}
 
 	@Override
@@ -94,19 +97,28 @@ public class ArStudyFragment extends Fragment {
 		timeIcon = view.findViewById(R.id.timer_icon);
 		studyStatusView = view.findViewById(R.id.study_status);
 		editButton = view.findViewById(R.id.edit_modus);
-		editButton.setOnClickListener(clickedView -> {
-			arInteractionListener.onEditorStateChanged(EditorState.EDIT_MODE);
-		});
+		editButton.setOnClickListener(clickedView -> arInteractionListener.onEditorStateChanged(EditorState.EDIT_MODE));
+		stateBanner = view.findViewById(R.id.state_banner);
+		stateBannerText = view.findViewById(R.id.state_banner_text);
 		chronometer = view.findViewById(R.id.time_view);
 		chronometer.setOnChronometerTickListener(chronometerChanged -> chronometer = chronometerChanged);
 		backButton = view.findViewById(R.id.back);
-		backButton.setOnClickListener(clickedView -> getActivity().finish());
+		backButton.setOnClickListener(this::showBackDialog);
 		settingsButton.setOnClickListener(clickedView -> showArSettingDialog());
 		addSubjectButton.setOnClickListener(this::onAddSubjectClicked);
 		playAndPauseButton.setOnClickListener(this::onPlayAndPauseClicked);
 		cancelButton.setOnClickListener(this::onCancelClicked);
 		finishButton.setOnClickListener(this::onFinishClicked);
 		initStudyBottomBar();
+	}
+
+	private void showBackDialog(View view) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+		builder.setTitle(R.string.leave_ar_scene_title);
+		builder.setMessage(R.string.leave_ar_scene_description);
+		builder.setPositiveButton(R.string.leave, (dialog, which) -> getActivity().finish());
+		builder.setNegativeButton(R.string.cancel, null);
+		builder.create().show();
 	}
 
 	private void initStudyBottomBar() {
@@ -151,7 +163,7 @@ public class ArStudyFragment extends Fragment {
 			viewModel.setScaleTechnique(ScaleTechnique.getTechnique(scaleSpinner.getSelectedItemPosition()));
 
 		})).setNegativeButton(R.string.cancel, ((dialog, which) -> dialog.dismiss()));
-		builder.create().show();
+		builder.setCancelable(false).create().show();
 	}
 
 
@@ -171,6 +183,8 @@ public class ArStudyFragment extends Fragment {
 			chronometer.start();
 			updateState(TestPersonState.RUNNING);
 			viewModel.createTestpersonAndStartService();
+			stateBanner.setBackgroundColor(getContext().getColor(R.color.purple));
+			stateBannerText.setText(R.string.subject_modi);
 		}).setNegativeButton(R.string.cancel, null).create().show();
 	}
 
@@ -194,7 +208,7 @@ public class ArStudyFragment extends Fragment {
 			viewModel.startSensorService();
 			updateState(currentState);
 			chronometer.start();
-		}).create().show();
+		}).setCancelable(false).create().show();
 	}
 
 	private void showSurveys() {
@@ -280,7 +294,14 @@ public class ArStudyFragment extends Fragment {
 			chronometer.setBase(SystemClock.elapsedRealtime());
 			updateState(TestPersonState.IDLE);
 			viewModel.abortSensorService();
-		}).setNegativeButton(R.string.no, (dialog, which) -> updateState(currentState)).create().show();
+			stateBanner.setBackgroundColor(getContext().getColor(android.R.color.holo_green_light));
+			stateBannerText.setText(R.string.study_modi);
+		}).setNegativeButton(R.string.no, (dialog, which) -> {
+			updateState(TestPersonState.RUNNING);
+			chronometer.start();
+			viewModel.startSensorService();
+			playAndPauseButton.setImageResource(R.drawable.pause_circle_outline);
+		}).setCancelable(false).create().show();
 	}
 
 
@@ -289,5 +310,7 @@ public class ArStudyFragment extends Fragment {
 		viewModel.stopSensorService();
 		updateState(TestPersonState.STOPPED);
 		showFinishDialog(viewModel.getTestPersonState());
+		stateBanner.setBackgroundColor(getContext().getColor(android.R.color.holo_green_light));
+		stateBannerText.setText(R.string.study_modi);
 	}
 }

@@ -42,11 +42,18 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> 
 				selectedThumbnail.setSelected(false);
 				selectionFrame.setVisibility(View.GONE);
 			}
-			thumbnail.setSelected(true);
-			selectedThumbnail = thumbnail;
-			selectionFrame = holder.getSelectionView();
-			selectionFrame.setVisibility(View.VISIBLE);
-			listener.onThumbnailClicked(thumbnail.getImageName());
+			if (!thumbnail.equals(selectedThumbnail)) {
+				thumbnail.setSelected(true);
+				selectedThumbnail = thumbnail;
+				selectionFrame = holder.getSelectionView();
+				selectionFrame.setVisibility(View.VISIBLE);
+				listener.onThumbnailClicked(thumbnail.getImageName());
+			} else {
+				selectionFrame = null;
+				selectedThumbnail = null;
+				listener.onThumbnailClicked(null);
+			}
+
 		});
 
 	}

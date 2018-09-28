@@ -19,8 +19,8 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import ncxp.de.arauthoringtool.ArEditorActivity;
 import ncxp.de.arauthoringtool.ArSceneActivity;
+import ncxp.de.arauthoringtool.MappingActivity;
 import ncxp.de.arauthoringtool.R;
 import ncxp.de.arauthoringtool.model.data.ARScene;
 import ncxp.de.arauthoringtool.ui.areditor.util.EditorState;
@@ -77,10 +77,10 @@ public class ArSceneFragment extends Fragment implements ArSceneListener {
 	private boolean onPopupMenuItemClicked(MenuItem menuItem, ARScene arScene) {
 		switch (menuItem.getItemId()) {
 			case R.id.edit:
-				Intent intent = new Intent(getActivity(), ArEditorActivity.class);
-				intent.putExtra(ArEditorActivity.ARSCENE_KEY, arScene);
-				intent.putExtra(ArEditorActivity.KEY_STUDY, viewModel.getStudy());
-				intent.putExtra(ArEditorActivity.KEY_EDITOR_STATE, EditorState.EDIT_MODE);
+				Intent intent = new Intent(getActivity(), MappingActivity.class);
+				intent.putExtra(MappingActivity.ARSCENE_KEY, arScene);
+				intent.putExtra(MappingActivity.KEY_STUDY, viewModel.getStudy());
+				intent.putExtra(MappingActivity.KEY_EDITOR_STATE, EditorState.EDIT_MODE);
 				startActivity(intent);
 				break;
 			case R.id.delete:
@@ -113,10 +113,10 @@ public class ArSceneFragment extends Fragment implements ArSceneListener {
 
 	@Override
 	public void onArSceneLoadClick(ARScene arScene) {
-		Intent intent = new Intent(getActivity(), ArEditorActivity.class);
-		intent.putExtra(ArEditorActivity.ARSCENE_KEY, arScene);
-		intent.putExtra(ArEditorActivity.KEY_STUDY, viewModel.getStudy());
-		intent.putExtra(ArEditorActivity.KEY_EDITOR_STATE, EditorState.STUDY_MODE);
+		Intent intent = new Intent(getActivity(), MappingActivity.class);
+		intent.putExtra(MappingActivity.ARSCENE_KEY, arScene);
+		intent.putExtra(MappingActivity.KEY_STUDY, viewModel.getStudy());
+		intent.putExtra(MappingActivity.KEY_EDITOR_STATE, EditorState.STUDY_MODE);
 		getActivity().startActivity(intent);
 	}
 

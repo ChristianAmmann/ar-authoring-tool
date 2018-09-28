@@ -59,14 +59,14 @@
 		android:padding="@dimen/back_arcene_margin"
 		android:src="@drawable/arrow_left"/>
 
-	<ImageView
+	<!--<ImageView
 		android:id="@+id/image_view_fit_to_scan"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:layout_gravity="center"
 		android:layout_margin="@dimen/spacing_large"
 		android:scaleType="fitCenter"
-		android:src="@drawable/fit_to_scan"/>
+		android:src="@drawable/fit_to_scan"/>-->
 
 	<ImageButton
 		android:id="@+id/expand_thumbnail_button"
@@ -79,13 +79,11 @@
 		android:contentDescription="@string/expand_bottom_toolbar"
 		android:padding="@dimen/spacing_extra_large"
 		android:src="@drawable/chevron_up"
-		android:tint="@android:color/white"
-		android:visibility="gone"/>
+		android:tint="@android:color/white"/>
 
 	<android.support.v7.widget.RecyclerView
 		android:id="@+id/model_thumbnail_list"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
-		android:visibility="gone"/>
+		android:layout_alignParentBottom="true"/>
 </RelativeLayout>
