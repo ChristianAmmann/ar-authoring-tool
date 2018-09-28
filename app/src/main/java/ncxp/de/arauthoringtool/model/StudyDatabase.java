@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import ncxp.de.arauthoringtool.model.dao.ArImageToObjectRelationDao;
+import ncxp.de.arauthoringtool.model.dao.ArObjectDao;
 import ncxp.de.arauthoringtool.model.dao.ArSceneDao;
 import ncxp.de.arauthoringtool.model.dao.DataDao;
 import ncxp.de.arauthoringtool.model.dao.DeviceSensorDao;
@@ -14,7 +14,7 @@ import ncxp.de.arauthoringtool.model.dao.StudyDeviceSensorJoinDao;
 import ncxp.de.arauthoringtool.model.dao.SurveyDao;
 import ncxp.de.arauthoringtool.model.dao.TestPersonDao;
 import ncxp.de.arauthoringtool.model.data.ARScene;
-import ncxp.de.arauthoringtool.model.data.ArImageToObjectRelation;
+import ncxp.de.arauthoringtool.model.data.ArObject;
 import ncxp.de.arauthoringtool.model.data.Data;
 import ncxp.de.arauthoringtool.model.data.DeviceSensor;
 import ncxp.de.arauthoringtool.model.data.Study;
@@ -29,7 +29,7 @@ import ncxp.de.arauthoringtool.model.data.TestPerson;
 		DeviceSensor.class,
 		Data.class,
 		ARScene.class,
-		ArImageToObjectRelation.class,
+		ArObject.class,
 		StudyDeviceSensorJoin.class}, version = 1, exportSchema = false)
 public abstract class StudyDatabase extends RoomDatabase {
 
@@ -51,7 +51,7 @@ public abstract class StudyDatabase extends RoomDatabase {
 
 	public abstract StudyDeviceSensorJoinDao studyDeviceSensorJoinDao();
 
-	public abstract ArImageToObjectRelationDao arImageToObjectRelationDao();
+	public abstract ArObjectDao arImageToObjectRelationDao();
 
 	public static StudyDatabase getInstance(final Context context) {
 		if (instance == null) {

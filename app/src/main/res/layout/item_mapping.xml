@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="match_parent"
+			  android:layout_height="wrap_content"
+			  android:orientation="horizontal">
+
+	<ImageView
+		android:id="@+id/map_thumbnail"
+		android:layout_width="200dp"
+		android:layout_height="150dp"
+		android:layout_gravity="center_vertical"
+		android:adjustViewBounds="true"
+		android:scaleType="fitCenter"/>
+
+	<View
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"/>
+
+	<RelativeLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+
+		<ImageView
+			android:layout_width="150dp"
+			android:layout_height="150dp"
+			android:src="@drawable/qrcode"/>
+
+		<TextView
+			android:id="@+id/map_number"
+			android:layout_width="50dp"
+			android:layout_height="50dp"
+			android:layout_centerInParent="true"
+			android:background="@drawable/text_frame"
+			android:fontFamily="sans-serif-light"
+			android:gravity="center"
+			android:textColor="@android:color/black"
+			android:textSize="@dimen/material_typography_h5"
+			android:textStyle="bold"/>
+
+	</RelativeLayout>
+
+
+</LinearLayout>

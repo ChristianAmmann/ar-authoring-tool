@@ -245,7 +245,7 @@ public class SurveyTestActivity extends AppCompatActivity {
 	}
 
 	private void loadUrl(Survey survey) {
-		String url = getString(R.string.sosci_survey_url, survey.getProjectDirectory(), survey.getIdentifier());
+		String url = getString(R.string.sosci_survey_url, survey.getProjectDirectory(), survey.getIdentifier(), Integer.toString(-1));
 		webView.loadUrl(url);
 		progressBar.setIndeterminate(true);
 	}

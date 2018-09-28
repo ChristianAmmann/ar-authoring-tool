@@ -21,13 +21,13 @@ public class ARScene implements Parcelable {
 
 	@PrimaryKey(autoGenerate = true)
 	@ColumnInfo(name = COLUMN_ID)
-	private long                          id;
+	private long           id;
 	@ColumnInfo(name = COLUMN_NAME)
-	private String                        name;
+	private String         name;
 	@ColumnInfo(name = COLUMN_DESCRIPTION)
-	private String                        description;
+	private String         description;
 	@Ignore
-	private List<ArImageToObjectRelation> arImageObjects;
+	private List<ArObject> arImageObjects;
 
 
 	public ARScene() {
@@ -57,11 +57,11 @@ public class ARScene implements Parcelable {
 		this.description = description;
 	}
 
-	public List<ArImageToObjectRelation> getArImageObjects() {
+	public List<ArObject> getArImageObjects() {
 		return arImageObjects;
 	}
 
-	public void setArImageObjects(List<ArImageToObjectRelation> arImageObjects) {
+	public void setArImageObjects(List<ArObject> arImageObjects) {
 		this.arImageObjects = arImageObjects;
 	}
 
@@ -71,7 +71,7 @@ public class ARScene implements Parcelable {
 		description = in.readString();
 		if (in.readByte() == 0x01) {
 			arImageObjects = new ArrayList<>();
-			in.readList(arImageObjects, ArImageToObjectRelation.class.getClassLoader());
+			in.readList(arImageObjects, ArObject.class.getClassLoader());
 		} else {
 			arImageObjects = null;
 		}

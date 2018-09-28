@@ -116,7 +116,7 @@
 	<string name="group_others_miscellaneous">Weitere Optionen</string>
 
 	<string name="sosci_survey_url">https://www.soscisurvey.de/%1$s/?q=%2$s&amp;r=%3$s</string>
-	<string name="snackbar_hint_sosci_survey">Durch das Testen des Fragenbogens werden Sie auf SoSci Survey als Proband/Besucher gezählt.</string>
+	<string name="snackbar_hint_sosci_survey">Einbinden des SoSci Fragebogen erfolgreich.</string>
 	<string name="snackbar_error_sosci_survey">Sollte ihren Fragenbogen nicht korrekt angezeigt werden, passen Sie die Einstellung der Umfrage an.</string>
 	<string name="snackbar_proband_error_sosci_survey">Ups… Leider kann der Fragebogen nicht auf gerufen werden. Der Studienleiter soll die Einstellungen anpassen.</string>
 	<string name="ok">ok</string>
@@ -137,7 +137,7 @@
 	<string name="soscisurvey_url_suffix">/?q=</string>
 	<string name="survey_project">Projekt</string>
 	<string name="survey_identifier">Kennung</string>
-	<string name="survey_settings">Fragebogen Einstellung</string>
+	<string name="survey_settings">Einstellung des Fragebogens</string>
 	<string name="survey_description_hint">z.B. SUS Fragebogen</string>
 	<string name="survey_title_hint">z.B. Mein Fragebogen</string>
 	<string name="data_collection">Datenerhebung</string>
@@ -164,14 +164,14 @@
 	<string name="copy_code">Code kopieren</string>
 	<string name="open_sosci_survey">SoSci Survey öffnen</string>
 	<string name="export_toast">Die Studie ist unter %1$s exportiert</string>
-	<string name="add_subject_hint">Soll ein neue Proband zur Studie \"%1$s\" hinzugefügt werden?\nStellen Sie sicher, dass die AR-Szene richtig geladen ist.
-		Achten Sie darauf, dass der Proband keine schnelle Bewegungen oder das Gerät schüttelt. Dadurch vermeiden Sie, dass die virtuellen Objekte an ihrer Stelle bleiben.
-		Nachdem Hinzufügen weisen Sie den Proband in die Studie ein. Der Proband kann mit dem Play-Button die Aufzeichnung starten.</string>
+	<string name="add_subject_hint">Soll ein neuer Proband zur Studie \"%1$s\" hinzugefügt werden?\nStellen Sie sicher, dass die AR-Szene richtig geladen ist.
+		Achten Sie darauf, dass der Proband keine schnelle Bewegungen oder das Gerät schüttelt.
+		Nachdem Hinzufügen weisen Sie den Proband in die Studie ein. Der Proband kann anschließend die Studie selbst starten.</string>
 	<string name="add_subject">Probanden hinzufügen?</string>
 	<string name="add">Hinzufügen</string>
 	<string name="are_you_ready">Bist du bereit?</string>
-	<string name="subject_start_help">In der Navigation kannst du die Studie pausieren und abschließen. Nur mit Absprache deines Studienleiter kannst du ebenso die Studie
-		abbrechen</string>
+	<string name="subject_start_help">In der Navigation kannst du die Studie pausieren und abschließen. Nur mit Absprache deines Studienleiter solltest du die Studie
+		abbrechen.</string>
 	<string name="lets_go">Los geht\'s</string>
 	<string name="cancel_study">Studie abbrechen?</string>
 	<string name="cancel_study_hint">Willst du die Studie abbrechen?</string>
@@ -243,4 +243,14 @@
 		Rahmen um den QR-Code angezeigt. Sie können nun ein AR-Objekt auf diesen Rahmen setzen.</string>
 	<string name="onboarding_areditor_placing_instructions_2">Um ein AR-Objekt auf den gelben Rahmen zu platzieren, tippen Sie den Rahmen an. Dabei wird der ausgewählte Rahmen grün. Anschließend wird Ihnen ein Menü mit den möglichen AR-Objekten angezeigt. Sie können jederzeit das ausgewählte Objekt ersetzen. Ausgewählte AR-Objekte werden mit einem umschließenden Ring visualisert.</string>
 	<string name="dialog_save_arscene_error">AR Szene benötigt einen Titel und eine Beschreibung</string>
+	<string name="edit_modi">Bearbeitungsmodus</string>
+	<string name="study_modi">Studienmodus</string>
+	<string name="mapping_description">Sie sehen hier die verwendeten AR Objekte für das AR Szenario. Bitte platzieren Sie die AR Objekte mit den QR-Codes im Raum.
+		Anschließend können Sie mit Play das AR Szenario starten. Wenn Sie die QR-Codes scannen, werden die Objekte auf dem QR-Code angezeigt.</string>
+	<string name="subject_modi">Probandenmodus</string>
+	<string name="leave_ar_scene_title">AR Szene verlassen?</string>
+	<string name="leave_ar_scene_description">Wollen Sie wirklich die AR Szene verlassen? Durch das Verlassen müssen Sie die AR Szene beim erneuten Laden mit QR-Codes
+		rekonstruieren
+		.</string>
+	<string name="leave">Verlassen</string>
 </resources>

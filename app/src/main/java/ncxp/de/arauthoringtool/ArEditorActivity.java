@@ -3,66 +3,55 @@ package ncxp.de.arauthoringtool;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
 import android.net.Uri;
-import android.opengl.Matrix;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.ar.core.Anchor;
 import com.google.ar.core.AugmentedImage;
 import com.google.ar.core.AugmentedImageDatabase;
 import com.google.ar.core.Config;
 import com.google.ar.core.Frame;
+import com.google.ar.core.HitResult;
+import com.google.ar.core.Plane;
 import com.google.ar.core.Session;
 import com.google.ar.core.TrackingState;
 import com.google.ar.core.exceptions.UnavailableApkTooOldException;
 import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException;
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
-import com.google.ar.sceneform.Camera;
+import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.FrameTime;
-import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.Node;
-import com.google.ar.sceneform.collision.Ray;
 import com.google.ar.sceneform.math.Quaternion;
 import com.google.ar.sceneform.math.Vector3;
-import com.google.ar.sceneform.rendering.Color;
-import com.google.ar.sceneform.rendering.Material;
-import com.google.ar.sceneform.rendering.MaterialFactory;
 import com.google.ar.sceneform.rendering.ModelRenderable;
-import com.google.ar.sceneform.rendering.PlaneRenderer;
-import com.google.ar.sceneform.rendering.Texture;
 import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
 
 import ncxp.de.arauthoringtool.model.StudyDatabase;
-import ncxp.de.arauthoringtool.model.dao.ArImageToObjectRelationDao;
+import ncxp.de.arauthoringtool.model.dao.ArObjectDao;
 import ncxp.de.arauthoringtool.model.dao.ArSceneDao;
 import ncxp.de.arauthoringtool.model.dao.TestPersonDao;
 import ncxp.de.arauthoringtool.model.data.ARScene;
-import ncxp.de.arauthoringtool.model.data.ArImageToObjectRelation;
+import ncxp.de.arauthoringtool.model.data.ArObject;
 import ncxp.de.arauthoringtool.model.data.Study;
 import ncxp.de.arauthoringtool.model.repository.ArSceneRepository;
 import ncxp.de.arauthoringtool.model.repository.TestPersonRepository;
 import ncxp.de.arauthoringtool.sceneform.ArNode;
 import ncxp.de.arauthoringtool.sceneform.DeleteWidgetNode;
 import ncxp.de.arauthoringtool.sceneform.ImageAnchor;
-import ncxp.de.arauthoringtool.sceneform.PlacementNode;
 import ncxp.de.arauthoringtool.sceneform.RotateWidgetNode;
 import ncxp.de.arauthoringtool.sceneform.ScaleWidgetNode;
 import ncxp.de.arauthoringtool.ui.areditor.ArEditFragment;
@@ -85,38 +74,22 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	public static final  String AUGMENTED_IMAGE_DB = "markers.imgdb";
 	private static final float  MAX_SCALE          = 4f;
 	private static final float  MIN_SCALE          = 0.1f;
-	private static final float  SENSITIVITY_SCALE  = 0.5f;
+	private static final float  SENSITIVITY_SCALE  = 0.4f;
 
 	private ArFragment        arFragment;
 	private ArEditFragment    editFragment;
 	private ArStudyFragment   studyFragment;
-	private ModelRenderable   frameRenderable;
 	private ArEditorViewModel viewModel;
 	private DeleteWidgetNode  deleteWidgetNode;
 	private ScaleWidgetNode   scaleWidgetNode;
 	private RotateWidgetNode  rotateWidgetNode;
-	private Material          highlight;
-	private ImageView         crosshair;
-	private GestureDetector   trackableGestureDetector;
-	private DisplayMetrics    metrics;
-	private float             displayCenterY;
-	private float             displayCenterX;
-	private Camera            camera;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_arimage_marker);
 		arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ar_marker_fragment);
-		metrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		displayCenterX = metrics.widthPixels / 2;
-		displayCenterY = metrics.heightPixels / 2;
-		crosshair = findViewById(R.id.crosshair);
-		setupArFragment();
-		camera = arFragment.getArSceneView().getScene().getCamera();
-		viewModel = obtainViewModel(this);
-		initPlacingFrame();
+		viewModel = obtainViewModel();
 		initDeleteWidgetNode();
 		initRotateWidgetNode();
 		initScaleWidgetNode();
@@ -125,13 +98,8 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		setupRotationTechnique();
 		setupScaleTechnique();
 		viewModel.resetInteractionTechnique();
+		setupArFragment();
 		if (viewModel.getEditorState().equals(EditorState.EDIT_MODE)) {
-			arFragment.getArSceneView().getScene().setOnTouchListener((hitTestResult, motionEvent) -> {
-				if (hitTestResult.getNode() == null) {
-					removeDeleteWidget();
-				}
-				return false;
-			});
 			showEditModeFragment();
 		} else {
 			showStudyModeFragment();
@@ -145,56 +113,21 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 				case RAYCASTING:
 					onRaycastingTechnique();
 					break;
-				case CROSSHAIR:
-					onCrosshairTechnique();
-					break;
 				case NONE:
 					onNoneSelectionTechnique();
 					break;
 			}
-
 		});
-	}
-
-	private void onCrosshairTechnique() {
-		crosshair.setVisibility(View.VISIBLE);
-		trackableGestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-			@Override
-			public boolean onSingleTapUp(MotionEvent motionEvent) {
-
-				HitTestResult hitTestResult = arFragment.getArSceneView()
-														.getScene()
-														.hitTest(projectRay(displayCenterX,
-																			displayCenterY,
-																			metrics.widthPixels,
-																			metrics.heightPixels,
-																			camera.getProjectionMatrix().data,
-																			camera.getViewMatrix().data));
-				if (hitTestResult.getNode() != null) {
-					ArNode node = (ArNode) hitTestResult.getNode();
-					arFragment.getTransformationSystem().getSelectionVisualizer().applySelectionVisual(node);
-					node.select();
-				} else {
-					arFragment.getTransformationSystem().getSelectionVisualizer().removeSelectionVisual(arFragment.getTransformationSystem().getSelectedNode());
-				}
-				return true;
-			}
-		});
-		arFragment.getArSceneView().getScene().setOnPeekTouchListener(((hitTestResult, motionEvent) -> trackableGestureDetector.onTouchEvent(motionEvent)));
 	}
 
 	private void onRaycastingTechnique() {
-		crosshair.setVisibility(View.GONE);
-		arFragment.setOnTapArPlaneListener((hitResult, plane, motionEvent) -> {
-			viewModel.setCurrentSelectedNode(null);
-			removeDeleteWidget();
-		});
-		arFragment.getArSceneView().getScene().setOnPeekTouchListener((hitTestResult, motionEvent) -> arFragment.onPeekTouch(hitTestResult, motionEvent));
-		trackableGestureDetector = null;
+		arFragment.setOnTapArPlaneListener(this::onTapArPlane);
+		viewModel.getArNodes().stream().forEach(arNode -> arNode.setOnTapListener((hitTestResult, motionEvent) -> onArNodeTapped(arNode)));
 	}
 
 	private void onNoneSelectionTechnique() {
-		arFragment.getArSceneView().getScene().setOnPeekTouchListener(null);
+		arFragment.setOnTapArPlaneListener(null);
+		viewModel.getArNodes().stream().forEach(arNode -> arNode.setOnTapListener(null));
 	}
 
 	private void setupRotationTechnique() {
@@ -213,40 +146,26 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	}
 
 	private void onTwoFingerTechnique() {
-		viewModel.getAugmentedImageMap().values().stream().filter(node -> node instanceof ArNode).forEach(node -> {
-			ArNode arNode = ((ArNode) node);
-			arNode.getRotationController().setEnabled(true);
-		});
+		viewModel.getArNodes().forEach(node -> node.getRotationController().setEnabled(true));
 	}
 
 	private void onNoneRotationTechnique() {
-		viewModel.getAugmentedImageMap().values().stream().filter(node -> node instanceof ArNode).forEach(node -> ((ArNode) node).getRotationController().setEnabled(false));
+		viewModel.getArNodes().forEach(node -> node.getRotationController().setEnabled(false));
 	}
 
 	private void setupScaleTechnique() {
 		viewModel.getScaleTechnique().observe(this, technique -> {
 			switch (technique) {
 				case PINCH:
-					onPinchTechnique();
+					viewModel.getArNodes().forEach(node -> node.getScaleController().setEnabled(true));
 					break;
 				case WIDGET_3D:
 				case NONE:
-					onNoneScaleTechnique();
+					viewModel.getArNodes().forEach(node -> node.getScaleController().setEnabled(false));
 					break;
 			}
 			removeScaleWidget();
 		});
-	}
-
-	private void onPinchTechnique() {
-		viewModel.getAugmentedImageMap().values().stream().filter(node -> node instanceof ArNode).forEach(node -> {
-			ArNode arNode = ((ArNode) node);
-			arNode.getScaleController().setEnabled(true);
-		});
-	}
-
-	private void onNoneScaleTechnique() {
-		viewModel.getAugmentedImageMap().values().stream().filter(node -> node instanceof ArNode).forEach(node -> ((ArNode) node).getScaleController().setEnabled(false));
 	}
 
 	private void removeScaleWidget() {
@@ -285,22 +204,33 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	}
 
 	private void setupArFragment() {
-		arFragment.getArSceneView().getScene().setOnUpdateListener(this::onUpdateFrame);
-		arFragment.getPlaneDiscoveryController().hide();
-		arFragment.getPlaneDiscoveryController().setInstructionView(null);
-		Texture.Sampler sampler = Texture.Sampler.builder()
-												 .setMinFilter(Texture.Sampler.MinFilter.LINEAR)
-												 .setMagFilter(Texture.Sampler.MagFilter.LINEAR)
-												 .setWrapMode(Texture.Sampler.WrapMode.REPEAT)
-												 .build();
-
-		CompletableFuture<Texture> hexagon = Texture.builder().setSource(this, R.drawable.hexagon).setSampler(sampler).build();
-		arFragment.getArSceneView().getPlaneRenderer().getMaterial().thenAcceptBoth(hexagon, (material, texture) -> {
-			material.setTexture(PlaneRenderer.MATERIAL_TEXTURE, texture);
-			material.setFloat3(PlaneRenderer.MATERIAL_COLOR, new Color(1, 1, 1, 0.1f));
+		arFragment.getArSceneView().getScene().setOnTouchListener((hitTestResult, motionEvent) -> {
+			if (hitTestResult.getNode() == null) {
+				removeDeleteWidget();
+			}
+			return false;
 		});
+		arFragment.setOnTapArPlaneListener(this::onTapArPlane);
+		arFragment.getArSceneView().getScene().addOnUpdateListener(this::onUpdateFrame);
 	}
 
+	private void onTapArPlane(HitResult hitResult, Plane plane, MotionEvent motionEvent) {
+		viewModel.setCurrentSelectedNode(null);
+		removeDeleteWidget();
+
+		if (plane.getType() != Plane.Type.HORIZONTAL_UPWARD_FACING) {
+			return;
+		}
+		if (viewModel.getCurrentImageSelection() == null) {
+			return;
+		}
+		if (viewModel.getEditorState().equals(EditorState.EDIT_MODE)) {
+			Anchor anchor = hitResult.createAnchor();
+			AnchorNode anchorNode = new AnchorNode(anchor);
+			anchorNode.setParent(arFragment.getArSceneView().getScene());
+			createARObject(anchorNode, viewModel.getCurrentImageSelection(), Quaternion.identity(), Vector3.one());
+		}
+	}
 
 	private void onUpdateFrame(FrameTime frameTime) {
 		Frame frame = arFragment.getArSceneView().getArFrame();
@@ -313,44 +243,14 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 	}
 
 	private void updateAugmentedImage(AugmentedImage augmentedImage) {
-		if (!viewModel.containsAugmentedImage(augmentedImage)) {
+		if (viewModel.containsAugmentedImage(augmentedImage) && !viewModel.isAugmentedImageUsed(augmentedImage)) {
+			viewModel.getAugmentedImagesUsed().add(augmentedImage.getName());
 			ImageAnchor imageAnchor = new ImageAnchor();
 			imageAnchor.setImage(augmentedImage);
-
-			if (viewModel.containsArSceneObject(augmentedImage.getName())) {
-				ArImageToObjectRelation arImageToObjectRelation = viewModel.getArSceneObjectFileName(augmentedImage.getName());
-				createARObject(imageAnchor, arImageToObjectRelation.getImageName(), arImageToObjectRelation.getRotation(), arImageToObjectRelation.getScale());
-			} else {
-				attachNewPlaceholder(imageAnchor);
-				viewModel.addARObject(augmentedImage.getName(), imageAnchor);
-			}
+			ArObject arObject = viewModel.getArObject(augmentedImage);
+			createARObject(imageAnchor, arObject.getImageName(), arObject.getRotation(), arObject.getScale());
 			arFragment.getArSceneView().getScene().addChild(imageAnchor);
 		}
-	}
-
-	private PlacementNode attachNewPlaceholder(Node parent) {
-		PlacementNode placeholder = new PlacementNode(frameRenderable, highlight);
-		placeholder.setOnTapListener((hitTestResult, motionEvent) -> {
-			Node currentSelectedNode = viewModel.getCurrentSelectedNode().getValue();
-			if (currentSelectedNode instanceof PlacementNode && !viewModel.getCurrentSelectedNode().equals(placeholder)) {
-				((PlacementNode) currentSelectedNode).unselect();
-			}
-			viewModel.setCurrentSelectedNode(placeholder);
-			placeholder.select();
-
-		});
-		placeholder.setParent(parent);
-		return placeholder;
-	}
-
-
-	private void initPlacingFrame() {
-		ModelRenderable.builder().setSource(this, R.raw.frame).build().thenAccept(renderable -> {
-			MaterialFactory.makeOpaqueWithColor(this, new Color(0, 1f, 0)).thenAccept(material -> {
-				highlight = material;
-				frameRenderable = renderable;
-			});
-		});
 	}
 
 	private void initDeleteWidgetNode() {
@@ -443,25 +343,25 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		}
 	}
 
-	public static ArEditorViewModel obtainViewModel(FragmentActivity activity) {
-		ARScene arScene = activity.getIntent().getParcelableExtra(ARSCENE_KEY);
-		Study study = activity.getIntent().getParcelableExtra(KEY_STUDY);
-		EditorState state = (EditorState) activity.getIntent().getSerializableExtra(KEY_EDITOR_STATE);
-		ArEditorViewModel viewModel = ViewModelProviders.of(activity, createFactory(activity)).get(ArEditorViewModel.class);
+	private ArEditorViewModel obtainViewModel() {
+		ARScene arScene = getIntent().getParcelableExtra(ARSCENE_KEY);
+		Study study = getIntent().getParcelableExtra(KEY_STUDY);
+		EditorState state = (EditorState) getIntent().getSerializableExtra(KEY_EDITOR_STATE);
+		ArEditorViewModel viewModel = ViewModelProviders.of(this, createFactory()).get(ArEditorViewModel.class);
 		viewModel.setArScene(arScene);
 		viewModel.setStudy(study);
 		viewModel.setEditorState(state);
 		return viewModel;
 	}
 
-	private static ArEditorViewModelFactory createFactory(FragmentActivity activity) {
-		StudyDatabase database = StudyDatabase.getInstance(activity);
+	private ArEditorViewModelFactory createFactory() {
+		StudyDatabase database = StudyDatabase.getInstance(this);
 		ArSceneDao arSceneDao = database.arSceneDao();
-		ArImageToObjectRelationDao arImageToObjectRelationDao = database.arImageToObjectRelationDao();
+		ArObjectDao arImageToObjectRelationDao = database.arImageToObjectRelationDao();
 		ArSceneRepository arSceneRepository = new ArSceneRepository(arSceneDao, arImageToObjectRelationDao);
 		TestPersonDao testPersonDao = database.testPerson();
 		TestPersonRepository testPersonRepository = new TestPersonRepository(testPersonDao);
-		return new ArEditorViewModelFactory(activity.getApplication(), arSceneRepository, testPersonRepository);
+		return new ArEditorViewModelFactory(getApplication(), arSceneRepository, testPersonRepository);
 	}
 
 	private void createARObject(Node parent, String imageName, Quaternion rotation, Vector3 scale) {
@@ -472,10 +372,8 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 			node.setLocalScale(scale);
 			node.setParent(parent);
 			node.setOnTapListener((hitTestResult, motionEvent) -> onArNodeTapped(node));
-			if (parent instanceof ImageAnchor) {
-				ImageAnchor imageAnchor = (ImageAnchor) parent;
-				viewModel.addARObject(imageAnchor.getImage().getName(), node);
-			}
+			viewModel.getArNodes().add(node);
+			node.setQrCodeNumber(viewModel.getArNodes().size());
 			node.select();
 			viewModel.setCurrentSelectedNode(node);
 		}).exceptionally(throwable -> {
@@ -511,7 +409,7 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 
 	private void attachRotateWidget(ArNode node) {
 		rotateWidgetNode.setParent(node.getParent());
-		rotateWidgetNode.setLocalPosition(node.getForward().scaled(0.2f));
+		rotateWidgetNode.setLocalPosition(node.getDown().scaled(0.5f));
 	}
 
 	private void attachScaleWidget(ArNode node) {
@@ -519,46 +417,25 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		scaleWidgetNode.setLocalPosition(node.getRight().scaled(0.35f));
 	}
 
-	private void attachDeleteWidget(Node node) {
+	private void attachDeleteWidget(ArNode node) {
 		deleteWidgetNode.setParent(node.getParent());
-		deleteWidgetNode.setLocalPosition(node.getRight().scaled(0.1f));
+		deleteWidgetNode.setLocalPosition(node.getDown().scaled(0.5f));
 		deleteWidgetNode.setOnTapListener((hitTestResult, motionEvent) -> {
-			ImageAnchor imageAnchor = (ImageAnchor) node.getParent();
-			imageAnchor.removeChild(node);
-			attachNewPlaceholder(imageAnchor);
+			viewModel.getArNodes().remove(node);
+			node.getParent().removeChild(node);
 			deleteWidgetNode.getParent().removeChild(deleteWidgetNode);
 		});
 	}
 
-
-	private void replaceARObject(String imageName, Node parent) {
-		Node anchor;
-		if (parent != null && parent.getParent() != null) {
-			anchor = parent.getParent();
-			anchor.removeChild(parent);
-		} else {
-			Node currentSelection = viewModel.getCurrentSelectedNode().getValue();
-			anchor = currentSelection.getParent();
-			anchor.removeChild(currentSelection);
-		}
-		createARObject(anchor, imageName, Quaternion.identity(), Vector3.one());
-	}
-
-
-	@Override
-	public void onReplaceArObject(String imageName, Node node) {
-		replaceARObject(imageName, node);
-	}
-
 	@Override
 	public void onDeleteAllArObjects() {
-		viewModel.getAugmentedImageMap().forEach((key, value) -> {
-			if (value.getParent() != null) {
-				arFragment.getArSceneView().getScene().removeChild(value.getParent());
-				arFragment.getArSceneView().getScene().removeChild(value);
+		viewModel.getArNodes().forEach(node -> {
+			if (node.getParent() != null) {
+				arFragment.getArSceneView().getScene().removeChild(node.getParent());
+				arFragment.getArSceneView().getScene().removeChild(node);
 			}
 		});
-		viewModel.setAugmentedImageMap(new HashMap<>());
+		viewModel.setArNodes(new ArrayList<>());
 	}
 
 	@Override
@@ -566,40 +443,12 @@ public class ArEditorActivity extends AppCompatActivity implements ArInteraction
 		viewModel.setEditorState(state);
 		switch (state) {
 			case EDIT_MODE:
-				viewModel.setComingFromStudyModus(true);
 				showEditModeFragment();
 				break;
 			case STUDY_MODE:
 				removeDeleteWidget();
-				viewModel.setComingFromStudyModus(false);
 				showStudyModeFragment();
 				break;
 		}
-	}
-
-	public static Ray projectRay(float tapX, float tapY, float screenWidth, float screenHeight, float[] projectionMatrix, float[] viewMatrix) {
-		float[] viewProjMtx = new float[16];
-		Matrix.multiplyMM(viewProjMtx, 0, projectionMatrix, 0, viewMatrix, 0);
-		return screenPointToRay(tapX, tapY, screenWidth, screenHeight, viewProjMtx);
-	}
-
-	public static Ray screenPointToRay(float tapX, float tapY, float screenWidth, float screenHeight, float[] viewProjMtx) {
-		tapY = screenHeight - tapY;
-		float x = tapX * 2.0F / screenWidth - 1.0F;
-		float y = tapY * 2.0F / screenHeight - 1.0F;
-		float[] farScreenPoint = new float[]{x, y, 1.0F, 1.0F};
-		float[] nearScreenPoint = new float[]{x, y, -1.0F, 1.0F};
-		float[] nearPlanePoint = new float[4];
-		float[] farPlanePoint = new float[4];
-		float[] invertedProjectionMatrix = new float[16];
-		Matrix.setIdentityM(invertedProjectionMatrix, 0);
-		Matrix.invertM(invertedProjectionMatrix, 0, viewProjMtx, 0);
-		Matrix.multiplyMV(nearPlanePoint, 0, invertedProjectionMatrix, 0, nearScreenPoint, 0);
-		Matrix.multiplyMV(farPlanePoint, 0, invertedProjectionMatrix, 0, farScreenPoint, 0);
-		Vector3 direction = new Vector3(farPlanePoint[0] / farPlanePoint[3], farPlanePoint[1] / farPlanePoint[3], farPlanePoint[2] / farPlanePoint[3]);
-		Vector3 origin = new Vector3(new Vector3(nearPlanePoint[0] / nearPlanePoint[3], nearPlanePoint[1] / nearPlanePoint[3], nearPlanePoint[2] / nearPlanePoint[3]));
-		direction = new Vector3(direction.x - origin.x, direction.y - origin.y, direction.z - origin.z);
-		direction.normalized();
-		return new Ray(origin, direction);
 	}
 }

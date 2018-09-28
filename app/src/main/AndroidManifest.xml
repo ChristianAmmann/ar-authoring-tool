@@ -43,6 +43,7 @@
 		<activity android:name=".OnboardingSurveyActivity"/>
 		<activity android:name=".OnboardingAppActivity"/>
 		<activity android:name=".OnboardingArEditorActivity"/>
+		<activity android:name=".MappingActivity"/>
 		<activity android:name=".AboutActivity"/>
 		<activity android:name=".ArSceneActivity"/>
 		<activity

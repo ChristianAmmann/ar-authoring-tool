@@ -31,7 +31,7 @@ public class SurveyRepository {
 	}
 
 	public void updateSurveys(List<Survey> surveys) {
-		surveys.forEach(surveyDao::update);
+		surveys.forEach(surveyDao::insert);
 	}
 
 	public void removeSurvey(Survey survey) {

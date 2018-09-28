@@ -20,28 +20,24 @@ import com.google.ar.sceneform.math.Vector3;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
+import ncxp.de.arauthoringtool.model.data.ARScene;
+import ncxp.de.arauthoringtool.model.data.ArObject;
+import ncxp.de.arauthoringtool.model.data.Study;
 import ncxp.de.arauthoringtool.model.data.TestPerson;
 import ncxp.de.arauthoringtool.model.data.TestPersonState;
-import ncxp.de.arauthoringtool.model.repository.TestPersonRepository;
-import ncxp.de.arauthoringtool.sensorlogger.SensorBackgroundService;
-import ncxp.de.arauthoringtool.model.data.ARScene;
-import ncxp.de.arauthoringtool.model.data.ArImageToObjectRelation;
-import ncxp.de.arauthoringtool.model.data.Study;
 import ncxp.de.arauthoringtool.model.repository.ArSceneRepository;
+import ncxp.de.arauthoringtool.model.repository.TestPersonRepository;
 import ncxp.de.arauthoringtool.sceneform.ArNode;
+import ncxp.de.arauthoringtool.sensorlogger.SensorBackgroundService;
+import ncxp.de.arauthoringtool.ui.areditor.Thumbnail;
 import ncxp.de.arauthoringtool.ui.areditor.util.EditorState;
 import ncxp.de.arauthoringtool.ui.areditor.util.RotationTechnique;
 import ncxp.de.arauthoringtool.ui.areditor.util.ScaleTechnique;
 import ncxp.de.arauthoringtool.ui.areditor.util.SelectionTechnique;
-import ncxp.de.arauthoringtool.ui.areditor.Thumbnail;
 
 
 public class ArEditorViewModel extends AndroidViewModel {
@@ -53,15 +49,16 @@ public class ArEditorViewModel extends AndroidViewModel {
 	private ARScene                             arScene;
 	private Study                               study;
 	private SensorBackgroundService             sensorBackgroundService;
-	private boolean                             bound                = false;
-	private Map<String, Node>                   augmentedImageMap;
+	private boolean                             bound = false;
+	private List<ArNode>                        arNodes;
 	private MutableLiveData<Node>               currentSelectedNode;
 	private EditorState                         editorState;
 	private TestPersonState                     testPersonState;
 	private MutableLiveData<SelectionTechnique> selectionTechnique;
 	private MutableLiveData<RotationTechnique>  rotationTechnique;
 	private MutableLiveData<ScaleTechnique>     scaleTechnique;
-	private boolean                             comingFromStudyModus = false;
+	private String                              currentImageSelection;
+	private List<String>                        augmentedImagesPlaced;
 
 
 	public ArEditorViewModel(@NonNull Application application, ArSceneRepository arSceneRepository, TestPersonRepository testPersonRepository) {
@@ -69,7 +66,7 @@ public class ArEditorViewModel extends AndroidViewModel {
 		this.arSceneRepository = arSceneRepository;
 		this.testPersonRepository = testPersonRepository;
 		this.modelsThumbnails = new MutableLiveData<>();
-		augmentedImageMap = new HashMap<>();
+		arNodes = new ArrayList<>();
 		modelsThumbnails.postValue(new ArrayList<>());
 		currentSelectedNode = new MutableLiveData<>();
 		Intent intent = new Intent(getApplication(), SensorBackgroundService.class);
@@ -79,6 +76,7 @@ public class ArEditorViewModel extends AndroidViewModel {
 		rotationTechnique = new MutableLiveData<>();
 		rotationTechnique.postValue(RotationTechnique.TWO_FINGER);
 		scaleTechnique = new MutableLiveData<>();
+		augmentedImagesPlaced = new ArrayList<>();
 		scaleTechnique.postValue(ScaleTechnique.PINCH);
 		this.testPersonState = TestPersonState.STOPPED;
 	}
@@ -124,40 +122,61 @@ public class ArEditorViewModel extends AndroidViewModel {
 	}
 
 	public void save(String title, String description) {
-		List<ArImageToObjectRelation> relations = convertTo(augmentedImageMap);
+		List<ArObject> arObjects = convertTo(arNodes);
 		ARScene scene = new ARScene();
 		scene.setName(title);
 		scene.setDescription(description);
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
 			long arSceneId = arSceneRepository.saveArScene(scene);
-			arSceneRepository.saveArImageToObjects(arSceneId, relations);
+			long[] ids = arSceneRepository.saveArObjects(arSceneId, arObjects);
+			for (int i = 0; i < ids.length; i++) {
+				arObjects.get(i).setArObjectId(ids[i]);
+			}
 			scene.setId(arSceneId);
 			setArScene(scene);
 		});
 	}
 
 	public void update(ARScene scene) {
-		List<ArImageToObjectRelation> relations = convertTo(augmentedImageMap);
+		List<ArObject> arObjects = convertTo(arNodes);
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
 			long arSceneId = arSceneRepository.saveArScene(scene);
-			arSceneRepository.saveArImageToObjects(arSceneId, relations);
+			arSceneRepository.saveArObjects(arSceneId, arObjects);
 		});
 	}
 
-	public List<ArImageToObjectRelation> convertTo(Map<String, Node> augmentedImageMap) {
-		Map<String, ArNode> map = augmentedImageMap.entrySet()
-												   .stream()
-												   .filter(x -> x.getValue() instanceof ArNode)
-												   .collect(Collectors.toMap(Map.Entry::getKey, x -> (ArNode) x.getValue()));
-		List<ArImageToObjectRelation> relations = new ArrayList<>();
-		map.entrySet().forEach(x -> {
-			Vector3 scale = x.getValue().getLocalScale();
-			Quaternion rotation = x.getValue().getLocalRotation();
-			relations.add(new ArImageToObjectRelation(x.getKey(), x.getValue().getFileName(), scale, rotation));
+	public List<ArObject> convertTo(List<ArNode> arNodes) {
+		List<ArObject> newArObjects = new ArrayList<>();
+		List<ArObject> oldArObjects = new ArrayList<>();
+		if (arScene != null) {
+			oldArObjects = arScene.getArImageObjects();
+		}
+		List<ArObject> finalOldArObjects = oldArObjects;
+		arNodes.forEach(node -> {
+			Vector3 scale = node.getLocalScale();
+			Quaternion rotation = node.getLocalRotation();
+			ArObject savedArObject = getExistingArObject(finalOldArObjects, node);
+			if (savedArObject != null) {
+				finalOldArObjects.remove(savedArObject);
+				newArObjects.add(new ArObject(savedArObject.getArObjectId(), node.getFileName(), scale, rotation));
+			} else {
+				newArObjects.add(new ArObject(node.getFileName(), scale, rotation));
+			}
 		});
-		return relations;
+		return newArObjects;
+	}
+
+	private ArObject getExistingArObject(List<ArObject> arObjects, ArNode node) {
+		if (arObjects != null && node.getQrCodeNumber() != null) {
+			for (ArObject arObject : arObjects) {
+				if (arObject.getImageName().replace("png", "sfb").equals(node.getFileName())) {
+					return arObject;
+				}
+			}
+		}
+		return null;
 	}
 
 	public void setArScene(ARScene arScene) {
@@ -166,18 +185,6 @@ public class ArEditorViewModel extends AndroidViewModel {
 
 	public ARScene getArScene() {
 		return this.arScene;
-	}
-
-	public boolean containsArSceneObject(String augmentedImageName) {
-		if (arScene != null) {
-			return arScene.getArImageObjects().stream().anyMatch(relation -> relation.getArMarkerId().equals(augmentedImageName));
-		}
-		return false;
-	}
-
-	public ArImageToObjectRelation getArSceneObjectFileName(String augmentedImageName) {
-		Optional<ArImageToObjectRelation> first = arScene.getArImageObjects().stream().filter(relation -> relation.getArMarkerId().equals(augmentedImageName)).findFirst();
-		return first.orElse(null);
 	}
 
 	private ServiceConnection connection = new ServiceConnection() {
@@ -233,24 +240,12 @@ public class ArEditorViewModel extends AndroidViewModel {
 		return study;
 	}
 
-	public Map<String, Node> getAugmentedImageMap() {
-		return augmentedImageMap;
+	public List<ArNode> getArNodes() {
+		return arNodes;
 	}
 
-	public void setAugmentedImageMap(Map<String, Node> augmentedImageMap) {
-		this.augmentedImageMap = augmentedImageMap;
-	}
-
-	public boolean containsAugmentedImage(AugmentedImage augmentedImage) {
-		return getAugmentedImageMap().containsKey(augmentedImage.getName());
-	}
-
-	public void addARObject(String name, Node node) {
-		augmentedImageMap.put(name, node);
-	}
-
-	public boolean containsARObject() {
-		return augmentedImageMap.values().stream().anyMatch(node -> node instanceof ArNode);
+	public void setArNodes(List<ArNode> arNodes) {
+		this.arNodes = arNodes;
 	}
 
 	public MutableLiveData<Node> getCurrentSelectedNode() {
@@ -303,14 +298,6 @@ public class ArEditorViewModel extends AndroidViewModel {
 		this.rotationTechnique.postValue(RotationTechnique.TWO_FINGER);
 	}
 
-	public boolean isComingFromStudyModus() {
-		return comingFromStudyModus;
-	}
-
-	public void setComingFromStudyModus(boolean comingFromStudyModus) {
-		this.comingFromStudyModus = comingFromStudyModus;
-	}
-
 	public void saveTestperson(TestPerson person) {
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
@@ -326,5 +313,46 @@ public class ArEditorViewModel extends AndroidViewModel {
 
 	public void setTestPersonState(TestPersonState testPersonState) {
 		this.testPersonState = testPersonState;
+	}
+
+	public String getCurrentImageSelection() {
+		return currentImageSelection;
+	}
+
+	public void setCurrentImageSelection(String currentImageSelection) {
+		this.currentImageSelection = currentImageSelection;
+	}
+
+	public boolean containsAugmentedImage(AugmentedImage augmentedImage) {
+		return arScene != null && arScene.getArImageObjects() != null && arScene.getArImageObjects().size() >= getQrCodeNumber(augmentedImage.getName());
+	}
+
+	public ArObject getArObject(AugmentedImage augmentedImage) {
+		return arScene.getArImageObjects().get(getQrCodeNumber(augmentedImage.getName()) - 1);
+	}
+
+	private int getQrCodeNumber(String imageName) {
+		imageName = imageName.substring(imageName.lastIndexOf("_") + 1);
+		imageName = imageName.substring(0, imageName.lastIndexOf("."));
+		return Integer.parseInt(imageName);
+	}
+
+	public boolean containsArNode(AugmentedImage augmentedImage) {
+		ArObject arObject = getArObject(augmentedImage);
+		if (arObject == null) {
+			return false;
+		}
+		String imageName = arObject.getImageName();
+		String sjbFile = imageName.replace("png", "sfb");
+		return arNodes != null && arNodes.stream()
+										 .anyMatch(arNode -> arNode.getFileName().equals(sjbFile) && arNode.getQrCodeNumber().equals(getQrCodeNumber(augmentedImage.getName())));
+	}
+
+	public boolean isAugmentedImageUsed(AugmentedImage augmentedImage) {
+		return augmentedImagesPlaced.stream().anyMatch(image -> augmentedImage.getName().equals(image));
+	}
+
+	public List<String> getAugmentedImagesUsed() {
+		return augmentedImagesPlaced;
 	}
 }

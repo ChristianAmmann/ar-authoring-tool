@@ -15,7 +15,7 @@
                ],
             },
             {
-               metallic: 1,
+               metallic: 0,
             },
             {
                roughness: 0.14280000000000001,
@@ -36,7 +36,7 @@
       collision: {},
       file: "sampledata/beagle/Mesh_Beagle.obj",
       name: "Mesh_Beagle",
-      scale: 0.5,
+      scale: 0.15,
    },
    samplers: [
       {
