@@ -76,7 +76,7 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 		deleteButton.setOnClickListener(clickedView -> showDeleteDialog());
 		deleteButton.setOnDragListener(new TrashDragListener(R.drawable.delete_empty, R.drawable.delete));
 		ImageButton backSceneButton = view.findViewById(R.id.back_arscene);
-		backSceneButton.setOnClickListener(clickedView -> getActivity().finish());
+		backSceneButton.setOnClickListener(this::showBackDialog);
 		initBottomBar();
 		setupAdapter();
 		viewModel.getThumbnails().observe(this, drawables -> thumbnailAdapter.replaceItems(drawables));
@@ -86,6 +86,15 @@ public class ArEditFragment extends Fragment implements ThumbnailListener {
 		viewModel.getCurrentSelectedNode().observe(this, current -> {
 			showActionButtons();
 		});
+	}
+
+	private void showBackDialog(View view) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+		builder.setTitle(R.string.leave_ar_scene_title);
+		builder.setMessage(R.string.leave_ar_scene_description);
+		builder.setPositiveButton(R.string.leave, (dialog, which) -> getActivity().finish());
+		builder.setNegativeButton(R.string.cancel, null);
+		builder.create().show();
 	}
 
 	private void setupAdapter() {

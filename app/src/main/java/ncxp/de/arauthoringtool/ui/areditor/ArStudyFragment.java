@@ -97,21 +97,28 @@ public class ArStudyFragment extends Fragment {
 		timeIcon = view.findViewById(R.id.timer_icon);
 		studyStatusView = view.findViewById(R.id.study_status);
 		editButton = view.findViewById(R.id.edit_modus);
-		editButton.setOnClickListener(clickedView -> {
-			arInteractionListener.onEditorStateChanged(EditorState.EDIT_MODE);
-		});
+		editButton.setOnClickListener(clickedView -> arInteractionListener.onEditorStateChanged(EditorState.EDIT_MODE));
 		stateBanner = view.findViewById(R.id.state_banner);
 		stateBannerText = view.findViewById(R.id.state_banner_text);
 		chronometer = view.findViewById(R.id.time_view);
 		chronometer.setOnChronometerTickListener(chronometerChanged -> chronometer = chronometerChanged);
 		backButton = view.findViewById(R.id.back);
-		backButton.setOnClickListener(clickedView -> getActivity().finish());
+		backButton.setOnClickListener(this::showBackDialog);
 		settingsButton.setOnClickListener(clickedView -> showArSettingDialog());
 		addSubjectButton.setOnClickListener(this::onAddSubjectClicked);
 		playAndPauseButton.setOnClickListener(this::onPlayAndPauseClicked);
 		cancelButton.setOnClickListener(this::onCancelClicked);
 		finishButton.setOnClickListener(this::onFinishClicked);
 		initStudyBottomBar();
+	}
+
+	private void showBackDialog(View view) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+		builder.setTitle(R.string.leave_ar_scene_title);
+		builder.setMessage(R.string.leave_ar_scene_description);
+		builder.setPositiveButton(R.string.leave, (dialog, which) -> getActivity().finish());
+		builder.setNegativeButton(R.string.cancel, null);
+		builder.create().show();
 	}
 
 	private void initStudyBottomBar() {
