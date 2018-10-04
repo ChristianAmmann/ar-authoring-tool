@@ -87,7 +87,7 @@ public class SensorBackgroundService extends Service implements SensorEventListe
 
 	private void startCollecting() {
 		if (study != null && study.getSensors() != null) {
-			study.getSensors().stream().forEach(deviceSensor -> {
+			study.getSensors().forEach(deviceSensor -> {
 				List<Sensor> sensors = sensorManager.getSensorList(deviceSensor.getType());
 				sensors.stream()
 					   .filter(sensor -> !sensor.isWakeUpSensor())

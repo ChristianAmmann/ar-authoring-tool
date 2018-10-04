@@ -1,9 +1,9 @@
 package ncxp.de.arauthoringtool.ui.areditor.util;
 
 public enum SelectionTechnique {
-	RAYCASTING(0, "Raycasting"),
+	RAYCASTING(0, "Tippen"),
 	CROSSHAIR(2, "Fadenkreuz"),
-	NONE(1, "Keine");
+	NONE(1, "Selektion unterbinden");
 
 	private int    position;
 	private String name;

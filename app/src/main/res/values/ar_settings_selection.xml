@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string-array name="selection_array">
-		<item>Raycasting</item>
-		<item>Keine</item>
+		<item>Tippen</item>
+		<item>Selektion unterbinden</item>
 	</string-array>
 </resources>

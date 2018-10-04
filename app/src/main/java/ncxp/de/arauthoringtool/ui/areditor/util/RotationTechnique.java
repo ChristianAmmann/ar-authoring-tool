@@ -1,9 +1,9 @@
 package ncxp.de.arauthoringtool.ui.areditor.util;
 
 public enum RotationTechnique {
-	TWO_FINGER(0, "Geste Two Finger"),
+	TWO_FINGER(0, "Rotationsgeste"),
 	WIDGET_3D(1, "3D-Widget"),
-	NONE(2, "Keine");
+	NONE(2, "Rotation unterbinden");
 
 	private int    position;
 	private String name;

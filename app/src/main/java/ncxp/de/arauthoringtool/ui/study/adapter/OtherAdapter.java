@@ -77,6 +77,7 @@ public class OtherAdapter extends RecyclerView.Adapter {
 					@Override
 					public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 						studySettings.setSensorAccuracy(position + 1);
+						settingsViewHolder.getAccuracySpinner().setSelection(studySettings.getSensorAccuracy() - 1);
 					}
 
 					@Override
@@ -84,7 +85,6 @@ public class OtherAdapter extends RecyclerView.Adapter {
 
 					}
 				});
-
 				break;
 		}
 	}

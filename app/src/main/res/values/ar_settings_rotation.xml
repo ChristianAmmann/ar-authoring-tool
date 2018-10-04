@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string-array name="rotation_array">
-		<item>Geste Two Finger</item>
+		<item>Rotationsgeste</item>
 		<item>3D-Widget</item>
-		<item>Keine</item>
+		<item>Rotation unterbinden</item>
 	</string-array>
 </resources>

@@ -1,9 +1,9 @@
 package ncxp.de.arauthoringtool.ui.areditor.util;
 
 public enum ScaleTechnique {
-	PINCH(0, "Geste Pinch"),
+	PINCH(0, "Skalierungsgeste"),
 	WIDGET_3D(1, "3D-Widget"),
-	NONE(2, "Keine");
+	NONE(2, "Skalierung unterbinden");
 
 	private int    position;
 	private String name;

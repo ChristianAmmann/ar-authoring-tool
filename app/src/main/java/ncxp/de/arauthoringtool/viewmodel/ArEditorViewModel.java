@@ -213,7 +213,8 @@ public class ArEditorViewModel extends AndroidViewModel {
 		if (study != null) {
 			sensorBackgroundService.initialize(study);
 		}
-		sensorBackgroundService.start();
+		//Bugs because of saving data
+		//sensorBackgroundService.start();
 	}
 
 	public void createTestpersonAndStartService() {
