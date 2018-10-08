@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import ncxp.de.arauthoringtool.view.onboarding.OnboardingAppActivity;
+import ncxp.de.arauthoringtool.view.studies.StudiesActivity;
+
 public class MainActivity extends AppCompatActivity {
 
 	public static final String ONBOARDING_KEY       = "onboarding_on_start";

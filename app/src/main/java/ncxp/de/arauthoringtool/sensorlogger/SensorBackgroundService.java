@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import ncxp.de.arauthoringtool.model.StudyDatabase;
+import ncxp.de.arauthoringtool.StudyDatabase;
 import ncxp.de.arauthoringtool.model.dao.DataDao;
 import ncxp.de.arauthoringtool.model.dao.TestPersonDao;
 import ncxp.de.arauthoringtool.model.data.Data;
 import ncxp.de.arauthoringtool.model.data.Study;
 import ncxp.de.arauthoringtool.model.data.TestPerson;
-import ncxp.de.arauthoringtool.model.repository.DataRepository;
-import ncxp.de.arauthoringtool.model.repository.TestPersonRepository;
+import ncxp.de.arauthoringtool.repository.DataRepository;
+import ncxp.de.arauthoringtool.repository.TestPersonRepository;
 
 public class SensorBackgroundService extends Service implements SensorEventListener {
 

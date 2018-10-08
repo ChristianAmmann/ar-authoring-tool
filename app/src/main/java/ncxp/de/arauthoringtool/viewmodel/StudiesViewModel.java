@@ -25,12 +25,12 @@ import ncxp.de.arauthoringtool.model.data.DeviceSensor;
 import ncxp.de.arauthoringtool.model.data.Study;
 import ncxp.de.arauthoringtool.model.data.Survey;
 import ncxp.de.arauthoringtool.model.data.TestPerson;
-import ncxp.de.arauthoringtool.model.repository.DataRepository;
-import ncxp.de.arauthoringtool.model.repository.StudyDeviceSensorJoinRepository;
-import ncxp.de.arauthoringtool.model.repository.StudyRepository;
-import ncxp.de.arauthoringtool.model.repository.SurveyRepository;
-import ncxp.de.arauthoringtool.model.repository.TestPersonRepository;
-import ncxp.de.arauthoringtool.util.CSVWriter;
+import ncxp.de.arauthoringtool.repository.DataRepository;
+import ncxp.de.arauthoringtool.repository.StudyDeviceSensorJoinRepository;
+import ncxp.de.arauthoringtool.repository.StudyRepository;
+import ncxp.de.arauthoringtool.repository.SurveyRepository;
+import ncxp.de.arauthoringtool.repository.TestPersonRepository;
+import ncxp.de.arauthoringtool.csvwriter.CSVWriter;
 import ncxp.de.arauthoringtool.viewmodel.util.ToastMessage;
 
 public class StudiesViewModel extends AndroidViewModel {

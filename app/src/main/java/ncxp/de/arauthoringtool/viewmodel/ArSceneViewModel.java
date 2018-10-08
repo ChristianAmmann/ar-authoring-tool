@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 
 import ncxp.de.arauthoringtool.model.data.ARScene;
 import ncxp.de.arauthoringtool.model.data.Study;
-import ncxp.de.arauthoringtool.model.repository.ArSceneRepository;
+import ncxp.de.arauthoringtool.repository.ArSceneRepository;
 
 public class ArSceneViewModel extends ViewModel {
 

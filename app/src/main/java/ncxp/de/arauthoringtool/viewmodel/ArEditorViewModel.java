@@ -29,15 +29,15 @@ import ncxp.de.arauthoringtool.model.data.ArObject;
 import ncxp.de.arauthoringtool.model.data.Study;
 import ncxp.de.arauthoringtool.model.data.TestPerson;
 import ncxp.de.arauthoringtool.model.data.TestPersonState;
-import ncxp.de.arauthoringtool.model.repository.ArSceneRepository;
-import ncxp.de.arauthoringtool.model.repository.TestPersonRepository;
+import ncxp.de.arauthoringtool.repository.ArSceneRepository;
+import ncxp.de.arauthoringtool.repository.TestPersonRepository;
 import ncxp.de.arauthoringtool.sceneform.ArNode;
 import ncxp.de.arauthoringtool.sensorlogger.SensorBackgroundService;
-import ncxp.de.arauthoringtool.ui.areditor.Thumbnail;
-import ncxp.de.arauthoringtool.ui.areditor.util.EditorState;
-import ncxp.de.arauthoringtool.ui.areditor.util.RotationTechnique;
-import ncxp.de.arauthoringtool.ui.areditor.util.ScaleTechnique;
-import ncxp.de.arauthoringtool.ui.areditor.util.SelectionTechnique;
+import ncxp.de.arauthoringtool.view.areditor.Thumbnail;
+import ncxp.de.arauthoringtool.view.areditor.util.EditorState;
+import ncxp.de.arauthoringtool.view.areditor.util.RotationTechnique;
+import ncxp.de.arauthoringtool.view.areditor.util.ScaleTechnique;
+import ncxp.de.arauthoringtool.view.areditor.util.SelectionTechnique;
 
 
 public class ArEditorViewModel extends AndroidViewModel {

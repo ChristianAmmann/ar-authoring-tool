@@ -17,8 +17,8 @@ import java.util.concurrent.Executors;
 import ncxp.de.arauthoringtool.model.data.ARScene;
 import ncxp.de.arauthoringtool.model.data.ArObject;
 import ncxp.de.arauthoringtool.model.data.Study;
-import ncxp.de.arauthoringtool.ui.areditor.Thumbnail;
-import ncxp.de.arauthoringtool.ui.areditor.util.EditorState;
+import ncxp.de.arauthoringtool.view.areditor.Thumbnail;
+import ncxp.de.arauthoringtool.view.areditor.util.EditorState;
 
 public class MappingViewModel extends AndroidViewModel {
 

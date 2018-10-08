@@ -4,8 +4,8 @@ import android.app.Application;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-import ncxp.de.arauthoringtool.model.repository.ArSceneRepository;
-import ncxp.de.arauthoringtool.model.repository.TestPersonRepository;
+import ncxp.de.arauthoringtool.repository.ArSceneRepository;
+import ncxp.de.arauthoringtool.repository.TestPersonRepository;
 import ncxp.de.arauthoringtool.viewmodel.ArEditorViewModel;
 
 public class ArEditorViewModelFactory implements ViewModelProvider.Factory {

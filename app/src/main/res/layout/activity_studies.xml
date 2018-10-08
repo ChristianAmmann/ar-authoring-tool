@@ -13,7 +13,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:paddingBottom="?attr/actionBarSize"
-		tools:context=".StudiesActivity"/>
+		tools:context=".view.studies.StudiesActivity"/>
 
 	<android.support.design.widget.AppBarLayout
 		android:id="@+id/bottom_app_bar"

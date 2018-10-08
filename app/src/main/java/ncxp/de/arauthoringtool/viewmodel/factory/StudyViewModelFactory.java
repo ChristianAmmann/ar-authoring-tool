@@ -4,10 +4,10 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import ncxp.de.arauthoringtool.sensorlogger.SensorDataManager;
-import ncxp.de.arauthoringtool.model.repository.DeviceSensorRepository;
-import ncxp.de.arauthoringtool.model.repository.StudyDeviceSensorJoinRepository;
-import ncxp.de.arauthoringtool.model.repository.StudyRepository;
-import ncxp.de.arauthoringtool.model.repository.SurveyRepository;
+import ncxp.de.arauthoringtool.repository.DeviceSensorRepository;
+import ncxp.de.arauthoringtool.repository.StudyDeviceSensorJoinRepository;
+import ncxp.de.arauthoringtool.repository.StudyRepository;
+import ncxp.de.arauthoringtool.repository.SurveyRepository;
 import ncxp.de.arauthoringtool.viewmodel.StudyViewModel;
 
 public class StudyViewModelFactory implements ViewModelProvider.Factory {

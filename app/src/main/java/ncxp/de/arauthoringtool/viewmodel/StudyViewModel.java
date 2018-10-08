@@ -14,13 +14,13 @@ import ncxp.de.arauthoringtool.model.data.DeviceSensor;
 import ncxp.de.arauthoringtool.model.data.Study;
 import ncxp.de.arauthoringtool.model.data.StudyDeviceSensorJoin;
 import ncxp.de.arauthoringtool.model.data.Survey;
-import ncxp.de.arauthoringtool.model.repository.DeviceSensorRepository;
-import ncxp.de.arauthoringtool.model.repository.StudyDeviceSensorJoinRepository;
-import ncxp.de.arauthoringtool.model.repository.StudyRepository;
-import ncxp.de.arauthoringtool.model.repository.SurveyRepository;
+import ncxp.de.arauthoringtool.repository.DeviceSensorRepository;
+import ncxp.de.arauthoringtool.repository.StudyDeviceSensorJoinRepository;
+import ncxp.de.arauthoringtool.repository.StudyRepository;
+import ncxp.de.arauthoringtool.repository.SurveyRepository;
 import ncxp.de.arauthoringtool.sensorlogger.SensorDataManager;
 import ncxp.de.arauthoringtool.sensorlogger.SensorGroup;
-import ncxp.de.arauthoringtool.ui.study.adapter.SensorSettings;
+import ncxp.de.arauthoringtool.view.study.adapter.SensorSettings;
 
 public class StudyViewModel extends ViewModel {
 
