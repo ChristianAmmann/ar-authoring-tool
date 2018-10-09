@@ -1,4 +1,4 @@
-package ncxp.de.arauthoringtool.view.study.adapter;
+package ncxp.de.arauthoringtool.view.create_study.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,10 +12,10 @@ import android.widget.Button;
 import java.util.List;
 
 import ncxp.de.arauthoringtool.R;
-import ncxp.de.arauthoringtool.view.study.viewholder.ConfigViewHolder;
-import ncxp.de.arauthoringtool.view.study.viewholder.SectionViewHolder;
-import ncxp.de.arauthoringtool.view.study.viewholder.SensorSettingsViewHolder;
-import ncxp.de.arauthoringtool.view.study.OptionOthersListener;
+import ncxp.de.arauthoringtool.view.create_study.viewholder.ConfigViewHolder;
+import ncxp.de.arauthoringtool.view.create_study.viewholder.SectionViewHolder;
+import ncxp.de.arauthoringtool.view.create_study.viewholder.SensorSettingsViewHolder;
+import ncxp.de.arauthoringtool.view.create_study.OptionOthersListener;
 
 public class OtherAdapter extends RecyclerView.Adapter {
 

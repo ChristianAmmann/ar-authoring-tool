@@ -1,4 +1,4 @@
-package ncxp.de.arauthoringtool.view.study;
+package ncxp.de.arauthoringtool.view.create_study;
 
 
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import ncxp.de.arauthoringtool.R;
-import ncxp.de.arauthoringtool.view.study.adapter.SensorAdapter;
+import ncxp.de.arauthoringtool.view.create_study.adapter.SensorAdapter;
 import ncxp.de.arauthoringtool.viewmodel.StudyViewModel;
 
 public class SensorFragment extends Fragment {

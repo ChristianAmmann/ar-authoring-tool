@@ -1,4 +1,4 @@
-package ncxp.de.arauthoringtool.view.study;
+package ncxp.de.arauthoringtool.view.create_study;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -27,7 +27,7 @@ import ncxp.de.arauthoringtool.repository.DeviceSensorRepository;
 import ncxp.de.arauthoringtool.repository.StudyDeviceSensorJoinRepository;
 import ncxp.de.arauthoringtool.repository.StudyRepository;
 import ncxp.de.arauthoringtool.repository.SurveyRepository;
-import ncxp.de.arauthoringtool.view.study.adapter.ViewPagerAdapter;
+import ncxp.de.arauthoringtool.view.create_study.adapter.ViewPagerAdapter;
 import ncxp.de.arauthoringtool.viewmodel.StudyViewModel;
 import ncxp.de.arauthoringtool.viewmodel.factory.StudyViewModelFactory;
 
@@ -37,6 +37,7 @@ public class StudyActivity extends AppCompatActivity {
 
 	private BottomNavigationView navigationView;
 	private ViewPager            viewPager;
+	private ViewPagerAdapter     adapter;
 	private MenuItem             previousMenuItem;
 	private StudyViewModel       viewModel;
 
@@ -84,7 +85,7 @@ public class StudyActivity extends AppCompatActivity {
 	}
 
 	private void setupViewPagerAdapter() {
-		ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+		adapter = new ViewPagerAdapter(getSupportFragmentManager());
 		adapter.addFragment(SensorFragment.newInstance());
 		adapter.addFragment(SurveyFragment.newInstance());
 		adapter.addFragment(OthersFragment.newInstance());

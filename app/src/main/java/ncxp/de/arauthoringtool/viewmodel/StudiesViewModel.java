@@ -35,7 +35,7 @@ import ncxp.de.arauthoringtool.viewmodel.util.ToastMessage;
 
 public class StudiesViewModel extends AndroidViewModel {
 
-	public static final String DIRECTORY = "MobileDataCollection";
+	public static final String DIRECTORY = "ArAuthoring";
 
 	private MutableLiveData<List<Study>>    studies;
 	private StudyRepository                 studyRepo;

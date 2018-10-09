@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ncxp.de.arauthoringtool.R;
-import ncxp.de.arauthoringtool.view.study.adapter.ViewPagerAdapter;
+import ncxp.de.arauthoringtool.view.create_study.adapter.ViewPagerAdapter;
 
 public class OnboardingSurveyActivity extends AppCompatActivity {
 

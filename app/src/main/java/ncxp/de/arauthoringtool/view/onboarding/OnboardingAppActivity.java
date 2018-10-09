@@ -18,8 +18,8 @@ import java.util.List;
 
 import ncxp.de.arauthoringtool.MainActivity;
 import ncxp.de.arauthoringtool.R;
-import ncxp.de.arauthoringtool.view.studies.StudiesActivity;
-import ncxp.de.arauthoringtool.view.study.adapter.ViewPagerAdapter;
+import ncxp.de.arauthoringtool.view.manage_studies.StudiesActivity;
+import ncxp.de.arauthoringtool.view.create_study.adapter.ViewPagerAdapter;
 
 public class OnboardingAppActivity extends AppCompatActivity {
 

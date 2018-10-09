@@ -1,4 +1,4 @@
-package ncxp.de.arauthoringtool.view.studies;
+package ncxp.de.arauthoringtool.view.manage_studies;
 
 import android.view.View;
 

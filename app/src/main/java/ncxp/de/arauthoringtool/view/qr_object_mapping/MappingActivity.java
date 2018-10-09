@@ -1,4 +1,4 @@
-package ncxp.de.arauthoringtool.view.mapping;
+package ncxp.de.arauthoringtool.view.qr_object_mapping;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import ncxp.de.arauthoringtool.view.onboarding.OnboardingAppActivity;
-import ncxp.de.arauthoringtool.view.studies.StudiesActivity;
+import ncxp.de.arauthoringtool.view.manage_studies.StudiesActivity;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package ncxp.de.arauthoringtool.view.study.adapter;
+package ncxp.de.arauthoringtool.view.create_study.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +10,8 @@ import java.util.List;
 
 import ncxp.de.arauthoringtool.R;
 import ncxp.de.arauthoringtool.model.data.Survey;
-import ncxp.de.arauthoringtool.view.study.OptionSurveyListener;
-import ncxp.de.arauthoringtool.view.study.viewholder.SurveyViewHolder;
+import ncxp.de.arauthoringtool.view.create_study.OptionSurveyListener;
+import ncxp.de.arauthoringtool.view.create_study.viewholder.SurveyViewHolder;
 
 public class SurveyAdapter extends RecyclerView.Adapter<SurveyViewHolder> {
 

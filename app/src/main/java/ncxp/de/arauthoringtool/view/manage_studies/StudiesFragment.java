@@ -1,4 +1,4 @@
-package ncxp.de.arauthoringtool.view.studies;
+package ncxp.de.arauthoringtool.view.manage_studies;
 
 import android.Manifest;
 import android.content.Intent;
@@ -26,7 +26,7 @@ import java.util.List;
 
 import ncxp.de.arauthoringtool.view.arscene.ArSceneActivity;
 import ncxp.de.arauthoringtool.R;
-import ncxp.de.arauthoringtool.view.study.StudyActivity;
+import ncxp.de.arauthoringtool.view.create_study.StudyActivity;
 import ncxp.de.arauthoringtool.model.data.Study;
 import ncxp.de.arauthoringtool.viewmodel.StudiesViewModel;
 import ncxp.de.arauthoringtool.viewmodel.util.ToastMessage;

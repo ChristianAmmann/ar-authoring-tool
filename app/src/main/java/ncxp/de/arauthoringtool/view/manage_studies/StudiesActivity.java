@@ -1,4 +1,4 @@
-package ncxp.de.arauthoringtool.view.studies;
+package ncxp.de.arauthoringtool.view.manage_studies;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -20,7 +20,7 @@ import ncxp.de.arauthoringtool.repository.StudyRepository;
 import ncxp.de.arauthoringtool.repository.SurveyRepository;
 import ncxp.de.arauthoringtool.repository.TestPersonRepository;
 import ncxp.de.arauthoringtool.view.onboarding.OnboardingAppActivity;
-import ncxp.de.arauthoringtool.view.study.StudyActivity;
+import ncxp.de.arauthoringtool.view.create_study.StudyActivity;
 import ncxp.de.arauthoringtool.viewmodel.StudiesViewModel;
 import ncxp.de.arauthoringtool.viewmodel.factory.StudiesViewModelFactory;
 

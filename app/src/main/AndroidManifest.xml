@@ -36,14 +36,14 @@
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
-		<activity android:name=".view.studies.StudiesActivity"/>
-		<activity android:name=".view.study.StudyActivity"/>
+		<activity android:name=".view.manage_studies.StudiesActivity"/>
+		<activity android:name=".view.create_study.StudyActivity"/>
 		<activity android:name=".view.survey.SurveyTestActivity"/>
 		<activity android:name=".view.survey.SurveyActivity"/>
 		<activity android:name=".view.onboarding.OnboardingSurveyActivity"/>
 		<activity android:name=".view.onboarding.OnboardingAppActivity"/>
 		<activity android:name=".view.onboarding.OnboardingArEditorActivity"/>
-		<activity android:name=".view.mapping.MappingActivity"/>
+		<activity android:name=".view.qr_object_mapping.MappingActivity"/>
 		<activity android:name=".view.imprint.AboutActivity"/>
 		<activity android:name=".view.arscene.ArSceneActivity"/>
 		<activity

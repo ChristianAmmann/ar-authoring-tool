@@ -1,4 +1,4 @@
-package ncxp.de.arauthoringtool.view.study;
+package ncxp.de.arauthoringtool.view.create_study;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,7 +29,7 @@ import java.util.List;
 import ncxp.de.arauthoringtool.R;
 import ncxp.de.arauthoringtool.view.survey.SurveyTestActivity;
 import ncxp.de.arauthoringtool.model.data.Survey;
-import ncxp.de.arauthoringtool.view.study.adapter.SurveyAdapter;
+import ncxp.de.arauthoringtool.view.create_study.adapter.SurveyAdapter;
 import ncxp.de.arauthoringtool.viewmodel.StudyViewModel;
 
 public class SurveyFragment extends Fragment implements OptionSurveyListener {

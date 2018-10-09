@@ -1,4 +1,4 @@
-package ncxp.de.arauthoringtool.view.study;
+package ncxp.de.arauthoringtool.view.create_study;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,10 +18,10 @@ import java.util.List;
 
 import ncxp.de.arauthoringtool.R;
 import ncxp.de.arauthoringtool.sensorlogger.SettingGroup;
-import ncxp.de.arauthoringtool.view.study.adapter.OptionItem;
-import ncxp.de.arauthoringtool.view.study.adapter.OptionType;
-import ncxp.de.arauthoringtool.view.study.adapter.OtherAdapter;
-import ncxp.de.arauthoringtool.view.study.adapter.SensorSettings;
+import ncxp.de.arauthoringtool.view.create_study.adapter.OptionItem;
+import ncxp.de.arauthoringtool.view.create_study.adapter.OptionType;
+import ncxp.de.arauthoringtool.view.create_study.adapter.OtherAdapter;
+import ncxp.de.arauthoringtool.view.create_study.adapter.SensorSettings;
 import ncxp.de.arauthoringtool.viewmodel.StudyViewModel;
 
 public class OthersFragment extends Fragment implements OptionOthersListener {

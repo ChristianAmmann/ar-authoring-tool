@@ -1,4 +1,4 @@
-package ncxp.de.arauthoringtool.view.mapping;
+package ncxp.de.arauthoringtool.view.qr_object_mapping;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

@@ -1,4 +1,4 @@
-package ncxp.de.arauthoringtool.view.study.viewholder;
+package ncxp.de.arauthoringtool.view.create_study.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

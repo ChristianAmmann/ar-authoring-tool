@@ -1,4 +1,4 @@
-package ncxp.de.arauthoringtool.view.study.adapter;
+package ncxp.de.arauthoringtool.view.create_study.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,8 +9,8 @@ import java.util.List;
 
 import ncxp.de.arauthoringtool.R;
 import ncxp.de.arauthoringtool.model.data.DeviceSensor;
-import ncxp.de.arauthoringtool.view.study.viewholder.ConfigViewHolder;
-import ncxp.de.arauthoringtool.view.study.viewholder.SectionViewHolder;
+import ncxp.de.arauthoringtool.view.create_study.viewholder.ConfigViewHolder;
+import ncxp.de.arauthoringtool.view.create_study.viewholder.SectionViewHolder;
 
 public class SensorAdapter extends RecyclerView.Adapter {
 

@@ -1,4 +1,4 @@
-package ncxp.de.arauthoringtool.view.study.adapter;
+package ncxp.de.arauthoringtool.view.create_study.adapter;
 
 public class OptionItem {
 	private String     name;

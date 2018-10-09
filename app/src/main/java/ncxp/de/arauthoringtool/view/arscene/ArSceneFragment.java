@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import ncxp.de.arauthoringtool.view.mapping.MappingActivity;
+import ncxp.de.arauthoringtool.view.qr_object_mapping.MappingActivity;
 import ncxp.de.arauthoringtool.R;
 import ncxp.de.arauthoringtool.model.data.ARScene;
 import ncxp.de.arauthoringtool.view.areditor.util.EditorState;

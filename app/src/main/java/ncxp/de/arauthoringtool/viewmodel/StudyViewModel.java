@@ -20,7 +20,7 @@ import ncxp.de.arauthoringtool.repository.StudyRepository;
 import ncxp.de.arauthoringtool.repository.SurveyRepository;
 import ncxp.de.arauthoringtool.sensorlogger.SensorDataManager;
 import ncxp.de.arauthoringtool.sensorlogger.SensorGroup;
-import ncxp.de.arauthoringtool.view.study.adapter.SensorSettings;
+import ncxp.de.arauthoringtool.view.create_study.adapter.SensorSettings;
 
 public class StudyViewModel extends ViewModel {
 

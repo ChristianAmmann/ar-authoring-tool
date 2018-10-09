@@ -1,4 +1,4 @@
-package ncxp.de.arauthoringtool.view.mapping;
+package ncxp.de.arauthoringtool.view.qr_object_mapping;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
